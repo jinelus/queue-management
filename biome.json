@@ -1,0 +1,97 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": ["**", "!.next", "!dist", "!build"]
+  },
+  "formatter": {
+    "enabled": true,
+    "lineWidth": 100,
+    "indentWidth": 2,
+    "indentStyle": "space"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "recommended": true,
+        "noStaticOnlyClass": "off"
+      },
+      "correctness": {
+        "recommended": true,
+        "noUnusedImports": {
+          "fix": "safe",
+          "level": "warn",
+          "options": {}
+        },
+        "useUniqueElementIds": "off",
+        "noNestedComponentDefinitions": "off"
+      },
+      "style": {
+        "recommended": true,
+        "useComponentExportOnlyModules": "off"
+      },
+      "nursery": {
+        "recommended": true,
+        "noNextAsyncClientComponent": "error",
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "warn",
+          "options": {
+            "attributes": ["className"],
+            "functions": ["cn", "tv", "className"]
+          }
+        }
+      },
+      "a11y": {
+        "recommended": true,
+        "useButtonType": "off"
+      },
+      "performance": { "recommended": true, "noNamespaceImport": "off", "noImgElement": "off" },
+      "security": {
+        "recommended": true,
+        "noSecrets": "off"
+      },
+      "suspicious": {
+        "recommended": true,
+        "noArrayIndexKey": "off"
+      }
+    },
+    "domains": {
+      "test": "recommended",
+      "next": "all",
+      "react": "all",
+      "project": "recommended"
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "recommended": true,
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "enabled": true,
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "all",
+      "arrowParentheses": "always"
+    }
+  },
+  "json": {
+    "formatter": {
+      "enabled": true,
+      "indentWidth": 2
+    }
+  }
+}
