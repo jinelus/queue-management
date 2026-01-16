@@ -3,9 +3,7 @@ import z from 'zod'
 
 export const env = createEnv({
   server: {
-    DATABASE_URL: z
-      .url()
-      .default('postgresql://queue_user:queue_password@localhost:5432/queue_management'),
+    DATABASE_URL: z.url(),
     BETTER_AUTH_SECRET: z.string().optional(),
     BETTER_AUTH_URL: z.string().default('http://localhost:3333'),
   },
