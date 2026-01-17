@@ -5,11 +5,11 @@ import { env } from '@repo/env'
 type GetEnv<T extends keyof typeof env> = PathValue<
   {
     DATABASE_URL: string
-    NODE_ENV: string
-    BETTER_AUTH_SECRET: string
-    BETTER_AUTH_URL: string
-    PORT: string
-    FRONT_END_URL: string
+    NODE_ENV?: string
+    BETTER_AUTH_SECRET?: string
+    BETTER_AUTH_URL?: string
+    PORT?: number
+    FRONT_END_URL?: string
   },
   T
 >

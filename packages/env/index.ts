@@ -7,7 +7,7 @@ export const env = createEnv({
     BETTER_AUTH_SECRET: z.string().optional(),
     BETTER_AUTH_URL: z.string().default('http://localhost:3333'),
     PORT: z.coerce.number().default(3333),
-    FRONT_END_URL: z.url().default('http://localhost:300'),
+    FRONT_END_URL: z.url().default('http://localhost:3000'),
   },
   client: {},
   shared: {},
