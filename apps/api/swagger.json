@@ -1,0 +1,16 @@
+{
+  "openapi": "3.1.0",
+  "paths": {},
+  "info": {
+    "title": "Videos Backend",
+    "description": "Backend com vídeos",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": { "bearer": { "scheme": "bearer", "bearerFormat": "JWT", "type": "http" } },
+    "schemas": {}
+  }
+}
