@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "./src/generated/prisma"
+  output   = "../src/infra/database/generated/prisma"
 }
 
 datasource db {
@@ -33,6 +33,11 @@ model Organization {
   users    User[]
   services Service[]
   tickets  Ticket[]
+
+  logo        String?
+  metadata    String?
+  members     Member[]
+  invitations Invitation[]
 
   @@map("organization")
 }
@@ -107,6 +112,13 @@ model User {
   servedTickets    Ticket[]
   assignedServices ServiceStaff[]
 
+  isAnonymous Boolean?     @default(false)
+  banned      Boolean?     @default(false)
+  banReason   String?
+  banExpires  DateTime?
+  members     Member[]
+  invitations Invitation[]
+
   @@unique([email])
   @@map("user")
 }
@@ -121,6 +133,9 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy       String?
+  activeOrganizationId String?
 
   @@unique([token])
   @@index([userId])
@@ -157,4 +172,35 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Member {
+  id             String       @id @default(ulid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String       @default("member")
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+  @@index([userId])
+  @@map("member")
+}
+
+model Invitation {
+  id             String       @id @default(ulid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String?
+  status         String       @default("pending")
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+  inviterId      String
+  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([email])
+  @@map("invitation")
 }
