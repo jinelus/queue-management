@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "./src/generated/prisma"
+  output   = "../src/infra/database/generated/prisma"
 }
 
 datasource db {
@@ -175,13 +175,13 @@ model Verification {
 }
 
 model Member {
-  id             String       @id
+  id             String       @id @default(ulid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   userId         String
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   role           String       @default("member")
-  createdAt      DateTime
+  createdAt      DateTime     @default(now())
 
   @@index([organizationId])
   @@index([userId])
@@ -189,7 +189,7 @@ model Member {
 }
 
 model Invitation {
-  id             String       @id
+  id             String       @id @default(ulid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   email          String
