@@ -4,7 +4,7 @@ import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { env } from '@repo/env'
 import { AuthGuard, AuthModule } from '@thallesp/nestjs-better-auth'
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod'
-import { auth } from '@/auth'
+import { auth } from '../auth'
 import { EnvModule } from './env/env.module'
 
 @Module({
