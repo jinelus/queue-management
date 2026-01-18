@@ -1,23 +1,18 @@
-import { PrismaPg } from "@prisma/adapter-pg";
-import { env } from "@repo/env";
-import { betterAuth, ulid } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import {
-  admin as adminPlugin,
-  anonymous,
-  bearer,
-  organization,
-} from "better-auth/plugins";
-import { PrismaClient } from "prisma/src/generated/prisma/client";
-import { ac, admin, developer, employee, user } from "./permissions";
+import { PrismaPg } from '@prisma/adapter-pg'
+import { env } from '@repo/env'
+import { BetterAuthPlugin, betterAuth, ulid } from 'better-auth'
+import { prismaAdapter } from 'better-auth/adapters/prisma'
+import { admin as adminPlugin, anonymous, bearer, organization } from 'better-auth/plugins'
+import { PrismaClient } from '@/infra/database/generated/prisma/client'
+import { ac, admin, developer, employee, user } from './permissions'
 
 const adapter = new PrismaPg({
   connectionString: env.DATABASE_URL,
-});
+})
 
 export const prisma = new PrismaClient({
   adapter,
-});
+})
 
 export const accessControl = {
   ac,
@@ -27,20 +22,19 @@ export const accessControl = {
     employee,
     user,
   },
-};
+}
 
-const frontEndUrl = new URL(env.FRONT_END_URL);
-const frontEndHost = frontEndUrl.hostname;
+const frontEndUrl = new URL(env.FRONT_END_URL)
+const frontEndHost = frontEndUrl.hostname
 
-const domainParts = frontEndHost.split(".");
-const parentDomain =
-  domainParts.length > 1 ? domainParts.slice(-2).join(".") : frontEndHost;
+const domainParts = frontEndHost.split('.')
+const parentDomain = domainParts.length > 1 ? domainParts.slice(-2).join('.') : frontEndHost
 
-const isSecure = env.FRONT_END_URL.startsWith("https://");
+const isSecure = env.FRONT_END_URL.startsWith('https://')
 
 export const auth: ReturnType<typeof betterAuth> = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: "postgresql",
+    provider: 'postgresql',
   }),
   emailAndPassword: {
     enabled: true,
@@ -53,7 +47,7 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
       enabled: isSecure,
       domain: isSecure ? parentDomain : undefined,
     },
-    cookiePrefix: "qm_app_",
+    cookiePrefix: 'qm_app_',
   },
   session: {
     cookieCache: {
@@ -65,13 +59,12 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
     bearer(),
     anonymous({
       generateRandomEmail() {
-        return `guest-${ulid()}@example.com`;
+        return `guest-${ulid()}@example.com`
       },
     }),
     organization(),
-    // @ts-expect-error - Fix type mismatch between admin plugin and core user schema
     adminPlugin({
       ...accessControl,
-    }),
+    }) as BetterAuthPlugin,
   ],
-});
+})
