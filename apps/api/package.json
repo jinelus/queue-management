@@ -5,15 +5,18 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "files": [
+    "./src/auth/permissions.ts"
+  ],
   "scripts": {
     "build": "pnpm env:load  nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint": "biome check --write",
+    "format": "biome format --write",
     "start": "pnpm env:load nest start",
     "dev": "pnpm env:load nest start -w",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -23,15 +26,18 @@
     "db:push": "pnpm env:load prisma db push",
     "db:reset": "pnpm env:load prisma migrate reset",
     "db:migrate": "pnpm env:load prisma migrate dev",
-    "env:load": "dotenv -e ../../.env --"
+    "env:load": "dotenv -e ../../.env --",
+    "swagger": "pnpm env:load nest start --entryFile infra/main.swagger && pnpm lint swagger.json"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.12",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.12",
     "@nestjs/platform-express": "^11.1.12",
+    "@nestjs/swagger": "^11.2.5",
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "@scalar/nestjs-api-reference": "^1.0.17",
     "@thallesp/nestjs-better-auth": "^2.2.2",
     "better-auth": "^1.4.14",
     "express": "^5.1.0",
