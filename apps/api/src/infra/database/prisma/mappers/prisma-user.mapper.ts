@@ -13,6 +13,7 @@ const httpUserSchema = z.object<ToZodShape<UserProps & { id: string }>>({
 
   banned: z.boolean().optional(),
   banReason: z.string().optional(),
+  banExpires: z.string(),
   image: z.string().optional(),
   role: z.string().optional(),
 

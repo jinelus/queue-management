@@ -25,11 +25,11 @@ export class User extends Entity<UserProps> {
     return this.props.name
   }
 
-  get email(): string {
-    return this.props.email
+  get email(): string | undefined {
+    return this.props?.email
   }
 
-  get emailVerified(): boolean {
+  get emailVerified(): boolean | undefined {
     return this.props.emailVerified
   }
 
