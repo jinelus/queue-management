@@ -18,7 +18,7 @@ async function bootstrap(): Promise<void> {
   const document = cleanupOpenApiDoc(
     SwaggerModule.createDocument(app, config, {
       deepScanRoutes: true,
-      operationIdFactory: (controllerKey: string, _: string) => controllerKey,
+      operationIdFactory: (controllerKey: string) => controllerKey,
     }),
     {
       version: '3.1',
