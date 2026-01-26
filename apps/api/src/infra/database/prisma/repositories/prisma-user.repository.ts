@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { UserRepository } from '@/domain/master/application/repositories/user.repository'
+import {
+  FindUsersParams,
+  UserRepository,
+} from '@/domain/master/application/repositories/user.repository'
 import { User } from '@/domain/master/entreprise/entities/user'
 import { PrismaUserMapper } from '../mappers/prisma-user.mapper'
 import { PrismaService } from '../prisma.service'
@@ -14,8 +17,10 @@ export class PrismaUserRepository implements UserRepository {
     })
   }
 
-  async findAll(): Promise<User[]> {
-    const users = await this.prisma.user.findMany()
+  async findAll(organizationId: string): Promise<User[]> {
+    const users = await this.prisma.user.findMany({
+      where: { organizationId },
+    })
     return users.map(PrismaUserMapper.toDomain)
   }
 
@@ -44,7 +49,41 @@ export class PrismaUserRepository implements UserRepository {
     })
   }
 
-  async count(): Promise<number> {
-    return this.prisma.user.count()
+  async count(organizationId: string, params?: FindUsersParams): Promise<number> {
+    const { role, search } = params ?? {}
+    const count = await this.prisma.user.count({
+      where: {
+        organizationId,
+        role,
+        name: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
+    })
+
+    return count
+  }
+
+  async findUsers(organizationId: string, params?: FindUsersParams): Promise<Array<User>> {
+    const { order, orderBy, page, perPage, role, search } = params ?? {}
+
+    const users = await this.prisma.user.findMany({
+      where: {
+        organizationId,
+        role,
+        name: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
+      take: perPage,
+      skip: page && perPage ? (page - 1) * perPage : undefined,
+      orderBy: {
+        [orderBy ?? 'createdAt']: order,
+      },
+    })
+
+    return users.map(PrismaUserMapper.toDomain)
   }
 }
