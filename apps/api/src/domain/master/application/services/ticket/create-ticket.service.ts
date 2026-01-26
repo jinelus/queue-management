@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { Either, right } from '@/core/either'
+import { NotFoundError } from '@/core/errors/not-found-error'
 import { Ticket } from '@/domain/master/entreprise/entities/ticket'
 import { OrganizationRepository } from '../../repositories/organization.repository'
+import { ServiceRepository } from '../../repositories/service.repository'
 import { TicketRepository } from '../../repositories/ticket.repository'
 
 interface CreateTicketServiceParams {
@@ -11,7 +13,7 @@ interface CreateTicketServiceParams {
 }
 
 type CreateTicketServiceResponse = Either<
-  null,
+  NotFoundError,
   {
     ticket: Ticket
   }
@@ -21,6 +23,7 @@ type CreateTicketServiceResponse = Either<
 export class CreateTicketService {
   constructor(
     private readonly organizationRepository: OrganizationRepository,
+    private readonly serviceRepository: ServiceRepository,
     private readonly ticketRepository: TicketRepository,
   ) {}
 
@@ -32,7 +35,12 @@ export class CreateTicketService {
     const organization = await this.organizationRepository.findById(organizationId)
 
     if (!organization) {
-      throw new Error('Organization not found')
+      throw new NotFoundError('Organization not found')
+    }
+    const service = await this.serviceRepository.findById(serviceId)
+
+    if (!service) {
+      throw new NotFoundError('Service not found')
     }
 
     const ticket = Ticket.create({

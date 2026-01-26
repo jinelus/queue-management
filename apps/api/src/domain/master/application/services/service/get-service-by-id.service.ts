@@ -29,7 +29,6 @@ export class GetServiceService {
     const service = await this.serviceRepository.findById(serviceId)
     if (!service) return left(new NotFoundError('Service not found'))
 
-    await this.serviceRepository.save(service)
     return right({ service })
   }
 }

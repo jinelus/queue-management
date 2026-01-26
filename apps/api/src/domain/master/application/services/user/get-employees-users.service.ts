@@ -7,6 +7,7 @@ import type { UserRepository } from '../../repositories/user.repository'
 
 interface GetEmployeesUsersServiceParams {
   userId: string
+  organizationId: string
 
   order?: 'asc' | 'desc'
   orderBy?: 'createdAt' | 'updatedAt' | 'email'
@@ -37,6 +38,7 @@ export class GetEmployeesUsersService {
     page,
     perPage,
     search,
+    organizationId,
   }: GetEmployeesUsersServiceParams): Promise<GetEmployeesUsersServiceResponse> {
     const { success } = await this.userPermission.userCan('list', 'user', { userId })
 
@@ -44,7 +46,7 @@ export class GetEmployeesUsersService {
       return left(new NotAllowedError('You are not allowed to access'))
     }
 
-    const users = await this.userRepository.findUsers({
+    const users = await this.userRepository.findUsers(organizationId, {
       role: 'employee',
       order: order ?? 'desc',
       orderBy: orderBy ?? 'createdAt',
@@ -53,7 +55,7 @@ export class GetEmployeesUsersService {
       search,
     })
 
-    const total = await this.userRepository.count({
+    const total = await this.userRepository.count(organizationId, {
       role: 'employee',
       search,
       order: 'desc',

@@ -46,6 +46,10 @@ export class UpdateServiceService {
     const service = await this.serviceRepository.findById(serviceId)
     if (!service) return left(new NotFoundError('Service not found'))
 
+    if (service.organizationId.toString() !== organization.id.toString()) {
+      return left(new NotFoundError('Service not found in this organization'))
+    }
+
     if (name !== undefined) service.name = name
     if (description !== undefined) service.description = description
     if (avgDurationInt !== undefined) service.avgDurationInt = avgDurationInt

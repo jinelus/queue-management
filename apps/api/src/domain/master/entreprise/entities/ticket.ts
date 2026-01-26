@@ -43,7 +43,7 @@ export class Ticket extends Entity<TicketProps> {
     return this.props.servedById
   }
 
-  get joinedAt(): Date | undefined {
+  get joinedAt(): Date {
     return this.props.joinedAt
   }
 
