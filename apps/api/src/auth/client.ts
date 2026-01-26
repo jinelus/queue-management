@@ -1,5 +1,5 @@
 import { BetterAuthClientPlugin, createAuthClient } from 'better-auth/client'
-import { adminClient } from 'better-auth/client/plugins'
+import { adminClient, anonymousClient, organizationClient } from 'better-auth/client/plugins'
 import { accessControl } from '.'
 
 export const authClient = createAuthClient({
@@ -7,5 +7,7 @@ export const authClient = createAuthClient({
     adminClient({
       ...accessControl,
     }) as BetterAuthClientPlugin,
+    organizationClient(),
+    anonymousClient(),
   ],
 })

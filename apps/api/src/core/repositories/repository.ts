@@ -6,11 +6,11 @@ export abstract class Repository<T extends Entity<any>> {
 
   abstract findById(id: string): Promise<T | null>
 
-  abstract findAll(): Promise<T[]>
+  abstract findAll(organizationId: string): Promise<T[]>
 
   abstract save(entity: T): Promise<void>
 
-  abstract count(): Promise<number>
+  abstract count(organizationId: string): Promise<number>
 
   abstract delete(entity: T): Promise<void>
 }
