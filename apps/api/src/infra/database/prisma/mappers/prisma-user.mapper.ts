@@ -5,7 +5,7 @@ import { User, UserProps } from '@/domain/master/entreprise/entities/user'
 import { Prisma, User as PrismaUser } from '../../generated/prisma/client'
 import { ToZodShape } from '../../zod-custom-shape'
 
-const httpUserSchema = z.object<ToZodShape<UserProps & { id: string }>>({
+export const httpUserSchema = z.object<ToZodShape<UserProps & { id: string }>>({
   id: z.ulid(),
   name: z.string(),
   email: z.string(),
