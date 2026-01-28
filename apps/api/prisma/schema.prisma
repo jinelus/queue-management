@@ -24,7 +24,7 @@ enum TicketStatus {
 }
 
 model Organization {
-  id          String   @id @default(uuid())
+  id          String   @id @default(ulid())
   slug        String   @unique
   name        String
   description String?
