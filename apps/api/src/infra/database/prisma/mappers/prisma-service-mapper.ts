@@ -5,7 +5,7 @@ import { Service, ServiceProps } from '@/domain/master/entreprise/entities/servi
 import { Prisma, Service as PrismaService } from '../../generated/prisma/client'
 import { ToZodShape } from '../../zod-custom-shape'
 
-const httpServiceSchema = z.object<ToZodShape<ServiceProps & { id: string }>>({
+export const httpServiceSchema = z.object<ToZodShape<ServiceProps & { id: string }>>({
   id: z.ulid(),
   name: z.string(),
   description: z.string(),

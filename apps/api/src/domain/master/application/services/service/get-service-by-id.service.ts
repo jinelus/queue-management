@@ -5,15 +5,15 @@ import { Service } from '@/domain/master/entreprise/entities/service'
 import { OrganizationRepository } from '../../repositories/organization.repository'
 import { ServiceRepository } from '../../repositories/service.repository'
 
-interface GetServiceServiceParams {
+interface GetServiceByIdServiceParams {
   organizationId: string
   serviceId: string
 }
 
-type GetServiceServiceResponse = Either<NotFoundError, { service: Service }>
+type GetServiceByIdServiceResponse = Either<NotFoundError, { service: Service }>
 
 @Injectable()
-export class GetServiceService {
+export class GetServiceByIdService {
   constructor(
     private readonly organizationRepository: OrganizationRepository,
     private readonly serviceRepository: ServiceRepository,
@@ -22,7 +22,7 @@ export class GetServiceService {
   async execute({
     serviceId,
     organizationId,
-  }: GetServiceServiceParams): Promise<GetServiceServiceResponse> {
+  }: GetServiceByIdServiceParams): Promise<GetServiceByIdServiceResponse> {
     const organization = await this.organizationRepository.findById(organizationId)
     if (!organization) return left(new NotFoundError('Organization not found'))
 

@@ -11,11 +11,11 @@ interface GetAllServicesServiceParams {
   page?: number
   perPage?: number
   order?: 'asc' | 'desc'
-  orderBy?: string
+  orderBy?: 'name' | 'createdAt' | 'updatedAt'
   search?: string
 }
 
-type GetAllServicesServiceResponse = Either<NotFoundError, { services: Service[]; count: number }>
+type GetAllServicesServiceResponse = Either<NotFoundError, { services: Service[]; total: number }>
 
 @Injectable()
 export class GetAllServicesService {
@@ -43,8 +43,8 @@ export class GetAllServicesService {
       search,
     })
 
-    const count = await this.serviceRepository.count(organizationId, { search, orderBy, order })
+    const total = await this.serviceRepository.count(organizationId, { search, orderBy, order })
 
-    return right({ services, count })
+    return right({ services, total })
   }
 }
