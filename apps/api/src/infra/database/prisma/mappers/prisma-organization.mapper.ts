@@ -5,7 +5,7 @@ import { Organization, OrganizationProps } from '@/domain/master/entreprise/enti
 import { Prisma, Organization as PrismaOrganization } from '../../generated/prisma/client'
 import { ToZodShape } from '../../zod-custom-shape'
 
-const httpOrganizationSchema = z.object<ToZodShape<OrganizationProps & { id: string }>>({
+export const httpOrganizationSchema = z.object<ToZodShape<OrganizationProps & { id: string }>>({
   id: z.ulid(),
   name: z.string(),
   description: z.string().optional(),
