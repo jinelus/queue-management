@@ -1,9 +1,709 @@
 {
-  "openapi": "3.1.0",
-  "paths": {},
+  "openapi": "3.0.0",
+  "paths": {
+    "/organizations/{organizationId}/users/by-id": {
+      "get": {
+        "description": "Retrieve a user by their unique identifier within an organization.",
+        "operationId": "GetUserByIdController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "targetUserId",
+            "required": false,
+            "in": "query",
+            "description": "The unique identifier of the user to retrieve",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with user details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetUserByIdResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Get user by id",
+        "tags": ["Users"]
+      }
+    },
+    "/organizations/{organizationId}/users/employees": {
+      "get": {
+        "description": "Retrieve employees users within an organization.",
+        "operationId": "GetEmployeesUsersController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number for pagination",
+            "schema": { "default": 1, "type": "number" }
+          },
+          {
+            "name": "perPage",
+            "required": false,
+            "in": "query",
+            "description": "Number of items per page for pagination",
+            "schema": { "default": 10, "type": "number" }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "description": "Order of the results",
+            "schema": { "enum": ["asc", "desc"], "type": "string" }
+          },
+          {
+            "name": "orderBy",
+            "required": false,
+            "in": "query",
+            "description": "Field to order the results by",
+            "schema": { "enum": ["createdAt", "updatedAt", "email"], "type": "string" }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search term to filter results",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with user details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetEmployeesUsersResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Get employees users",
+        "tags": ["Users"]
+      }
+    },
+    "/organizations/by-slug/{slug}": {
+      "get": {
+        "description": "Retrieve an organization by its unique slug.",
+        "operationId": "GetOrganizationBySlugController",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "The unique slug of the organization",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with organization details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetOrganizationBySlugResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Get organization by slug",
+        "tags": ["Organizations"]
+      }
+    },
+    "/organizations/{organizationId}/services": {
+      "post": {
+        "description": "Create a new service within an organization.",
+        "operationId": "CreateServiceController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateServiceBodyDto" }
+            }
+          }
+        },
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with created service details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CreateServiceResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Create a new service",
+        "tags": ["Services"]
+      },
+      "get": {
+        "description": "Retrieve all services within an organization.",
+        "operationId": "GetAllServicesController",
+        "parameters": [
+          { "name": "page", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "perPage", "required": false, "in": "query", "schema": { "type": "number" } },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string", "enum": ["asc", "desc"] }
+          },
+          {
+            "name": "orderBy",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string", "enum": ["name", "createdAt", "updatedAt"] }
+          },
+          { "name": "search", "required": false, "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with all services details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetAllServicesResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "summary": "Get all services",
+        "tags": ["Services"]
+      }
+    },
+    "/organizations/{organizationId}/services/{serviceId}": {
+      "delete": {
+        "description": "Delete a service within an organization.",
+        "operationId": "DeleteServiceController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the service to be deleted",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with deleted service details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DeleteServiceResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Delete a service",
+        "tags": ["Services"]
+      },
+      "put": {
+        "description": "Update the details of a service within an organization.",
+        "operationId": "UpdateServiceController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the service",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateServiceBodyDto" }
+            }
+          }
+        },
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with updated service details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UpdateServiceResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Update a service",
+        "tags": ["Services"]
+      }
+    },
+    "/organizations/{organizationId}/services/{serviceId}/toggle-status": {
+      "patch": {
+        "description": "Toggle the active status of a service within an organization.",
+        "operationId": "ToggleServiceStatusController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the service",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ToggleServiceStatusBodyDto" }
+            }
+          }
+        },
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with toggled service status details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ToggleServiceStatusResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Toggle the status of a service",
+        "tags": ["Services"]
+      }
+    },
+    "/organizations/{organizationId}/services/by-id/{serviceId}": {
+      "get": {
+        "description": "Retrieve all services within an organization.",
+        "operationId": "GetServiceByIdController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the service",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with all services details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetServiceByIdResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "summary": "Get all services",
+        "tags": ["Services"]
+      }
+    },
+    "/organizations/{organizationId}/tickets": {
+      "post": {
+        "description": "Create a new ticket within an organization.",
+        "operationId": "CreateTicketController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateTicketBodyDto" } }
+          }
+        },
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with created ticket details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CreateTicketResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "summary": "Create a new ticket",
+        "tags": ["Tickets"]
+      }
+    },
+    "/organizations/{organizationId}/tickets/{ticketId}/status": {
+      "put": {
+        "description": "Update the status of a ticket within an organization.",
+        "operationId": "UpdateTicketStatusController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "ticketId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the ticket",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateTicketStatusBodyDto" }
+            }
+          }
+        },
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with updated ticket details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UpdateTicketStatusResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Update the status of a ticket",
+        "tags": ["Tickets"]
+      }
+    },
+    "/organizations/{organizationId}/tickets/{ticketId}/transfer": {
+      "put": {
+        "description": "Transfer a ticket to another service within an organization.",
+        "operationId": "TransferTicketController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "ticketId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the ticket",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TransferTicketBodyDto" }
+            }
+          }
+        },
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with transferred ticket details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TransferTicketResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Transfer a ticket to another service",
+        "tags": ["Tickets"]
+      }
+    },
+    "/organizations/{organizationId}/tickets/{ticketId}/leave-queue": {
+      "patch": {
+        "description": "Leave the queue for a ticket within an organization.",
+        "operationId": "LeaveQueueController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "ticketId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the ticket",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with left ticket details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LeaveQueueResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "summary": "Leave the queue for a ticket",
+        "tags": ["Tickets"]
+      }
+    },
+    "/organizations/{organizationId}/tickets/{ticketId}/position": {
+      "get": {
+        "description": "Retrieve the position of a ticket within an organization.",
+        "operationId": "GetTicketPositionController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "ticketId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the ticket",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with ticket position details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetTicketPositionResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "summary": "Get the position of a ticket in the queue",
+        "tags": ["Tickets"]
+      }
+    },
+    "/organizations/{organizationId}/service-staff/assign": {
+      "post": {
+        "description": "Assign a staff member to a service within an organization.",
+        "operationId": "AssignStaffToServiceController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AssignStaffToServiceBodyDto" }
+            }
+          }
+        },
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with created service details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AssignStaffToServiceResponseDto_Output" }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Assign staff to a service",
+        "tags": ["Service Staff"]
+      }
+    }
+  },
   "info": {
-    "title": "Videos Backend",
-    "description": "Backend com vídeos",
+    "title": "Queue management",
+    "description": "A queue management API",
     "version": "1.0",
     "contact": {}
   },
@@ -11,6 +711,567 @@
   "servers": [],
   "components": {
     "securitySchemes": { "bearer": { "scheme": "bearer", "bearerFormat": "JWT", "type": "http" } },
-    "schemas": {}
+    "schemas": {
+      "GetUserByIdResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "name": { "type": "string" },
+              "email": { "type": "string" },
+              "emailVerified": { "type": "boolean" },
+              "banned": { "type": "boolean" },
+              "banReason": { "type": "string" },
+              "banExpires": { "type": "string" },
+              "image": { "type": "string" },
+              "role": { "type": "string" },
+              "createdAt": { "type": "string" },
+              "updatedAt": { "type": "string" }
+            },
+            "required": [
+              "id",
+              "name",
+              "email",
+              "emailVerified",
+              "banExpires",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": ["user"],
+        "additionalProperties": false
+      },
+      "GetEmployeesUsersResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "name": { "type": "string" },
+                "email": { "type": "string" },
+                "emailVerified": { "type": "boolean" },
+                "banned": { "type": "boolean" },
+                "banReason": { "type": "string" },
+                "banExpires": { "type": "string" },
+                "image": { "type": "string" },
+                "role": { "type": "string" },
+                "createdAt": { "type": "string" },
+                "updatedAt": { "type": "string" }
+              },
+              "required": [
+                "id",
+                "name",
+                "email",
+                "emailVerified",
+                "banExpires",
+                "createdAt",
+                "updatedAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "total": { "type": "number" }
+        },
+        "required": ["users", "total"],
+        "additionalProperties": false
+      },
+      "GetOrganizationBySlugResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "organization": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "slug": { "type": "string" },
+              "logoUrl": { "type": "string" },
+              "logo": { "type": "string" },
+              "metadata": { "type": "string" },
+              "createdAt": { "type": "string" },
+              "updatedAt": { "type": "string" }
+            },
+            "required": ["id", "name", "slug", "createdAt", "updatedAt"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["organization"],
+        "additionalProperties": false
+      },
+      "CreateServiceBodyDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 255 },
+          "description": { "type": "string" },
+          "avgDurationInt": { "type": "number" },
+          "isActive": { "type": "boolean" }
+        },
+        "required": ["name"]
+      },
+      "CreateServiceResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "avgDurationInt": { "type": "number" },
+              "isActive": { "type": "boolean" },
+              "organizationId": { "type": "string" },
+              "createdAt": { "type": "string" },
+              "updatedAt": { "type": "string" }
+            },
+            "required": ["id", "name", "description", "organizationId", "createdAt", "updatedAt"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["service"],
+        "additionalProperties": false
+      },
+      "DeleteServiceResponseDto_Output": {
+        "type": "object",
+        "properties": { "message": { "type": "string" } },
+        "required": ["message"],
+        "additionalProperties": false
+      },
+      "GetAllServicesResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "services": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "name": { "type": "string" },
+                "description": { "type": "string" },
+                "avgDurationInt": { "type": "number" },
+                "isActive": { "type": "boolean" },
+                "organizationId": { "type": "string" },
+                "createdAt": { "type": "string" },
+                "updatedAt": { "type": "string" }
+              },
+              "required": ["id", "name", "description", "organizationId", "createdAt", "updatedAt"],
+              "additionalProperties": false
+            }
+          },
+          "total": { "type": "number" }
+        },
+        "required": ["services", "total"],
+        "additionalProperties": false
+      },
+      "ToggleServiceStatusBodyDto": {
+        "type": "object",
+        "properties": { "isActive": { "type": "boolean" } },
+        "required": ["isActive"]
+      },
+      "ToggleServiceStatusResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "avgDurationInt": { "type": "number" },
+              "isActive": { "type": "boolean" },
+              "organizationId": { "type": "string" },
+              "createdAt": { "type": "string" },
+              "updatedAt": { "type": "string" }
+            },
+            "required": ["id", "name", "description", "organizationId", "createdAt", "updatedAt"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["service"],
+        "additionalProperties": false
+      },
+      "UpdateServiceBodyDto": {
+        "type": "object",
+        "properties": {
+          "isActive": { "type": "boolean" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "avgDurationInt": { "type": "number" }
+        }
+      },
+      "UpdateServiceResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "avgDurationInt": { "type": "number" },
+              "isActive": { "type": "boolean" },
+              "organizationId": { "type": "string" },
+              "createdAt": { "type": "string" },
+              "updatedAt": { "type": "string" }
+            },
+            "required": ["id", "name", "description", "organizationId", "createdAt", "updatedAt"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["service"],
+        "additionalProperties": false
+      },
+      "GetServiceByIdResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "avgDurationInt": { "type": "number" },
+              "isActive": { "type": "boolean" },
+              "organizationId": { "type": "string" },
+              "createdAt": { "type": "string" },
+              "updatedAt": { "type": "string" }
+            },
+            "required": ["id", "name", "description", "organizationId", "createdAt", "updatedAt"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["service"],
+        "additionalProperties": false
+      },
+      "CreateTicketBodyDto": {
+        "type": "object",
+        "properties": {
+          "guestName": { "type": "string", "minLength": 1, "maxLength": 255 },
+          "serviceId": {
+            "type": "string",
+            "format": "ulid",
+            "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+          }
+        },
+        "required": ["guestName", "serviceId"]
+      },
+      "CreateTicketResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "ticket": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "guestName": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["WAITING", "CALLED", "SERVING", "SERVED", "ABSENT", "CANCELLED"]
+              },
+              "callCount": { "type": "number" },
+              "organizationId": { "type": "string" },
+              "serviceId": { "type": "string" },
+              "servedById": { "type": "string" },
+              "joinedAt": { "type": "string" },
+              "calledAt": { "type": "string" },
+              "startedAt": { "type": "string" },
+              "completedAt": { "type": "string" }
+            },
+            "required": [
+              "id",
+              "guestName",
+              "status",
+              "organizationId",
+              "serviceId",
+              "joinedAt",
+              "calledAt",
+              "startedAt",
+              "completedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": ["ticket"],
+        "additionalProperties": false
+      },
+      "UpdateTicketStatusBodyDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["WAITING", "CALLED", "SERVING", "SERVED", "ABSENT", "CANCELLED"]
+          }
+        },
+        "required": ["status"]
+      },
+      "UpdateTicketStatusResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "ticket": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "guestName": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["WAITING", "CALLED", "SERVING", "SERVED", "ABSENT", "CANCELLED"]
+              },
+              "callCount": { "type": "number" },
+              "organizationId": { "type": "string" },
+              "serviceId": { "type": "string" },
+              "servedById": { "type": "string" },
+              "joinedAt": { "type": "string" },
+              "calledAt": { "type": "string" },
+              "startedAt": { "type": "string" },
+              "completedAt": { "type": "string" }
+            },
+            "required": [
+              "id",
+              "guestName",
+              "status",
+              "organizationId",
+              "serviceId",
+              "joinedAt",
+              "calledAt",
+              "startedAt",
+              "completedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": ["ticket"],
+        "additionalProperties": false
+      },
+      "TransferTicketBodyDto": {
+        "type": "object",
+        "properties": {
+          "targetServiceId": {
+            "type": "string",
+            "format": "ulid",
+            "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+          }
+        },
+        "required": ["targetServiceId"]
+      },
+      "TransferTicketResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "ticket": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "guestName": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["WAITING", "CALLED", "SERVING", "SERVED", "ABSENT", "CANCELLED"]
+              },
+              "callCount": { "type": "number" },
+              "organizationId": { "type": "string" },
+              "serviceId": { "type": "string" },
+              "servedById": { "type": "string" },
+              "joinedAt": { "type": "string" },
+              "calledAt": { "type": "string" },
+              "startedAt": { "type": "string" },
+              "completedAt": { "type": "string" }
+            },
+            "required": [
+              "id",
+              "guestName",
+              "status",
+              "organizationId",
+              "serviceId",
+              "joinedAt",
+              "calledAt",
+              "startedAt",
+              "completedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": ["ticket"],
+        "additionalProperties": false
+      },
+      "LeaveQueueResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "ticket": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "guestName": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["WAITING", "CALLED", "SERVING", "SERVED", "ABSENT", "CANCELLED"]
+              },
+              "callCount": { "type": "number" },
+              "organizationId": { "type": "string" },
+              "serviceId": { "type": "string" },
+              "servedById": { "type": "string" },
+              "joinedAt": { "type": "string" },
+              "calledAt": { "type": "string" },
+              "startedAt": { "type": "string" },
+              "completedAt": { "type": "string" }
+            },
+            "required": [
+              "id",
+              "guestName",
+              "status",
+              "organizationId",
+              "serviceId",
+              "joinedAt",
+              "calledAt",
+              "startedAt",
+              "completedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": ["ticket"],
+        "additionalProperties": false
+      },
+      "GetTicketPositionResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "ticket": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "guestName": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["WAITING", "CALLED", "SERVING", "SERVED", "ABSENT", "CANCELLED"]
+              },
+              "callCount": { "type": "number" },
+              "organizationId": { "type": "string" },
+              "serviceId": { "type": "string" },
+              "servedById": { "type": "string" },
+              "joinedAt": { "type": "string" },
+              "calledAt": { "type": "string" },
+              "startedAt": { "type": "string" },
+              "completedAt": { "type": "string" }
+            },
+            "required": [
+              "id",
+              "guestName",
+              "status",
+              "organizationId",
+              "serviceId",
+              "joinedAt",
+              "calledAt",
+              "startedAt",
+              "completedAt"
+            ],
+            "additionalProperties": false
+          },
+          "position": { "anyOf": [{ "type": "number" }, { "type": "null" }] },
+          "estimatedWaitTime": { "anyOf": [{ "type": "number" }, { "type": "null" }] }
+        },
+        "required": ["ticket", "position", "estimatedWaitTime"],
+        "additionalProperties": false
+      },
+      "AssignStaffToServiceBodyDto": {
+        "type": "object",
+        "properties": {
+          "serviceId": {
+            "type": "string",
+            "format": "ulid",
+            "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+          },
+          "staffId": {
+            "type": "string",
+            "format": "ulid",
+            "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+          }
+        },
+        "required": ["serviceId", "staffId"]
+      },
+      "AssignStaffToServiceResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "serviceStaff": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "userId": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "serviceId": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "active": { "type": "boolean" }
+            },
+            "required": ["id", "userId", "serviceId"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["serviceStaff"],
+        "additionalProperties": false
+      }
+    }
   }
 }

@@ -5,7 +5,7 @@ import { Ticket, TicketProps } from '@/domain/master/entreprise/entities/ticket'
 import { Prisma, Ticket as PrismaTicket } from '../../generated/prisma/client'
 import { ToZodShape } from '../../zod-custom-shape'
 
-const httpTicketSchema = z.object<ToZodShape<TicketProps & { id: string }>>({
+export const httpTicketSchema = z.object<ToZodShape<TicketProps & { id: string }>>({
   id: z.ulid(),
   guestName: z.string(),
   status: z.enum(['WAITING', 'CALLED', 'SERVING', 'SERVED', 'ABSENT', 'CANCELLED']),
