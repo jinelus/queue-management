@@ -3,7 +3,7 @@ import { Either, left, right } from '@/core/either'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { User } from '../../../entreprise/entities/user'
 import { PermissionFactory } from '../../permissions/permission.factory'
-import type { UserRepository } from '../../repositories/user.repository'
+import { UserRepository } from '../../repositories/user.repository'
 
 interface GetEmployeesUsersServiceParams {
   userId: string
