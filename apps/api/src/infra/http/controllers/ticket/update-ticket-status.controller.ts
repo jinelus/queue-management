@@ -5,7 +5,6 @@ import {
   NotFoundException,
   Param,
   Put,
-  Session,
   UnauthorizedException,
 } from '@nestjs/common'
 import {
@@ -16,7 +15,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { type UserSession } from '@thallesp/nestjs-better-auth'
+import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'

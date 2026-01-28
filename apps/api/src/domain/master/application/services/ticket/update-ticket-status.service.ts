@@ -56,7 +56,7 @@ export class UpdateTicketStatusService {
     }
 
     if (ticket.organizationId.toString() !== organization.id.toString()) {
-      return left(new NotFoundError('Ticket does not belong to the organization'))
+      return left(new NotFoundError('Ticket not found'))
     }
 
     ticket.status = status

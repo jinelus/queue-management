@@ -39,14 +39,14 @@ export class AssignStaffToService {
     userId,
     organizationId,
   }: AssignStaffToServiceParams): Promise<AssignStaffToServiceResponse> {
-    const { success } = await this.permissionFactory.userCan('create', 'serviceStaff', {
-      userId: actorId,
-    })
-
     const organization = await this.organizationRepository.findById(organizationId)
     if (!organization) {
       return left(new NotFoundError('Organization not found'))
     }
+
+    const { success } = await this.permissionFactory.userCan('create', 'serviceStaff', {
+      userId: actorId,
+    })
 
     if (!success) {
       return left(new NotAllowedError())

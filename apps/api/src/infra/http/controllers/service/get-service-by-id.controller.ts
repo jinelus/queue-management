@@ -37,12 +37,12 @@ export class GetServiceByIdController {
 
   @Get('')
   @ApiOperation({
-    summary: 'Get all services',
-    description: 'Retrieve all services within an organization.',
+    summary: 'Get a service by ID',
+    description: 'Retrieve a specific service within an organization by its ID.',
   })
   @ZodResponse({
     type: GetServiceByIdResponseDto,
-    description: 'Successful response with all services details',
+    description: 'Successful response with the service details',
   })
   @ApiNotFoundResponse()
   @ApiUnauthorizedResponse()

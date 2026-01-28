@@ -8,7 +8,7 @@ import { ToZodShape } from '../../zod-custom-shape'
 export const httpServiceSchema = z.object<ToZodShape<ServiceProps & { id: string }>>({
   id: z.ulid(),
   name: z.string(),
-  description: z.string(),
+  description: z.string().optional(),
   avgDurationInt: z.number().optional(),
   isActive: z.boolean().optional(),
   organizationId: z.string(),
@@ -56,7 +56,7 @@ export class PrismaServiceMapper {
       id: service.id.toString(),
 
       name: service.name,
-      description: service.description,
+      description: service.description ?? undefined,
       avgDurationInt: service.avgDurationInt,
       isActive: service.isActive,
       organizationId: service.organizationId,

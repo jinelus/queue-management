@@ -95,7 +95,7 @@ model ServiceStaff {
 
   active Boolean @default(true)
 
-  @@index([userId, serviceId])
+  @@unique([userId, serviceId])
   @@map("service_staff")
 }
 
