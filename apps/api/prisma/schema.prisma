@@ -87,6 +87,7 @@ model Ticket {
 }
 
 model ServiceStaff {
+  id        String  @id @default(ulid())
   userId    String
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   serviceId String
@@ -94,7 +95,7 @@ model ServiceStaff {
 
   active Boolean @default(true)
 
-  @@id([userId, serviceId])
+  @@index([userId, serviceId])
   @@map("service_staff")
 }
 
