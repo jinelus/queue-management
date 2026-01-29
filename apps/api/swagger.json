@@ -383,7 +383,7 @@
     },
     "/organizations/{organizationId}/services/by-id/{serviceId}": {
       "get": {
-        "description": "Retrieve all services within an organization.",
+        "description": "Retrieve a specific service within an organization by its ID.",
         "operationId": "GetServiceByIdController",
         "parameters": [
           {
@@ -413,7 +413,7 @@
           "401": { "description": "" },
           "404": { "description": "" },
           "default": {
-            "description": "Successful response with all services details",
+            "description": "Successful response with the service details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/GetServiceByIdResponseDto_Output" }
@@ -421,7 +421,7 @@
             }
           }
         },
-        "summary": "Get all services",
+        "summary": "Get a service by ID",
         "tags": ["Services"]
       }
     },
@@ -699,6 +699,89 @@
         "summary": "Assign staff to a service",
         "tags": ["Service Staff"]
       }
+    },
+    "/organizations/{organizationId}/services/{serviceId}/service-staff": {
+      "post": {
+        "description": "Retrieve a list of staff members assigned to a specific service within an organization.",
+        "operationId": "GetServiceStaffByServiceIdController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the service",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with service staff details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetServiceStaffByServiceIdResponseDto_Output"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Get service staff by service ID",
+        "tags": ["Service Staff"]
+      }
+    },
+    "/organizations/{organizationId}/by-staff/service-staff": {
+      "post": {
+        "description": "Retrieve service staff members associated with a specific staff ID within an organization.",
+        "operationId": "GetServiceStaffByStaffIdController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": { "description": "" },
+          "404": { "description": "" },
+          "default": {
+            "description": "Successful response with service staff details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetServiceStaffByStaffIdResponseDto_Output"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Get service staff by staff ID",
+        "tags": ["Service Staff"]
+      }
     }
   },
   "info": {
@@ -846,7 +929,7 @@
               "createdAt": { "type": "string" },
               "updatedAt": { "type": "string" }
             },
-            "required": ["id", "name", "description", "organizationId", "createdAt", "updatedAt"],
+            "required": ["id", "name", "organizationId", "createdAt", "updatedAt"],
             "additionalProperties": false
           }
         },
@@ -880,7 +963,7 @@
                 "createdAt": { "type": "string" },
                 "updatedAt": { "type": "string" }
               },
-              "required": ["id", "name", "description", "organizationId", "createdAt", "updatedAt"],
+              "required": ["id", "name", "organizationId", "createdAt", "updatedAt"],
               "additionalProperties": false
             }
           },
@@ -913,7 +996,7 @@
               "createdAt": { "type": "string" },
               "updatedAt": { "type": "string" }
             },
-            "required": ["id", "name", "description", "organizationId", "createdAt", "updatedAt"],
+            "required": ["id", "name", "organizationId", "createdAt", "updatedAt"],
             "additionalProperties": false
           }
         },
@@ -948,7 +1031,7 @@
               "createdAt": { "type": "string" },
               "updatedAt": { "type": "string" }
             },
-            "required": ["id", "name", "description", "organizationId", "createdAt", "updatedAt"],
+            "required": ["id", "name", "organizationId", "createdAt", "updatedAt"],
             "additionalProperties": false
           }
         },
@@ -974,7 +1057,7 @@
               "createdAt": { "type": "string" },
               "updatedAt": { "type": "string" }
             },
-            "required": ["id", "name", "description", "organizationId", "createdAt", "updatedAt"],
+            "required": ["id", "name", "organizationId", "createdAt", "updatedAt"],
             "additionalProperties": false
           }
         },
@@ -1270,6 +1353,72 @@
           }
         },
         "required": ["serviceStaff"],
+        "additionalProperties": false
+      },
+      "GetServiceStaffByServiceIdResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "servicesStaff": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "userId": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "serviceId": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "active": { "type": "boolean" }
+              },
+              "required": ["id", "userId", "serviceId"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["servicesStaff"],
+        "additionalProperties": false
+      },
+      "GetServiceStaffByStaffIdResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "servicesStaff": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "userId": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "serviceId": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "active": { "type": "boolean" }
+              },
+              "required": ["id", "userId", "serviceId"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["servicesStaff"],
         "additionalProperties": false
       }
     }
