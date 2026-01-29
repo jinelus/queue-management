@@ -44,7 +44,7 @@ export class GetServiceStaffByStaffId {
       return left(new NotAllowedError())
     }
 
-    const servicesStaff = await this.serviceStaffRepository.findByUserId(actorId)
+    const servicesStaff = await this.serviceStaffRepository.findByUserId(organizationId, actorId)
 
     return right({ servicesStaff })
   }
