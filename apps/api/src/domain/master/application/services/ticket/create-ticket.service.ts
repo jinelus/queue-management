@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Either, right } from '@/core/either'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { Ticket } from '@/domain/master/entreprise/entities/ticket'
 import { OrganizationRepository } from '../../repositories/organization.repository'
@@ -41,6 +42,14 @@ export class CreateTicketService {
 
     if (!service) {
       throw new NotFoundError('Service not found')
+    }
+
+    if (service.organizationId !== organizationId) {
+      throw new NotFoundError('Service not found')
+    }
+
+    if (!service.isActive) {
+      throw new NotAllowedError('Service is not active')
     }
 
     const ticket = Ticket.create({
