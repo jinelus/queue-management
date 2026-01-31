@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import { env } from '@repo/env'
 import { AuthGuard, AuthModule } from '@thallesp/nestjs-better-auth'
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod'
 import { auth } from '../auth'
 import { EnvModule } from './env/env.module'
+import { EventsModule } from './events/events.module'
 import { OrganizationModule } from './http/controllers/organization/organization.module'
 import { ServiceModule } from './http/controllers/service/service.module'
 import { ServiceStaffModule } from './http/controllers/service-staff/service-staff.module'
 import { TicketModule } from './http/controllers/ticket/ticket.module'
 import { UserModule } from './http/controllers/user/user.module'
+import { GatewayModule } from './http/gateway/gateway.module'
 
 @Module({
   providers: [
@@ -38,11 +41,14 @@ import { UserModule } from './http/controllers/user/user.module'
     AuthModule.forRoot({
       auth,
     }),
+    EventEmitterModule.forRoot(),
     UserModule,
     OrganizationModule,
     ServiceModule,
     TicketModule,
     ServiceStaffModule,
+    EventsModule,
+    GatewayModule,
   ],
 })
 export class AppModule {}
