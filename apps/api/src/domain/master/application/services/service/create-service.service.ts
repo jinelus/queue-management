@@ -15,6 +15,7 @@ interface CreateServiceServiceParams {
   avgDurationInt?: number
   organizationId: string
   isActive?: boolean
+  maxCapacity?: number
 }
 
 type CreateServiceServiceResponse = Either<
@@ -39,6 +40,7 @@ export class CreateServiceService {
     organizationId,
     isActive,
     userId,
+    maxCapacity,
   }: CreateServiceServiceParams): Promise<CreateServiceServiceResponse> {
     const { success } = await this.permissionFactory.userCan('create', 'service', { userId })
 
@@ -52,12 +54,17 @@ export class CreateServiceService {
       return left(new NotFoundError())
     }
 
+    if (maxCapacity < 1) {
+      return left(new NotAllowedError('Max capacity must be at least 1'))
+    }
+
     const service = Service.create({
       name,
       description,
       avgDurationInt,
       organizationId,
       isActive,
+      maxCapacity,
     })
 
     await this.serviceRepository.create(service)

@@ -9,7 +9,7 @@
     "./src/auth/permissions.ts"
   ],
   "scripts": {
-    "build": "pnpm env:load  nest build",
+    "build": "pnpm env:load nest build",
     "lint": "biome check --write",
     "format": "biome format --write",
     "start": "pnpm env:load nest start",
@@ -30,6 +30,7 @@
     "swagger": "pnpm env:load nest start --entryFile infra/main.swagger && pnpm lint swagger.json"
   },
   "dependencies": {
+    "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^11.1.12",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.12",
@@ -44,6 +45,7 @@
     "@socket.io/redis-adapter": "^8.3.0",
     "@thallesp/nestjs-better-auth": "^2.2.2",
     "better-auth": "^1.4.14",
+    "bullmq": "^5.67.2",
     "express": "^5.1.0",
     "nestjs-zod": "^5.1.1",
     "pg": "^8.17.1",

@@ -49,6 +49,8 @@ model Service {
   name           String
   description    String?
   avgDurationInt Int     @default(5)
+  maxCapacity    Int?
+  alertThresholdMinutes Int @default(30)
   isActive       Boolean @default(true)
 
   organizationId String

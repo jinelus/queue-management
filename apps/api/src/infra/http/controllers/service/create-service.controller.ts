@@ -29,6 +29,7 @@ export const createServiceBody = z.object({
   description: z.string().optional(),
   avgDurationInt: z.coerce.number().optional(),
   isActive: z.boolean().optional(),
+  maxCapacity: z.coerce.number().optional(),
 })
 
 export class CreateServiceBodyDto extends createZodDto(createServiceBody) {}
@@ -74,7 +75,7 @@ export class CreateServiceController {
     @Param() params: CreateServiceParamsDto,
   ): Promise<CreateServiceResponseDto> {
     const currentUserId = session.user.id
-    const { name, description, avgDurationInt, isActive } = body
+    const { name, description, avgDurationInt, isActive, maxCapacity } = body
     const { organizationId } = params
 
     const result = await this.createServiceService.execute({
@@ -84,6 +85,7 @@ export class CreateServiceController {
       isActive,
       organizationId,
       userId: currentUserId,
+      maxCapacity,
     })
 
     if (result.isLeft()) {

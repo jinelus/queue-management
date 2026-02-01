@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common'
-import { EnvModule } from '../env/env.module'
-import { QueueEventsListener } from './queue/listeners/queue-events.listener'
+import { Module } from "@nestjs/common";
+import { DatabaseModule } from "@/infra/database/database.module";
+import { EnvModule } from "../env/env.module";
+import { QueueEventsListener } from "./queue/listeners/queue-events.listener";
 
 @Module({
-  imports: [EnvModule],
+  imports: [EnvModule, DatabaseModule],
   providers: [QueueEventsListener],
   exports: [QueueEventsListener],
 })

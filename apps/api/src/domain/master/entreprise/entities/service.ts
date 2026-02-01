@@ -1,74 +1,99 @@
-import { Entity } from '@/core/entities/entity'
-import type { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import type { Optional } from '@/core/types/optional'
+import { Entity } from "@/core/entities/entity";
+import type { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import type { Optional } from "@/core/types/optional";
 
 export interface ServiceProps {
-  name: string
-  description: string
-  avgDurationInt?: number
-  isActive?: boolean
+  name: string;
+  description: string;
+  avgDurationInt?: number;
+  maxCapacity?: number | null;
+  alertThresholdMinutes?: number;
+  isActive?: boolean;
 
-  organizationId: string
+  organizationId: string;
 
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export class Service extends Entity<ServiceProps> {
-  get name(): ServiceProps['name'] {
-    return this.props.name
+  get name(): ServiceProps["name"] {
+    return this.props.name;
   }
 
-  get description(): ServiceProps['description'] {
-    return this.props.description
+  get description(): ServiceProps["description"] {
+    return this.props.description;
   }
 
-  get avgDurationInt(): ServiceProps['avgDurationInt'] {
-    return this.props.avgDurationInt
+  get avgDurationInt(): ServiceProps["avgDurationInt"] {
+    return this.props.avgDurationInt;
   }
 
-  get isActive(): ServiceProps['isActive'] {
-    return this.props.isActive
+  get maxCapacity(): ServiceProps["maxCapacity"] {
+    return this.props.maxCapacity;
   }
 
-  get organizationId(): ServiceProps['organizationId'] {
-    return this.props.organizationId
+  get alertThresholdMinutes(): ServiceProps["alertThresholdMinutes"] {
+    return this.props.alertThresholdMinutes;
   }
 
-  get createdAt(): ServiceProps['createdAt'] {
-    return this.props.createdAt
+  get isActive(): ServiceProps["isActive"] {
+    return this.props.isActive;
   }
 
-  get updatedAt(): ServiceProps['updatedAt'] {
-    return this.props.updatedAt
+  get organizationId(): ServiceProps["organizationId"] {
+    return this.props.organizationId;
   }
 
-  set name(name: ServiceProps['name']) {
-    this.props.name = name
-    this.touch()
+  get createdAt(): ServiceProps["createdAt"] {
+    return this.props.createdAt;
   }
 
-  set description(description: ServiceProps['description']) {
-    this.props.description = description
-    this.touch()
+  get updatedAt(): ServiceProps["updatedAt"] {
+    return this.props.updatedAt;
   }
 
-  set avgDurationInt(avgDurationInt: ServiceProps['avgDurationInt']) {
-    this.props.avgDurationInt = avgDurationInt
-    this.touch()
+  set name(name: ServiceProps["name"]) {
+    this.props.name = name;
+    this.touch();
   }
 
-  set isActive(isActive: ServiceProps['isActive']) {
-    this.props.isActive = isActive
-    this.touch()
+  set description(description: ServiceProps["description"]) {
+    this.props.description = description;
+    this.touch();
+  }
+
+  set avgDurationInt(avgDurationInt: ServiceProps["avgDurationInt"]) {
+    this.props.avgDurationInt = avgDurationInt;
+    this.touch();
+  }
+
+  set maxCapacity(maxCapacity: ServiceProps["maxCapacity"]) {
+    this.props.maxCapacity = maxCapacity;
+    this.touch();
+  }
+
+  set alertThresholdMinutes(
+    alertThresholdMinutes: ServiceProps["alertThresholdMinutes"],
+  ) {
+    this.props.alertThresholdMinutes = alertThresholdMinutes;
+    this.touch();
+  }
+
+  set isActive(isActive: ServiceProps["isActive"]) {
+    this.props.isActive = isActive;
+    this.touch();
   }
 
   private touch() {
-    this.props.updatedAt = new Date()
+    this.props.updatedAt = new Date();
   }
 
   static create(
-    props: Optional<ServiceProps, 'createdAt' | 'updatedAt' | 'isActive' | 'avgDurationInt'>,
+    props: Optional<
+      ServiceProps,
+      "createdAt" | "updatedAt" | "isActive" | "avgDurationInt"
+    >,
     id?: UniqueEntityID,
   ): Service {
     const service = new Service(
@@ -76,12 +101,13 @@ export class Service extends Entity<ServiceProps> {
         ...props,
         isActive: props.isActive ?? false,
         avgDurationInt: props.avgDurationInt ?? 5,
+        alertThresholdMinutes: props.alertThresholdMinutes ?? 30,
         createdAt: props.createdAt ?? new Date(),
         updatedAt: props.updatedAt ?? new Date(),
       },
       id,
-    )
+    );
 
-    return service
+    return service;
   }
 }

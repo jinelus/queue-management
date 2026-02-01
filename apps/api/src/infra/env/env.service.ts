@@ -10,6 +10,9 @@ type GetEnv<T extends keyof typeof env> = PathValue<
     BETTER_AUTH_URL?: string
     PORT?: number
     FRONT_END_URL?: string
+    REDIS_HOST: string
+    REDIS_PORT: number
+    REDIS_URL?: string
   },
   T
 >

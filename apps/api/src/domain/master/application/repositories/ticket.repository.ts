@@ -19,4 +19,13 @@ export abstract class TicketRepository extends Repository<Ticket> {
   ): Promise<number>;
   abstract findOldestWaiting(serviceId: string): Promise<Ticket | null>;
   abstract countPreceding(serviceId: string, createdAt: Date): Promise<number>;
+  abstract getServedTicketsCountByDay(
+    organizationId: string,
+    days: number,
+  ): Promise<{ date: string; count: number }[]>;
+  abstract getAverageServiceDuration(
+    organizationId: string,
+  ): Promise<
+    { employeeId: string; employeeName: string; avgDuration: number }[]
+  >;
 }
