@@ -1,0 +1,5 @@
+export * from './in-memory-organization.repository'
+export * from './in-memory-service.repository'
+export * from './in-memory-service-staff.repository'
+export * from './in-memory-ticket.repository'
+export * from './in-memory-user-repository.repository'
