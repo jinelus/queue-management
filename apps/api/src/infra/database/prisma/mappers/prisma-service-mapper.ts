@@ -1,21 +1,31 @@
-import { createZodDto } from 'nestjs-zod'
-import { z } from 'zod'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Service, ServiceProps } from '@/domain/master/entreprise/entities/service'
-import { Prisma, Service as PrismaService } from '../../generated/prisma/client'
-import { ToZodShape } from '../../zod-custom-shape'
+import { createZodDto } from "nestjs-zod";
+import { z } from "zod";
+import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import {
+  Service,
+  ServiceProps,
+} from "@/domain/master/entreprise/entities/service";
+import {
+  Prisma,
+  Service as PrismaService,
+} from "../../generated/prisma/client";
+import { ToZodShape } from "../../zod-custom-shape";
 
-export const httpServiceSchema = z.object<ToZodShape<ServiceProps & { id: string }>>({
+export const httpServiceSchema = z.object<
+  ToZodShape<ServiceProps & { id: string }>
+>({
   id: z.ulid(),
   name: z.string(),
   description: z.string().optional(),
   avgDurationInt: z.number().optional(),
+  maxCapacity: z.number().nullable().optional(),
+  alertThresholdMinutes: z.number().optional(),
   isActive: z.boolean().optional(),
   organizationId: z.string(),
 
   createdAt: z.string(),
   updatedAt: z.string(),
-})
+});
 
 export class HttpService extends createZodDto(httpServiceSchema) {}
 
@@ -26,6 +36,8 @@ export class PrismaServiceMapper {
         name: raw.name,
         description: raw.description,
         avgDurationInt: raw.avgDurationInt,
+        maxCapacity: raw.maxCapacity,
+        alertThresholdMinutes: raw.alertThresholdMinutes,
         isActive: raw.isActive,
         organizationId: raw.organizationId,
 
@@ -33,7 +45,7 @@ export class PrismaServiceMapper {
         updatedAt: raw.updatedAt,
       },
       new UniqueEntityID(raw.id),
-    )
+    );
   }
 
   static toPrisma(service: Service): Prisma.ServiceUncheckedCreateInput {
@@ -43,12 +55,14 @@ export class PrismaServiceMapper {
       name: service.name,
       description: service.description,
       avgDurationInt: service.avgDurationInt,
+      maxCapacity: service.maxCapacity,
+      alertThresholdMinutes: service.alertThresholdMinutes,
       isActive: service.isActive,
       organizationId: service.organizationId,
 
       createdAt: service.createdAt ?? undefined,
       updatedAt: service.updatedAt ?? undefined,
-    }
+    };
   }
 
   static toHttp(service: Service): HttpService {
@@ -58,12 +72,14 @@ export class PrismaServiceMapper {
       name: service.name,
       description: service.description ?? undefined,
       avgDurationInt: service.avgDurationInt,
+      maxCapacity: service.maxCapacity,
+      alertThresholdMinutes: service.alertThresholdMinutes,
       isActive: service.isActive,
       organizationId: service.organizationId,
 
       createdAt: service.createdAt?.toISOString(),
       updatedAt: service.updatedAt?.toISOString(),
-    })
-    return httpService
+    });
+    return httpService;
   }
 }
