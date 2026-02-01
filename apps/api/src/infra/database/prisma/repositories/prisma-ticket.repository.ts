@@ -1,11 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common'
 import {
   FindTicketsParams,
   TicketRepository,
-} from "@/domain/master/application/repositories/ticket.repository";
-import { Ticket } from "@/domain/master/entreprise/entities/ticket";
-import { PrismaTicketMapper } from "../mappers/prisma-ticket.mapper";
-import { PrismaService } from "../prisma.service";
+} from '@/domain/master/application/repositories/ticket.repository'
+import { Ticket } from '@/domain/master/entreprise/entities/ticket'
+import { PrismaTicketMapper } from '../mappers/prisma-ticket.mapper'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaTicketRepository implements TicketRepository {
@@ -14,46 +14,43 @@ export class PrismaTicketRepository implements TicketRepository {
   async create(entity: Ticket): Promise<void> {
     await this.prisma.ticket.create({
       data: PrismaTicketMapper.toPrisma(entity),
-    });
+    })
   }
 
   async findAll(organizationId: string): Promise<Ticket[]> {
     const tickets = await this.prisma.ticket.findMany({
       where: { organizationId },
-    });
-    return tickets.map(PrismaTicketMapper.toDomain);
+    })
+    return tickets.map(PrismaTicketMapper.toDomain)
   }
 
   async findById(id: string): Promise<Ticket | null> {
     const ticket = await this.prisma.ticket.findUnique({
       where: { id },
-    });
+    })
 
     if (!ticket) {
-      return null;
+      return null
     }
 
-    return PrismaTicketMapper.toDomain(ticket);
+    return PrismaTicketMapper.toDomain(ticket)
   }
 
   async save(entity: Ticket): Promise<void> {
     await this.prisma.ticket.update({
       where: { id: entity.id.toString() },
       data: PrismaTicketMapper.toPrisma(entity),
-    });
+    })
   }
 
   async delete(entity: Ticket): Promise<void> {
     await this.prisma.ticket.delete({
       where: { id: entity.id.toString() },
-    });
+    })
   }
 
-  async count(
-    organizationId: string,
-    params?: FindTicketsParams,
-  ): Promise<number> {
-    const { serviceId, servedById, search, status } = params ?? {};
+  async count(organizationId: string, params?: FindTicketsParams): Promise<number> {
+    const { serviceId, servedById, search, status } = params ?? {}
     const count = await this.prisma.ticket.count({
       where: {
         organizationId,
@@ -62,34 +59,22 @@ export class PrismaTicketRepository implements TicketRepository {
         status,
         guestName: {
           contains: search,
-          mode: "insensitive",
+          mode: 'insensitive',
         },
       },
-    });
+    })
 
-    return count;
+    return count
   }
 
-  async findTickets(
-    organizationId: string,
-    params?: FindTicketsParams,
-  ): Promise<Array<Ticket>> {
-    const {
-      order,
-      orderBy,
-      page,
-      perPage,
-      search,
-      status,
-      servedById,
-      serviceId,
-    } = params ?? {};
+  async findTickets(organizationId: string, params?: FindTicketsParams): Promise<Array<Ticket>> {
+    const { order, orderBy, page, perPage, search, status, servedById, serviceId } = params ?? {}
 
     const tickets = await this.prisma.ticket.findMany({
       where: {
         guestName: {
           contains: search,
-          mode: "insensitive",
+          mode: 'insensitive',
         },
         organizationId,
         ...(status ? { status } : {}),
@@ -99,42 +84,94 @@ export class PrismaTicketRepository implements TicketRepository {
       take: perPage,
       skip: page && perPage ? (page - 1) * perPage : undefined,
       orderBy: {
-        [orderBy ?? "joinedAt"]: order,
+        [orderBy ?? 'joinedAt']: order,
       },
-    });
+    })
 
-    return tickets.map(PrismaTicketMapper.toDomain);
+    return tickets.map(PrismaTicketMapper.toDomain)
   }
 
   async findOldestWaiting(serviceId: string): Promise<Ticket | null> {
     const ticket = await this.prisma.ticket.findFirst({
       where: {
         serviceId,
-        status: "WAITING",
+        status: 'WAITING',
       },
       orderBy: {
-        joinedAt: "asc",
+        joinedAt: 'asc',
       },
-    });
+    })
 
     if (!ticket) {
-      return null;
+      return null
     }
 
-    return PrismaTicketMapper.toDomain(ticket);
+    return PrismaTicketMapper.toDomain(ticket)
   }
 
   async countPreceding(serviceId: string, joinedAt: Date): Promise<number> {
     const count = await this.prisma.ticket.count({
       where: {
         serviceId,
-        status: "WAITING",
+        status: 'WAITING',
         joinedAt: {
           lt: joinedAt,
         },
       },
-    });
+    })
 
-    return count;
+    return count
+  }
+
+  async getServedTicketsCountByDay(
+    organizationId: string,
+    days: number,
+  ): Promise<{ date: string; count: number }[]> {
+    const startDate = new Date()
+    startDate.setHours(0, 0, 0, 0)
+    startDate.setDate(startDate.getDate() - (days - 1))
+
+    const results = await this.prisma.$queryRaw<{ date: Date; count: number }[]>`
+      SELECT
+        "completedAt"::date as date,
+        COUNT(*)::int as count
+      FROM "ticket"
+      WHERE "organizationId" = ${organizationId}
+        AND "status" = 'SERVED'
+        AND "completedAt" >= ${startDate}
+      GROUP BY "completedAt"::date
+      ORDER BY "completedAt"::date ASC
+    `
+
+    return results.map((r) => ({
+      date: r.date instanceof Date ? r.date.toISOString().split('T')[0] : r.date,
+      count: Number(r.count),
+    }))
+  }
+
+  async getAverageServiceDuration(
+    organizationId: string,
+  ): Promise<{ employeeId: string; employeeName: string; avgDuration: number }[]> {
+    const results = await this.prisma.$queryRaw<
+      { servedById: string; employeeName: string; avgDuration: number }[]
+    >`
+        SELECT
+            t."servedById",
+            u."name" as "employeeName",
+            AVG(EXTRACT(EPOCH FROM (t."completedAt" - t."startedAt")))::float as "avgDuration"
+        FROM "ticket" t
+        JOIN "user" u ON t."servedById" = u."id"
+        WHERE t."organizationId" = ${organizationId}
+          AND t."status" = 'SERVED'
+          AND t."startedAt" IS NOT NULL
+          AND t."completedAt" IS NOT NULL
+        GROUP BY t."servedById", u."name"
+     `
+
+    return results.map((r) => ({
+      employeeId: r.servedById,
+      employeeName: r.employeeName,
+      avgDuration: Math.round(r.avgDuration),
+    }))
   }
 }

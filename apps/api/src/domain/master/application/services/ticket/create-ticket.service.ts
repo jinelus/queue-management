@@ -52,6 +52,19 @@ export class CreateTicketService {
       throw new NotAllowedError('Service is not active')
     }
 
+    if (service.maxCapacity !== null && service.maxCapacity !== undefined) {
+      const pendingCount = await this.ticketRepository.count(organizationId, {
+        serviceId,
+        status: 'WAITING',
+        orderBy: 'joinedAt',
+        order: 'asc',
+      })
+
+      if (pendingCount >= service.maxCapacity) {
+        throw new NotAllowedError('Queue is full')
+      }
+    }
+
     const ticket = Ticket.create({
       guestName,
       organizationId,
