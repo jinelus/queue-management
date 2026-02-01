@@ -1,3 +1,4 @@
+import { BullModule } from '@nestjs/bullmq'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
@@ -8,6 +9,7 @@ import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod'
 import { auth } from '../auth'
 import { EnvModule } from './env/env.module'
 import { EventsModule } from './events/events.module'
+import { AnalyticsModule } from './http/controllers/analytics/analytics.module'
 import { OrganizationModule } from './http/controllers/organization/organization.module'
 import { ServiceModule } from './http/controllers/service/service.module'
 import { ServiceStaffModule } from './http/controllers/service-staff/service-staff.module'
@@ -41,6 +43,14 @@ import { GatewayModule } from './http/gateway/gateway.module'
     AuthModule.forRoot({
       auth,
     }),
+    BullModule.forRootAsync({
+      useFactory: () => ({
+        connection: {
+          host: env.REDIS_HOST,
+          port: env.REDIS_PORT,
+        },
+      }),
+    }),
     EventEmitterModule.forRoot(),
     UserModule,
     OrganizationModule,
@@ -49,6 +59,7 @@ import { GatewayModule } from './http/gateway/gateway.module'
     ServiceStaffModule,
     EventsModule,
     GatewayModule,
+    AnalyticsModule,
   ],
 })
 export class AppModule {}

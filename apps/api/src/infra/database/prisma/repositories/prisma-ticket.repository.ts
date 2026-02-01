@@ -137,4 +137,60 @@ export class PrismaTicketRepository implements TicketRepository {
 
     return count;
   }
+
+  async getServedTicketsCountByDay(
+    organizationId: string,
+    days: number,
+  ): Promise<{ date: string; count: number }[]> {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
+    const results = await this.prisma.$queryRaw<
+      { date: Date; count: number }[]
+    >`
+      SELECT
+        "completedAt"::date as date,
+        COUNT(*)::int as count
+      FROM "ticket"
+      WHERE "organizationId" = ${organizationId}
+        AND "status" = 'SERVED'
+        AND "completedAt" >= ${startDate}
+      GROUP BY "completedAt"::date
+      ORDER BY "completedAt"::date ASC
+    `;
+
+    return results.map((r) => ({
+      date:
+        r.date instanceof Date ? r.date.toISOString().split("T")[0] : r.date,
+      count: Number(r.count),
+    }));
+  }
+
+  async getAverageServiceDuration(
+    organizationId: string,
+  ): Promise<
+    { employeeId: string; employeeName: string; avgDuration: number }[]
+  > {
+    const results = await this.prisma.$queryRaw<
+      { servedById: string; employeeName: string; avgDuration: number }[]
+    >`
+        SELECT
+            t."servedById",
+            u."name" as "employeeName",
+            AVG(EXTRACT(EPOCH FROM (t."completedAt" - t."startedAt")))::float as "avgDuration"
+        FROM "ticket" t
+        JOIN "user" u ON t."servedById" = u."id"
+        WHERE t."organizationId" = ${organizationId}
+          AND t."status" = 'SERVED'
+          AND t."startedAt" IS NOT NULL
+          AND t."completedAt" IS NOT NULL
+        GROUP BY t."servedById", u."name"
+     `;
+
+    return results.map((r) => ({
+      employeeId: r.servedById,
+      employeeName: r.employeeName,
+      avgDuration: Math.round(r.avgDuration),
+    }));
+  }
 }
