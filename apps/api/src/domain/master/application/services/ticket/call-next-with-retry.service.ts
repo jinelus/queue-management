@@ -1,4 +1,6 @@
+import { InjectQueue } from '@nestjs/bullmq'
 import { Injectable } from '@nestjs/common'
+import { Queue } from 'bullmq'
 import { Either, left, right } from '@/core/either'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
@@ -22,14 +24,13 @@ type CallNextWithRetryServiceResponse = Either<
 
 @Injectable()
 export class CallNextWithRetryService {
-  private readonly MAX_CALL_ATTEMPTS = 3
-  private readonly CALL_TIMEOUT_MS = 30000
-  private callTimeouts = new Map<string, NodeJS.Timeout>()
+  private readonly CALL_TIMEOUT_MS = 5000
 
   constructor(
     private readonly ticketRepository: TicketRepository,
     private readonly permissionFactory: PermissionFactory,
     private readonly queueEventsListener: QueueEventsListener,
+    @InjectQueue('ticket-call-queue') private readonly ticketCallQueue: Queue,
   ) {}
 
   async execute({
@@ -58,7 +59,6 @@ export class CallNextWithRetryService {
 
     await this.ticketRepository.save(ticket)
 
-    // Émettre l'événement WebSocket
     this.queueEventsListener.onUserCalled({
       ticketId: ticket.id.toString(),
       payload: {
@@ -68,77 +68,35 @@ export class CallNextWithRetryService {
       },
     })
 
-    // Démarrer le retry logic
-    this.scheduleNextCallAttempt(ticket.id.toString(), serviceId, organizationId)
+    await this.scheduleNextCallAttempt(ticket.id.toString(), serviceId, organizationId)
 
     return right({ ticket })
   }
 
-  private scheduleNextCallAttempt(
+  async scheduleNextCallAttempt(
     ticketId: string,
     serviceId: string,
     organizationId: string,
-  ): void {
-    // Nettoyer ancien timeout s'il existe
-    if (this.callTimeouts.has(ticketId)) {
-      clearTimeout(this.callTimeouts.get(ticketId))
+  ): Promise<void> {
+    const existingJob = await this.ticketCallQueue.getJob(ticketId)
+    if (existingJob) {
+      await existingJob.remove()
     }
 
-    const timeout = setTimeout(async () => {
-      const ticket = await this.ticketRepository.findById(ticketId)
-
-      if (!ticket || ticket.status !== 'CALLED') {
-        return
-      }
-
-      if (ticket.callCount >= this.MAX_CALL_ATTEMPTS) {
-        // Marquer comme absent
-        ticket.status = 'ABSENT'
-        await this.ticketRepository.save(ticket)
-
-        this.queueEventsListener.onUserNoShow({
-          ticketId: ticket.id.toString(),
-          payload: { ticketId: ticket.id.toString() },
-        })
-
-        // Appeler le suivant automatiquement
-        const nextTicket = await this.ticketRepository.findOldestWaiting(serviceId)
-        if (nextTicket) {
-          // Récursif : appeler le suivant
-          await this.execute({
-            serviceId,
-            staffId: ticket.servedById,
-            organizationId,
-          })
-        }
-
-        return
-      }
-
-      // Incrémenter et rappeler
-      ticket.callCount += 1
-      await this.ticketRepository.save(ticket)
-
-      this.queueEventsListener.onUserCalled({
-        ticketId: ticket.id.toString(),
-        payload: {
-          ticketId: ticket.id.toString(),
-          position: 1,
-          callAttempt: ticket.callCount,
-        },
-      })
-
-      this.scheduleNextCallAttempt(ticketId, serviceId, organizationId)
-    }, this.CALL_TIMEOUT_MS)
-
-    this.callTimeouts.set(ticketId, timeout)
+    await this.ticketCallQueue.add(
+      'retry',
+      { ticketId, serviceId, organizationId },
+      {
+        jobId: ticketId,
+        delay: this.CALL_TIMEOUT_MS,
+      },
+    )
   }
 
-  // Nettoyer les timeouts si le ticket est servi
   async markAsServed(ticketId: string): Promise<void> {
-    if (this.callTimeouts.has(ticketId)) {
-      clearTimeout(this.callTimeouts.get(ticketId))
-      this.callTimeouts.delete(ticketId)
+    const job = await this.ticketCallQueue.getJob(ticketId)
+    if (job) {
+      await job.remove()
     }
   }
 }

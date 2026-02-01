@@ -8,6 +8,9 @@ export const env = createEnv({
     BETTER_AUTH_URL: z.string().default('http://localhost:3333'),
     PORT: z.coerce.number().default(3333),
     FRONT_END_URL: z.url().default('http://localhost:3000'),
+    REDIS_HOST: z.string().default('localhost'),
+    REDIS_PORT: z.coerce.number().default(6379),
+    REDIS_URL: z.string().optional(),
   },
   client: {},
   shared: {},
@@ -17,5 +20,8 @@ export const env = createEnv({
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     PORT: process.env.PORT,
     FRONT_END_URL: process.env.FRONT_END_URL,
+    REDIS_HOST: process.env.REDIS_HOST,
+    REDIS_PORT: process.env.REDIS_PORT,
+    REDIS_URL: process.env.REDIS_URL,
   },
 })

@@ -5,14 +5,29 @@ import { ServerOptions } from 'socket.io'
 
 export class RedisIoAdapter extends IoAdapter {
   private adapterConstructor: ReturnType<typeof createAdapter>
+  private pubClient: ReturnType<typeof createClient>
+  private subClient: ReturnType<typeof createClient>
 
   async connectToRedis(): Promise<void> {
-    const pubClient = createClient({ url: process.env.REDIS_URL })
-    const subClient = pubClient.duplicate()
+    const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379'
 
-    await Promise.all([pubClient.connect(), subClient.connect()])
+    if (!redisUrl) {
+      throw new Error('REDIS_URL is not defined in environment variables')
+    }
 
-    this.adapterConstructor = createAdapter(pubClient, subClient)
+    this.pubClient = createClient({ url: redisUrl })
+    this.subClient = this.pubClient.duplicate()
+
+    this.pubClient.on('error', (err) => console.error('Redis Pub Client Error:', err))
+    this.subClient.on('error', (err) => console.error('Redis Sub Client Error:', err))
+
+    await Promise.all([this.pubClient.connect(), this.subClient.connect()])
+
+    this.adapterConstructor = createAdapter(this.pubClient, this.subClient)
+  }
+
+  async disconnect(): Promise<void> {
+    await Promise.all([this.pubClient.destroy(), this.subClient.destroy()])
   }
 
   createIOServer(port: number, options?: ServerOptions) {
