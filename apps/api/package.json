@@ -20,7 +20,7 @@
     "test": "pnpm env:load vitest",
     "test:watch": "pnpm env:load vitest --watch",
     "test:cov": "pnpm env:load vitest --coverage",
-    "test:e2e": "pnpm env:load vitest --config ./test/vitest-e2e.json",
+    "test:e2e": "pnpm env:load vitest --config ./vitest.config.e2e.mts",
     "db:generate": "pnpm env:load prisma generate",
     "db:push": "pnpm env:load prisma db push",
     "db:reset": "pnpm env:load prisma migrate reset",
