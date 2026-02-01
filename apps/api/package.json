@@ -17,11 +17,10 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test": "pnpm env:load vitest",
+    "test:watch": "pnpm env:load vitest --watch",
+    "test:cov": "pnpm env:load vitest --coverage",
+    "test:e2e": "pnpm env:load vitest --config ./test/vitest-e2e.json",
     "db:generate": "pnpm env:load prisma generate",
     "db:push": "pnpm env:load prisma db push",
     "db:reset": "pnpm env:load prisma migrate reset",
@@ -30,6 +29,7 @@
     "swagger": "pnpm env:load nest start --entryFile infra/main.swagger && pnpm lint swagger.json"
   },
   "dependencies": {
+    "@faker-js/faker": "github:faker-js/faker",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^11.1.12",
     "@nestjs/config": "^4.0.2",
@@ -63,11 +63,10 @@
     "@repo/env": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/express": "^5.0.6",
-    "@types/jest": "^29.5.2",
     "@types/node": "^25.0.9",
     "@types/supertest": "^6.0.0",
+    "@vitest/coverage-v8": "4.0.18",
     "dotenv-cli": "^11.0.0",
-    "jest": "^29.5.0",
     "prisma": "^7.2.0",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
@@ -75,7 +74,10 @@
     "ts-loader": "^9.4.3",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "unplugin-swc": "^1.5.9",
+    "vite-tsconfig-paths": "^6.0.5",
+    "vitest": "^4.0.18"
   },
   "jest": {
     "moduleFileExtensions": [
