@@ -48,6 +48,7 @@ import { GatewayModule } from './http/gateway/gateway.module'
         connection: {
           host: env.REDIS_HOST,
           port: env.REDIS_PORT,
+          url: env.REDIS_URL,
         },
       }),
     }),
