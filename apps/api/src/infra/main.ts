@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: <> */
+
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { env } from '@repo/env'
@@ -5,6 +7,7 @@ import { apiReference } from '@scalar/nestjs-api-reference'
 import { cleanupOpenApiDoc } from 'nestjs-zod'
 import { AppModule } from './app.module'
 import { EnvService } from './env/env.service'
+import { RedisIoAdapter } from './http/adapters/redis-io.adapter'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -18,6 +21,10 @@ async function bootstrap() {
 
   const configService = app.get(EnvService)
   const port = configService.get('PORT')
+
+  const redisIoAdapter = new RedisIoAdapter(app)
+  await redisIoAdapter.connectToRedis()
+  app.useWebSocketAdapter(redisIoAdapter)
 
   const config = new DocumentBuilder()
     .addBearerAuth({ type: 'http' })

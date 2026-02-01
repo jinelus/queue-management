@@ -7,21 +7,23 @@ import { OrganizationRepository } from '../../repositories/organization.reposito
 import { ServiceRepository } from '../../repositories/service.repository'
 import { TicketRepository } from '../../repositories/ticket.repository'
 
-interface CreateTicketServiceParams {
+interface JoinQueueServiceParams {
   guestName: string
   organizationId: string
   serviceId: string
 }
 
-type CreateTicketServiceResponse = Either<
-  NotFoundError,
+type JoinQueueServiceResponse = Either<
+  NotFoundError | NotAllowedError,
   {
     ticket: Ticket
+    position: number | null
+    estimatedWaitTime: number | null
   }
 >
 
 @Injectable()
-export class CreateTicketService {
+export class JoinQueueService {
   constructor(
     private readonly organizationRepository: OrganizationRepository,
     private readonly serviceRepository: ServiceRepository,
@@ -32,7 +34,7 @@ export class CreateTicketService {
     guestName,
     organizationId,
     serviceId,
-  }: CreateTicketServiceParams): Promise<CreateTicketServiceResponse> {
+  }: JoinQueueServiceParams): Promise<JoinQueueServiceResponse> {
     const organization = await this.organizationRepository.findById(organizationId)
 
     if (!organization) {
@@ -52,6 +54,19 @@ export class CreateTicketService {
       throw new NotAllowedError('Service is not active')
     }
 
+    if (service.maxCapacity) {
+      const pendingCount = await this.ticketRepository.count(organizationId, {
+        serviceId,
+        status: 'WAITING',
+        orderBy: 'joinedAt',
+        order: 'asc',
+      })
+
+      if (pendingCount >= service.maxCapacity) {
+        throw new NotAllowedError('Queue is full')
+      }
+    }
+
     const ticket = Ticket.create({
       guestName,
       organizationId,
@@ -60,8 +75,22 @@ export class CreateTicketService {
 
     await this.ticketRepository.create(ticket)
 
+    const positionCount = await this.ticketRepository.countPreceding(
+      ticket.serviceId,
+      ticket.joinedAt,
+    )
+    const position = positionCount + 1
+
+    let estimatedWaitTime: number | null = null
+
+    if (service.avgDurationInt) {
+      estimatedWaitTime = position * service.avgDurationInt
+    }
+
     return right({
       ticket,
+      position,
+      estimatedWaitTime,
     })
   }
 }

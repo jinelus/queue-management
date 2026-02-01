@@ -20,7 +20,6 @@
     },
     "domains": {
       "test": "recommended",
-      "react": "all",
       "project": "recommended"
     }
   },
