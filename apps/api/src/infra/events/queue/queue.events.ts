@@ -6,12 +6,10 @@ export const QUEUE_EVENTS = {
 
 export type UserCalledEvent = {
   ticketId: string
-  // ticketNumber: string
   position: number
   callAttempt: number
 }
 
 export type UserNoShowEvent = {
   ticketId: string
-  // ticketNumber: string
 }

@@ -1,31 +1,33 @@
-import { Injectable } from "@nestjs/common";
-import { Either, left, right } from "@/core/either";
-import { NotAllowedError } from "@/core/errors/not-allowed-error";
-import { NotFoundError } from "@/core/errors/not-found-error";
-import { Ticket } from "@/domain/master/entreprise/entities/ticket";
-import { CreateTicketService } from "./create-ticket.service";
-import { GetTicketPositionService } from "./get-ticket-position.service";
+import { Injectable } from '@nestjs/common'
+import { Either, right } from '@/core/either'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
+import { NotFoundError } from '@/core/errors/not-found-error'
+import { Ticket } from '@/domain/master/entreprise/entities/ticket'
+import { OrganizationRepository } from '../../repositories/organization.repository'
+import { ServiceRepository } from '../../repositories/service.repository'
+import { TicketRepository } from '../../repositories/ticket.repository'
 
 interface JoinQueueServiceParams {
-  guestName: string;
-  organizationId: string;
-  serviceId: string;
+  guestName: string
+  organizationId: string
+  serviceId: string
 }
 
 type JoinQueueServiceResponse = Either<
   NotFoundError | NotAllowedError,
   {
-    ticket: Ticket;
-    position: number | null;
-    estimatedWaitTime: number | null;
+    ticket: Ticket
+    position: number | null
+    estimatedWaitTime: number | null
   }
->;
+>
 
 @Injectable()
 export class JoinQueueService {
   constructor(
-    private readonly createTicketService: CreateTicketService,
-    private readonly getTicketPositionService: GetTicketPositionService,
+    private readonly organizationRepository: OrganizationRepository,
+    private readonly serviceRepository: ServiceRepository,
+    private readonly ticketRepository: TicketRepository,
   ) {}
 
   async execute({
@@ -33,37 +35,62 @@ export class JoinQueueService {
     organizationId,
     serviceId,
   }: JoinQueueServiceParams): Promise<JoinQueueServiceResponse> {
-    // 1. Create the ticket
-    const createResult = await this.createTicketService.execute({
+    const organization = await this.organizationRepository.findById(organizationId)
+
+    if (!organization) {
+      throw new NotFoundError('Organization not found')
+    }
+    const service = await this.serviceRepository.findById(serviceId)
+
+    if (!service) {
+      throw new NotFoundError('Service not found')
+    }
+
+    if (service.organizationId !== organizationId) {
+      throw new NotFoundError('Service not found')
+    }
+
+    if (!service.isActive) {
+      throw new NotAllowedError('Service is not active')
+    }
+
+    if (service.maxCapacity) {
+      const pendingCount = await this.ticketRepository.count(organizationId, {
+        serviceId,
+        status: 'WAITING',
+        orderBy: 'joinedAt',
+        order: 'asc',
+      })
+
+      if (pendingCount >= service.maxCapacity) {
+        throw new NotAllowedError('Queue is full')
+      }
+    }
+
+    const ticket = Ticket.create({
       guestName,
       organizationId,
       serviceId,
-    });
+    })
 
-    if (createResult.isLeft()) {
-      return left(createResult.value);
+    await this.ticketRepository.create(ticket)
+
+    const positionCount = await this.ticketRepository.countPreceding(
+      ticket.serviceId,
+      ticket.joinedAt,
+    )
+    const position = positionCount + 1
+
+    let estimatedWaitTime: number | null = null
+
+    if (service.avgDurationInt) {
+      estimatedWaitTime = position * service.avgDurationInt
     }
-
-    const { ticket } = createResult.value;
-
-    // 2. Get position info
-    const positionResult = await this.getTicketPositionService.execute({
-      ticketId: ticket.id.toString(),
-      organizationId,
-    });
-
-    if (positionResult.isLeft()) {
-      // In theory, this shouldn't happen right after creation,
-      // but if it does, we return the error or fallback
-      return left(positionResult.value);
-    }
-
-    const { position, estimatedWaitTime } = positionResult.value;
 
     return right({
       ticket,
       position,
       estimatedWaitTime,
-    });
+    })
   }
 }
