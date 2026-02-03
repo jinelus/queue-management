@@ -6,11 +6,14 @@ import { Ticket } from '@/domain/master/entreprise/entities/ticket'
 import { PermissionFactory } from '../../permissions/permission.factory'
 import { OrganizationRepository } from '../../repositories/organization.repository'
 import { ServiceRepository } from '../../repositories/service.repository'
+import { ServiceStaffRepository } from '../../repositories/service-staff.repository'
 import { TicketRepository } from '../../repositories/ticket.repository'
+import { UserRepository } from '../../repositories/user.repository'
 
 interface TransferTicketServiceParams {
   ticketId: string
   targetServiceId: string
+  targetStaffId?: string
   staffId: string
   organizationId: string
 }
@@ -28,12 +31,15 @@ export class TransferTicketService {
     private readonly organizationRepository: OrganizationRepository,
     private readonly ticketRepository: TicketRepository,
     private readonly serviceRepository: ServiceRepository,
+    private readonly serviceStaffRepository: ServiceStaffRepository,
+    private readonly userRepository: UserRepository,
     private readonly permissionFactory: PermissionFactory,
   ) {}
 
   async execute({
     ticketId,
     targetServiceId,
+    targetStaffId,
     staffId,
     organizationId,
   }: TransferTicketServiceParams): Promise<TransferTicketServiceResponse> {
@@ -71,10 +77,42 @@ export class TransferTicketService {
       return left(new NotAllowedError())
     }
 
-    ticket.serviceId = targetServiceId
-    ticket.status = 'WAITING'
-    ticket.servedById = undefined
-    ticket.callCount = 0
+    // Validate target staff if provided
+    if (targetStaffId) {
+      const targetUser = await this.userRepository.findById(targetStaffId)
+
+      if (!targetUser) {
+        return left(new NotFoundError('Target staff not found'))
+      }
+
+      // Verify staff is assigned to the target service
+      const staffAssignment = await this.serviceStaffRepository.findByPair(
+        targetServiceId,
+        targetStaffId,
+      )
+
+      if (!staffAssignment || !staffAssignment.active) {
+        return left(new NotFoundError('Staff is not assigned to the target service'))
+      }
+
+      // Check if staff is available (online and counter not closed)
+      if (!staffAssignment.isOnline || staffAssignment.isCounterClosed) {
+        return left(new NotAllowedError('Target staff is not available'))
+      }
+
+      // Assign ticket directly to the target staff
+      ticket.serviceId = targetServiceId
+      ticket.status = 'CALLED'
+      ticket.servedById = targetStaffId
+      ticket.calledAt = new Date()
+      ticket.callCount = 1
+    } else {
+      // Transfer to service queue (existing behavior)
+      ticket.serviceId = targetServiceId
+      ticket.status = 'WAITING'
+      ticket.servedById = undefined
+      ticket.callCount = 0
+    }
 
     await this.ticketRepository.save(ticket)
 

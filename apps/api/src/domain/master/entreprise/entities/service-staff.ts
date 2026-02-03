@@ -6,6 +6,8 @@ export interface ServiceStaffProps {
   userId: string
   serviceId: string
   active: boolean
+  isOnline: boolean
+  isCounterClosed: boolean
 }
 
 export class ServiceStaff extends Entity<ServiceStaffProps> {
@@ -25,11 +27,32 @@ export class ServiceStaff extends Entity<ServiceStaffProps> {
     this.props.active = active
   }
 
-  static create(props: Optional<ServiceStaffProps, 'active'>, id?: UniqueEntityID): ServiceStaff {
+  get isOnline(): boolean {
+    return this.props.isOnline
+  }
+
+  set isOnline(isOnline: boolean) {
+    this.props.isOnline = isOnline
+  }
+
+  get isCounterClosed(): boolean {
+    return this.props.isCounterClosed
+  }
+
+  set isCounterClosed(isCounterClosed: boolean) {
+    this.props.isCounterClosed = isCounterClosed
+  }
+
+  static create(
+    props: Optional<ServiceStaffProps, 'active' | 'isOnline' | 'isCounterClosed'>,
+    id?: UniqueEntityID,
+  ): ServiceStaff {
     const serviceStaff = new ServiceStaff(
       {
         ...props,
         active: props.active ?? true,
+        isOnline: props.isOnline ?? false,
+        isCounterClosed: props.isCounterClosed ?? false,
       },
       id,
     )
