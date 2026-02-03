@@ -10,6 +10,7 @@ export const httpUserSchema = z.object<ToZodShape<UserProps & { id: string }>>({
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
+  organizationId: z.ulid(),
 
   banned: z.boolean().optional(),
   banReason: z.string().optional(),
@@ -31,6 +32,7 @@ export class PrismaUserMapper {
 
         email: raw.email,
         emailVerified: raw.emailVerified,
+        organizationId: raw.organizationId ? new UniqueEntityID(raw.organizationId) : undefined,
 
         banExpires: raw.banExpires ?? undefined,
         banned: raw.banned ?? undefined,
@@ -55,6 +57,7 @@ export class PrismaUserMapper {
 
       email: user.email,
       emailVerified: user.emailVerified,
+      organizationId: user.organizationId ? user.organizationId.toString() : undefined,
 
       image: user.image,
 
@@ -77,6 +80,7 @@ export class PrismaUserMapper {
 
       email: user.email,
       emailVerified: user.emailVerified,
+      organizationId: user.organizationId?.toString(),
 
       banExpires: user.banExpires?.toISOString(),
       banned: user.banned,

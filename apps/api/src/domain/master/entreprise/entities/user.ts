@@ -7,6 +7,7 @@ export interface UserProps {
 
   email?: string
   emailVerified?: boolean
+  organizationId?: UniqueEntityID
 
   image?: string
 
@@ -43,6 +44,15 @@ export class User extends Entity<UserProps> {
 
   get updatedAt(): Date {
     return this.props.updatedAt
+  }
+
+  get organizationId(): UserProps['organizationId'] {
+    return this.props.organizationId
+  }
+
+  set organizationId(value: UserProps['organizationId']) {
+    this.props.organizationId = value
+    this.touch()
   }
 
   get role(): string | undefined {
