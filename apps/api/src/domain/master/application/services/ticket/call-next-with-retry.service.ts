@@ -7,6 +7,7 @@ import { NotFoundError } from '@/core/errors/not-found-error'
 import { Ticket } from '@/domain/master/entreprise/entities/ticket'
 import { QueueEventsListener } from '@/infra/events/queue/listeners/queue-events.listener'
 import { PermissionFactory } from '../../permissions/permission.factory'
+import { ServiceStaffRepository } from '../../repositories/service-staff.repository'
 import { TicketRepository } from '../../repositories/ticket.repository'
 
 interface CallNextWithRetryServiceParams {
@@ -28,6 +29,7 @@ export class CallNextWithRetryService {
 
   constructor(
     private readonly ticketRepository: TicketRepository,
+    private readonly serviceStaffRepository: ServiceStaffRepository,
     private readonly permissionFactory: PermissionFactory,
     private readonly queueEventsListener: QueueEventsListener,
     @InjectQueue('ticket-call-queue') private readonly ticketCallQueue: Queue,
@@ -44,6 +46,13 @@ export class CallNextWithRetryService {
 
     if (!success) {
       return left(new NotAllowedError())
+    }
+
+    // Check if staff has counter closed
+    const staffAssignment = await this.serviceStaffRepository.findByPair(serviceId, staffId)
+
+    if (staffAssignment?.isCounterClosed) {
+      return left(new NotAllowedError('Counter is closed. Finish current customers first.'))
     }
 
     const ticket = await this.ticketRepository.findOldestWaiting(serviceId)
