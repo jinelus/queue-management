@@ -80,13 +80,14 @@ export class ToggleStaffStatusController {
   ): Promise<ToggleStaffStatusResponseDto> {
     const actorId = session.user.id
     const { isOnline, isCounterClosed } = body
-    const { serviceStaffId } = params
+    const { serviceStaffId, organizationId } = params
 
     const result = await this.toggleStaffStatusService.execute({
       serviceStaffId,
       actorId,
       isOnline,
       isCounterClosed,
+      organizationId,
     })
 
     if (result.isLeft()) {

@@ -4,6 +4,7 @@ import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { ServiceStaff } from '@/domain/master/entreprise/entities/service-staff'
 import { PermissionFactory } from '../../permissions/permission.factory'
+import { OrganizationRepository } from '../../repositories/organization.repository'
 import { ServiceStaffRepository } from '../../repositories/service-staff.repository'
 
 interface ToggleStaffStatusServiceParams {
@@ -11,6 +12,7 @@ interface ToggleStaffStatusServiceParams {
   actorId: string
   isOnline?: boolean
   isCounterClosed?: boolean
+  organizationId: string
 }
 
 type ToggleStaffStatusServiceResponse = Either<
@@ -24,6 +26,7 @@ type ToggleStaffStatusServiceResponse = Either<
 export class ToggleStaffStatusService {
   constructor(
     private readonly serviceStaffRepository: ServiceStaffRepository,
+    private readonly organizationRepository: OrganizationRepository,
     private readonly permissionFactory: PermissionFactory,
   ) {}
 
@@ -32,7 +35,14 @@ export class ToggleStaffStatusService {
     actorId,
     isOnline,
     isCounterClosed,
+    organizationId,
   }: ToggleStaffStatusServiceParams): Promise<ToggleStaffStatusServiceResponse> {
+    const organization = await this.organizationRepository.findById(organizationId)
+
+    if (!organization) {
+      return left(new NotFoundError('Organization not found'))
+    }
+
     const { success } = await this.permissionFactory.userCan('update', 'service', {
       userId: actorId,
     })
