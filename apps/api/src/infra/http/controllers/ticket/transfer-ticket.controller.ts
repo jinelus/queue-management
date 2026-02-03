@@ -29,6 +29,7 @@ import {
 
 export const transferTicketBody = z.object({
   targetServiceId: z.ulid(),
+  targetStaffId: z.ulid().optional(),
 })
 
 export class TransferTicketBodyDto extends createZodDto(transferTicketBody) {}
@@ -54,8 +55,9 @@ export class TransferTicketController {
 
   @Put('')
   @ApiOperation({
-    summary: 'Transfer a ticket to another service',
-    description: 'Transfer a ticket to another service within an organization.',
+    summary: 'Transfer a ticket to another service or colleague',
+    description:
+      'Transfer a ticket to another service within an organization. Optionally specify a target staff member.',
   })
   @ZodResponse({
     type: TransferTicketResponseDto,
@@ -79,12 +81,13 @@ export class TransferTicketController {
     @Param() params: TransferTicketParamsDto,
   ): Promise<TransferTicketResponseDto> {
     const staffId = session.user.id
-    const { targetServiceId } = body
+    const { targetServiceId, targetStaffId } = body
     const { organizationId, ticketId } = params
 
     const result = await this.transferTicketService.execute({
       ticketId,
       targetServiceId,
+      targetStaffId,
       organizationId,
       staffId,
     })

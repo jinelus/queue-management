@@ -45,13 +45,13 @@ model Organization {
 }
 
 model Service {
-  id             String  @id @default(ulid())
-  name           String
-  description    String?
-  avgDurationInt Int     @default(5)
-  maxCapacity    Int?
-  alertThresholdMinutes Int @default(30)
-  isActive       Boolean @default(true)
+  id                    String  @id @default(ulid())
+  name                  String
+  description           String?
+  avgDurationInt        Int     @default(5)
+  maxCapacity           Int?
+  alertThresholdMinutes Int     @default(30)
+  isActive              Boolean @default(true)
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -95,7 +95,9 @@ model ServiceStaff {
   serviceId String
   service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
-  active Boolean @default(true)
+  active          Boolean @default(true)
+  isOnline        Boolean @default(false)
+  isCounterClosed Boolean @default(false)
 
   @@unique([userId, serviceId])
   @@map("service_staff")

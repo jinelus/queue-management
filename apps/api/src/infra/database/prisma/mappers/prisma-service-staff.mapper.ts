@@ -10,6 +10,8 @@ export const httpServiceStaffSchema = z.object<ToZodShape<ServiceStaffProps & { 
   userId: z.ulid(),
   serviceId: z.ulid(),
   active: z.boolean().optional(),
+  isOnline: z.boolean().optional(),
+  isCounterClosed: z.boolean().optional(),
 })
 
 export class HttpServiceStaff extends createZodDto(httpServiceStaffSchema) {}
@@ -21,6 +23,8 @@ export class PrismaServiceStaffMapper {
         userId: raw.userId,
         serviceId: raw.serviceId,
         active: raw.active,
+        isOnline: raw.isOnline,
+        isCounterClosed: raw.isCounterClosed,
       },
       new UniqueEntityID(raw.id),
     )
@@ -32,16 +36,19 @@ export class PrismaServiceStaffMapper {
       userId: serviceStaff.userId,
       serviceId: serviceStaff.serviceId,
       active: serviceStaff.active,
+      isOnline: serviceStaff.isOnline,
+      isCounterClosed: serviceStaff.isCounterClosed,
     }
   }
 
   static toHttp(serviceStaff: ServiceStaff): HttpServiceStaff {
     const httpServiceStaff = httpServiceStaffSchema.parse({
       id: serviceStaff.id.toString(),
-
       userId: serviceStaff.userId,
       serviceId: serviceStaff.serviceId,
       active: serviceStaff.active,
+      isOnline: serviceStaff.isOnline,
+      isCounterClosed: serviceStaff.isCounterClosed,
     })
     return httpServiceStaff
   }
