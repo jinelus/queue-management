@@ -15,15 +15,17 @@ async function bootstrap(): Promise<void> {
     .setVersion('1.0')
     .build()
 
-  const document = cleanupOpenApiDoc(
-    SwaggerModule.createDocument(app, config, {
-      deepScanRoutes: true,
-      operationIdFactory: (controllerKey: string) => controllerKey,
-    }),
-    {
-      version: '3.1',
-    },
-  )
+  const rawDocument = SwaggerModule.createDocument(app, config, {
+    deepScanRoutes: true,
+    operationIdFactory: (controllerKey: string) => controllerKey,
+  })
+
+  const document = cleanupOpenApiDoc(rawDocument, {
+    version: '3.1',
+  })
+
+  // Update OpenAPI version to 3.1.0 to match the cleanup output format
+  document.openapi = '3.1.0'
 
   writeFileSync('swagger.json', JSON.stringify(document))
   process.exit()

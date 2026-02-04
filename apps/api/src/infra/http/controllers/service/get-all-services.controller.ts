@@ -10,6 +10,7 @@ import {
   ApiNotFoundResponse,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
@@ -67,6 +68,33 @@ export class GetAllServicesController {
     name: 'organizationId',
     description: 'The unique identifier of the organization',
     type: String,
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    description: 'Page number for pagination',
+  })
+  @ApiQuery({
+    name: 'perPage',
+    required: false,
+    description: 'Number of items per page for pagination',
+  })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    description: 'Order of the results (asc or desc)',
+    enum: ['asc', 'desc'],
+  })
+  @ApiQuery({
+    name: 'orderBy',
+    required: false,
+    description: 'Field to order the results by',
+    enum: ['name', 'createdAt', 'updatedAt'],
+  })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    description: 'Search term to filter services by name',
   })
   async handle(
     @Query() query: GetAllServicesQueryDto,
