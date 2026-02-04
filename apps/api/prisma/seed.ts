@@ -1,14 +1,12 @@
 import { PrismaPg } from '@prisma/adapter-pg'
-import { Pool } from 'pg'
+import { env } from '@repo/env'
 import { ulid } from 'ulid'
 import { PrismaClient } from '../src/infra/database/generated/prisma/client'
 import { TicketStatus } from '../src/infra/database/generated/prisma/enums'
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+const adapter = new PrismaPg({
+  connectionString: env.DATABASE_URL,
 })
-
-const adapter = new PrismaPg(pool)
 
 const prisma = new PrismaClient({
   adapter,
@@ -172,11 +170,11 @@ async function main() {
 }
 
 main()
-  .then(async () => {
-    await prisma.$disconnect()
-  })
   .catch(async (e) => {
     console.error(e)
     await prisma.$disconnect()
     process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
   })
