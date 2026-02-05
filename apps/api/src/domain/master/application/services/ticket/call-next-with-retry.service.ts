@@ -48,32 +48,24 @@ export class CallNextWithRetryService {
       return left(new NotAllowedError())
     }
 
-    // Check if staff has counter closed
     const staffAssignment = await this.serviceStaffRepository.findByPair(serviceId, staffId)
 
     if (staffAssignment?.isCounterClosed) {
       return left(new NotAllowedError('Counter is closed. Finish current customers first.'))
     }
 
-    const ticket = await this.ticketRepository.findOldestWaiting(serviceId)
+    const ticket = await this.ticketRepository.atomicClaimOldestWaiting(serviceId, staffId)
 
     if (!ticket) {
       return right({ ticket: null })
     }
-
-    ticket.status = 'CALLED'
-    ticket.servedById = staffId
-    ticket.calledAt = new Date()
-    ticket.callCount = 1
-
-    await this.ticketRepository.save(ticket)
 
     this.queueEventsListener.onUserCalled({
       ticketId: ticket.id.toString(),
       payload: {
         ticketId: ticket.id.toString(),
         position: 1,
-        callAttempt: 1,
+        callAttempt: ticket.callCount,
       },
     })
 
