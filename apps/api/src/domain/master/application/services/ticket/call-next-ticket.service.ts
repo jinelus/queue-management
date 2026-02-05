@@ -37,18 +37,11 @@ export class CallNextTicketService {
       return left(new NotAllowedError())
     }
 
-    const ticket = await this.ticketRepository.findOldestWaiting(serviceId)
+    const ticket = await this.ticketRepository.atomicClaimOldestWaiting(serviceId, staffId)
 
     if (!ticket) {
       return right({ ticket: null })
     }
-
-    ticket.status = 'CALLED'
-    ticket.servedById = staffId
-    ticket.calledAt = new Date()
-    ticket.callCount = ticket.callCount + 1
-
-    await this.ticketRepository.save(ticket)
 
     return right({
       ticket,

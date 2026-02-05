@@ -166,4 +166,23 @@ export class InMemoryTicketRepository implements TicketRepository {
       avgDuration: Math.round(total / count),
     }))
   }
+
+  async atomicClaimOldestWaiting(serviceId: string, staffId: string): Promise<Ticket | null> {
+    // Simulate atomic operation by finding and updating in one step
+    const ticket = await this.findOldestWaiting(serviceId)
+
+    if (!ticket) {
+      return null
+    }
+
+    // Atomically update the ticket
+    ticket.status = 'CALLED'
+    ticket.servedById = staffId
+    ticket.calledAt = new Date()
+    ticket.callCount = ticket.callCount + 1
+
+    await this.save(ticket)
+
+    return ticket
+  }
 }
