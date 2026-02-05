@@ -174,4 +174,45 @@ export class PrismaTicketRepository implements TicketRepository {
       avgDuration: Math.round(r.avgDuration),
     }))
   }
+
+  async atomicClaimOldestWaiting(serviceId: string, staffId: string): Promise<Ticket | null> {
+    const result = await this.prisma.$transaction(async (tx) => {
+      const tickets = await tx.$queryRaw<Array<{ id: string }>>`
+        SELECT id
+        FROM "ticket"
+        WHERE "serviceId" = ${serviceId}
+          AND status = 'WAITING'
+        ORDER BY "joinedAt" ASC
+        LIMIT 1
+        FOR UPDATE SKIP LOCKED
+      `
+
+      if (!tickets || tickets.length === 0) {
+        return null
+      }
+
+      const ticketId = tickets[0].id
+
+      const updatedTicket = await tx.ticket.update({
+        where: {
+          id: ticketId,
+          status: 'WAITING',
+        },
+        data: {
+          status: 'CALLED',
+          servedById: staffId,
+          calledAt: new Date(),
+          callCount: { increment: 1 },
+        },
+      })
+
+      return updatedTicket
+    })
+
+    if (!result) {
+      return null
+    }
+
+    return PrismaTicketMapper.toDomain(result)
+  }
 }
