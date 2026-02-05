@@ -1,0 +1,43 @@
+{
+  "type": "object",
+  "properties": {
+    "ticket": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "ulid",
+          "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+        },
+        "guestName": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["WAITING", "CALLED", "SERVING", "SERVED", "ABSENT", "CANCELLED"]
+        },
+        "callCount": { "type": "number" },
+        "organizationId": { "type": "string" },
+        "serviceId": { "type": "string" },
+        "servedById": { "type": "string" },
+        "joinedAt": { "type": "string" },
+        "calledAt": { "type": "string" },
+        "startedAt": { "type": "string" },
+        "completedAt": { "type": "string" }
+      },
+      "required": [
+        "id",
+        "guestName",
+        "status",
+        "organizationId",
+        "serviceId",
+        "joinedAt",
+        "calledAt",
+        "startedAt",
+        "completedAt"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": ["ticket"],
+  "additionalProperties": false,
+  "x-readme-ref-name": "CreateTicketResponseDto_Output"
+}

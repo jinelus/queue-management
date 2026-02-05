@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ulid",
+            "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+          },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "avgDurationInt": { "type": "number" },
+          "maxCapacity": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }]
+          },
+          "alertThresholdMinutes": { "type": "number" },
+          "isActive": { "type": "boolean" },
+          "organizationId": { "type": "string" },
+          "createdAt": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        },
+        "required": ["id", "name", "organizationId", "createdAt", "updatedAt"],
+        "additionalProperties": false
+      }
+    },
+    "total": { "type": "number" }
+  },
+  "required": ["services", "total"],
+  "additionalProperties": false,
+  "x-readme-ref-name": "GetAllServicesResponseDto_Output"
+}
