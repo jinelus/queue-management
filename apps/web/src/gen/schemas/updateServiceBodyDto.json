@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "properties": {
+    "isActive": { "type": "boolean" },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "avgDurationInt": { "type": "number" }
+  },
+  "x-readme-ref-name": "UpdateServiceBodyDto"
+}

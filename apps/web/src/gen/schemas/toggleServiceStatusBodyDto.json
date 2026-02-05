@@ -1,0 +1,6 @@
+{
+  "type": "object",
+  "properties": { "isActive": { "type": "boolean" } },
+  "required": ["isActive"],
+  "x-readme-ref-name": "ToggleServiceStatusBodyDto"
+}

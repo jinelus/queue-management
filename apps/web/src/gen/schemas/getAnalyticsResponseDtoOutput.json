@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "servedTicketsByDay": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "string" },
+          "count": { "type": "number" }
+        },
+        "required": ["date", "count"],
+        "additionalProperties": false
+      }
+    },
+    "avgDurationByEmployee": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "employeeId": { "type": "string" },
+          "employeeName": { "type": "string" },
+          "avgDuration": { "type": "number" }
+        },
+        "required": ["employeeId", "employeeName", "avgDuration"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["servedTicketsByDay", "avgDurationByEmployee"],
+  "additionalProperties": false,
+  "x-readme-ref-name": "GetAnalyticsResponseDto_Output"
+}

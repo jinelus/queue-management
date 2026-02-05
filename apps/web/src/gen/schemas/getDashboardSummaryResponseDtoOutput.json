@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "serviceId": { "type": "string" },
+          "serviceName": { "type": "string" },
+          "isActive": { "type": "boolean" },
+          "waitingCount": { "type": "number" },
+          "activeStaffCount": { "type": "number" },
+          "estimatedWaitTime": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }]
+          },
+          "isAlert": { "type": "boolean" }
+        },
+        "required": [
+          "serviceId",
+          "serviceName",
+          "isActive",
+          "waitingCount",
+          "activeStaffCount",
+          "estimatedWaitTime",
+          "isAlert"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "totalWaiting": { "type": "number" },
+    "totalActiveStaff": { "type": "number" }
+  },
+  "required": ["services", "totalWaiting", "totalActiveStaff"],
+  "additionalProperties": false,
+  "x-readme-ref-name": "GetDashboardSummaryResponseDto_Output"
+}
