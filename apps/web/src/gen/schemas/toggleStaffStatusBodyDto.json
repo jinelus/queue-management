@@ -1,0 +1,8 @@
+{
+  "type": "object",
+  "properties": {
+    "isOnline": { "type": "boolean" },
+    "isCounterClosed": { "type": "boolean" }
+  },
+  "x-readme-ref-name": "ToggleStaffStatusBodyDto"
+}

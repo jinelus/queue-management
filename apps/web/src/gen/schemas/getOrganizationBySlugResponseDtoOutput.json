@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "organization": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "ulid",
+          "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+        },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "slug": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "logo": { "type": "string" },
+        "metadata": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "slug", "createdAt", "updatedAt"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["organization"],
+  "additionalProperties": false,
+  "x-readme-ref-name": "GetOrganizationBySlugResponseDto_Output"
+}

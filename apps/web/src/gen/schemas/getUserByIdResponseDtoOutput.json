@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "ulid",
+          "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+        },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "emailVerified": { "type": "boolean" },
+        "organizationId": {
+          "type": "string",
+          "format": "ulid",
+          "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+        },
+        "banned": { "type": "boolean" },
+        "banReason": { "type": "string" },
+        "banExpires": { "type": "string" },
+        "image": { "type": "string" },
+        "role": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "emailVerified",
+        "organizationId",
+        "banExpires",
+        "createdAt",
+        "updatedAt"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": ["user"],
+  "additionalProperties": false,
+  "x-readme-ref-name": "GetUserByIdResponseDto_Output"
+}
