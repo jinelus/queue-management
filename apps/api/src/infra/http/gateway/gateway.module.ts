@@ -6,7 +6,6 @@ import { PermissionFactory } from '@/domain/master/application/permissions/permi
 import { CallNextWithRetryService } from '@/domain/master/application/services/ticket/call-next-with-retry.service'
 import { CreateTicketService } from '@/domain/master/application/services/ticket/create-ticket.service'
 import { GetTicketPositionService } from '@/domain/master/application/services/ticket/get-ticket-position.service'
-import { JoinQueueService } from '@/domain/master/application/services/ticket/join-queue.service'
 import { LeaveQueueService } from '@/domain/master/application/services/ticket/leave-queue.service'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { EventsModule } from '@/infra/events/events.module'
@@ -26,7 +25,6 @@ import { QueueGateway } from './websocket/queue.gateway'
     QueueGateway,
     CreateTicketService,
     GetTicketPositionService,
-    JoinQueueService,
     LeaveQueueService,
     CallNextWithRetryService,
     TicketCallProcessor,
