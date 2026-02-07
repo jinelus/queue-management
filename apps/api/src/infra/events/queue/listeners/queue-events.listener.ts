@@ -1,42 +1,69 @@
 // queue-events.listener.ts
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { WebSocketServer } from '@nestjs/websockets'
-import { Server } from 'socket.io'
 import { ServiceRepository } from '@/domain/master/application/repositories/service.repository'
 import { TicketRepository } from '@/domain/master/application/repositories/ticket.repository'
-import { UserCalledEvent, UserNoShowEvent } from '../queue.events'
+import { WebSocketBroadcaster } from '@/infra/http/gateway/websocket/websocket-broadcaster.service'
+import {
+  QUEUE_EVENTS,
+  type QueueUpdatedEvent,
+  type TicketCalledEvent,
+  type TicketCreatedEvent,
+  type TicketLeftEvent,
+  UserCalledEvent,
+  UserNoShowEvent,
+} from '../queue.events'
 
 @Injectable()
 export class QueueEventsListener {
-  @WebSocketServer()
-  server: Server
-
   constructor(
     private readonly ticketRepository: TicketRepository,
     private readonly serviceRepository: ServiceRepository,
+    private readonly broadcaster: WebSocketBroadcaster,
   ) {}
 
-  @OnEvent('queue.user-called')
+  @OnEvent(QUEUE_EVENTS.USER_CALLED)
   async onUserCalled(data: { ticketId: string; payload: UserCalledEvent }) {
-    this.server.to(`ticket:${data.ticketId}`).emit('user-called', data.payload)
+    this.broadcaster.broadcastToTicket(data.ticketId, 'user-called', data.payload)
   }
 
-  @OnEvent('queue.user-no-show')
+  @OnEvent(QUEUE_EVENTS.USER_NO_SHOW)
   async onUserNoShow(data: { ticketId: string; payload: UserNoShowEvent }) {
-    this.server.to(`ticket:${data.ticketId}`).emit('user-no-show', data.payload)
+    this.broadcaster.broadcastToTicket(data.ticketId, 'user-no-show', data.payload)
   }
 
-  @OnEvent('queue.updated')
-  async onQueueUpdated(data: { organizationId: string; serviceId: string }) {
+  @OnEvent(QUEUE_EVENTS.TICKET_CREATED)
+  async onTicketCreated(data: TicketCreatedEvent) {
+    Logger.log(`[QueueEvents] Ticket created: ${data.ticketId}`)
+    await this.broadcastQueueUpdate(data.organizationId, data.serviceId)
+  }
+
+  @OnEvent(QUEUE_EVENTS.TICKET_CALLED)
+  async onTicketCalled(data: TicketCalledEvent) {
+    Logger.log(`[QueueEvents] Ticket called: ${data.ticketId}`)
+    await this.broadcastQueueUpdate(data.organizationId, data.serviceId)
+  }
+
+  @OnEvent(QUEUE_EVENTS.TICKET_LEFT)
+  async onTicketLeft(data: TicketLeftEvent) {
+    Logger.log(`[QueueEvents] Ticket left queue: ${data.ticketId}`)
+    await this.broadcastQueueUpdate(data.organizationId, data.serviceId)
+  }
+
+  @OnEvent(QUEUE_EVENTS.QUEUE_UPDATED)
+  async onQueueUpdated(data: QueueUpdatedEvent) {
+    await this.broadcastQueueUpdate(data.organizationId, data.serviceId)
+  }
+
+  private async broadcastQueueUpdate(organizationId: string, serviceId: string) {
     const [queueLength, service] = await Promise.all([
-      this.ticketRepository.count(data.organizationId, {
-        serviceId: data.serviceId,
+      this.ticketRepository.count(organizationId, {
+        serviceId,
         status: 'WAITING',
         orderBy: 'joinedAt',
         order: 'asc',
       }),
-      this.serviceRepository.findById(data.serviceId),
+      this.serviceRepository.findById(serviceId),
     ])
 
     let isAlert = false
@@ -47,9 +74,9 @@ export class QueueEventsListener {
       }
     }
 
-    this.server.to(`org:${data.organizationId}`).emit('queue-updated', {
-      organizationId: data.organizationId,
-      serviceId: data.serviceId,
+    this.broadcaster.broadcastToOrg(organizationId, 'queue-updated', {
+      organizationId,
+      serviceId,
       queueLength,
       isAlert,
       timestamp: new Date().toISOString(),

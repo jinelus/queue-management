@@ -1,3 +1,4 @@
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InMemoryServiceStaffRepository, InMemoryTicketRepository } from '@test/repositories'
 import type { Queue } from 'bullmq'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
@@ -13,6 +14,7 @@ describe('CallNextWithRetryService', () => {
   let serviceStaffRepository: InMemoryServiceStaffRepository
   let permissionFactory: FakePermissionFactory
   let queueEventsListener: QueueEventsListener
+  let eventEmitter: EventEmitter2
   let ticketCallQueue: { add: ReturnType<typeof vi.fn>; getJob: ReturnType<typeof vi.fn> }
 
   beforeEach(() => {
@@ -22,6 +24,9 @@ describe('CallNextWithRetryService', () => {
     queueEventsListener = {
       onUserCalled: vi.fn(),
     } as unknown as QueueEventsListener
+    eventEmitter = {
+      emit: vi.fn(),
+    } as unknown as EventEmitter2
     ticketCallQueue = {
       add: vi.fn(),
       getJob: vi.fn(),
@@ -32,6 +37,7 @@ describe('CallNextWithRetryService', () => {
       serviceStaffRepository,
       permissionFactory as unknown as PermissionFactory,
       queueEventsListener,
+      eventEmitter,
       ticketCallQueue as unknown as Queue,
     )
   })
