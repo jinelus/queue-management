@@ -10,11 +10,11 @@ import {
 } from '@nestjs/websockets'
 import { AllowAnonymous, AuthGuard, OptionalAuth } from '@thallesp/nestjs-better-auth'
 import { Server, Socket } from 'socket.io'
-import { TicketRepository } from '@/domain/master/application/repositories/ticket.repository'
 import { CallNextWithRetryService } from '@/domain/master/application/services/ticket/call-next-with-retry.service'
-import { JoinQueueService } from '@/domain/master/application/services/ticket/join-queue.service'
+import { CreateTicketService } from '@/domain/master/application/services/ticket/create-ticket.service'
 import { LeaveQueueService } from '@/domain/master/application/services/ticket/leave-queue.service'
 import * as queueTypes from './queue.types'
+import { WebSocketBroadcaster } from './websocket-broadcaster.service'
 
 @WebSocketGateway({
   namespace: 'queue',
@@ -29,13 +29,16 @@ export class QueueGateway
   server: Server
 
   constructor(
-    private readonly joinQueueService: JoinQueueService,
+    private readonly createTicketService: CreateTicketService,
     private readonly leaveQueueService: LeaveQueueService,
     private readonly callNextWithRetryService: CallNextWithRetryService,
-    private readonly ticketRepository: TicketRepository,
+    private readonly broadcaster: WebSocketBroadcaster,
   ) {}
 
   onModuleInit() {
+    // Share server reference with broadcaster for event handlers to use
+    this.broadcaster.setServer(this.server)
+
     this.server.on('connection', (socket: Socket) => {
       Logger.log(`[Queue] Client connected: ${socket.id}`)
     })
@@ -70,7 +73,7 @@ export class QueueGateway
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      const result = await this.joinQueueService.execute({
+      const result = await this.createTicketService.execute({
         guestName: data.guestName,
         organizationId: data.organizationId,
         serviceId: data.serviceId,
@@ -86,8 +89,7 @@ export class QueueGateway
           position,
           estimatedWaitTime,
         })
-
-        await this.broadcastQueueUpdate(data.organizationId, data.serviceId)
+        // Event is now emitted by CreateTicketService
       } else {
         const error = result.value
         client.emit('error', { message: error.message })
@@ -115,8 +117,7 @@ export class QueueGateway
         const { ticket } = result.value
 
         client.emit('next-called', { ticketId: ticket.id.toString() })
-
-        await this.broadcastQueueUpdate(data.organizationId, data.serviceId)
+        // Event is now emitted by CallNextWithRetryService
       } else if (result.isRight() && !result.value.ticket) {
         client.emit('queue-empty', { message: 'No tickets waiting' })
       } else {
@@ -144,9 +145,7 @@ export class QueueGateway
         const { ticket } = result.value
 
         client.emit('left-queue', { ticketId: ticket.id.toString() })
-
-        const serviceId = ticket.serviceId.toString()
-        await this.broadcastQueueUpdate(data.organizationId, serviceId)
+        // Event is now emitted by LeaveQueueService
       } else {
         client.emit('error', { message: 'Failed to leave queue' })
       }
@@ -167,23 +166,6 @@ export class QueueGateway
       serviceId: data.serviceId,
       timestamp: new Date().toISOString(),
       // TODO: Add actual queue data (position count, etc.)
-    })
-  }
-
-  @OptionalAuth()
-  private async broadcastQueueUpdate(organizationId: string, serviceId: string) {
-    const queueLength = await this.ticketRepository.count(organizationId, {
-      serviceId,
-      status: 'WAITING',
-      orderBy: 'joinedAt',
-      order: 'asc',
-    })
-
-    this.server.to(`org:${organizationId}`).emit('queue-updated', {
-      organizationId,
-      serviceId,
-      queueLength,
-      timestamp: new Date().toISOString(),
     })
   }
 }

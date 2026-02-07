@@ -1,11 +1,13 @@
 import { InjectQueue } from '@nestjs/bullmq'
 import { Injectable } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Queue } from 'bullmq'
 import { Either, left, right } from '@/core/either'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { Ticket } from '@/domain/master/entreprise/entities/ticket'
 import { QueueEventsListener } from '@/infra/events/queue/listeners/queue-events.listener'
+import { QUEUE_EVENTS } from '@/infra/events/queue/queue.events'
 import { PermissionFactory } from '../../permissions/permission.factory'
 import { ServiceStaffRepository } from '../../repositories/service-staff.repository'
 import { TicketRepository } from '../../repositories/ticket.repository'
@@ -32,6 +34,7 @@ export class CallNextWithRetryService {
     private readonly serviceStaffRepository: ServiceStaffRepository,
     private readonly permissionFactory: PermissionFactory,
     private readonly queueEventsListener: QueueEventsListener,
+    private readonly eventEmitter: EventEmitter2,
     @InjectQueue('ticket-call-queue') private readonly ticketCallQueue: Queue,
   ) {}
 
@@ -67,6 +70,12 @@ export class CallNextWithRetryService {
         position: 1,
         callAttempt: ticket.callCount,
       },
+    })
+
+    this.eventEmitter.emit(QUEUE_EVENTS.TICKET_CALLED, {
+      ticketId: ticket.id.toString(),
+      organizationId,
+      serviceId,
     })
 
     await this.scheduleNextCallAttempt(ticket.id.toString(), serviceId, organizationId)
