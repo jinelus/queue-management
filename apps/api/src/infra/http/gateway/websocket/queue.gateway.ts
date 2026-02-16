@@ -45,7 +45,9 @@ export class QueueGateway
   }
 
   onModuleDestroy() {
-    this.server.close()
+    if (this.server && typeof this.server.close === 'function') {
+      this.server.close()
+    }
   }
 
   async handleConnection(client: Socket) {
