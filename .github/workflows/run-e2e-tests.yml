@@ -51,5 +51,5 @@ jobs:
       - name: Run E2E tests
         run: cd apps/api && pnpm prisma generate 
       - name: Run E2E tests
-        run: cd apps/api && pnpm test:e2e
+        run: cd apps/api && pnpm vitest --config ./vitest.config.e2e.mts
 
