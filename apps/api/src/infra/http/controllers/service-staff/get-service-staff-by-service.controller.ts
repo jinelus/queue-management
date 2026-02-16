@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, NotFoundException, Param, Post } from '@nestjs/common'
+import { BadRequestException, Controller, Get, NotFoundException, Param } from '@nestjs/common'
 import {
   ApiBearerAuth,
   ApiNotFoundResponse,
@@ -40,7 +40,7 @@ export class GetServiceStaffByServiceIdResponseDto extends createZodDto(
 export class GetServiceStaffByServiceIdController {
   constructor(private readonly getServiceStaffByServiceIdService: GetServiceStaffByServiceId) {}
 
-  @Post('')
+  @Get('')
   @ApiOperation({
     summary: 'Get service staff by service ID',
     description:

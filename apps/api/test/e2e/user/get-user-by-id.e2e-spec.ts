@@ -31,8 +31,6 @@ describe('Get User by ID (E2E)', () => {
       role: 'employee',
     })
 
-    console.log(token)
-
     const response = await request(app.getHttpServer())
       .get(`/organizations/${organization.id}/users/by-id`)
       .set('Authorization', `Bearer ${token}`)
