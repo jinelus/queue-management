@@ -29,7 +29,6 @@ describe('UpdateTicketStatusService', () => {
     const organization = Organization.create({
       name: 'Org 1',
       slug: 'org-1',
-      ownerId: 'user-1',
     })
     await organizationRepository.create(organization)
 
@@ -37,6 +36,7 @@ describe('UpdateTicketStatusService', () => {
       guestName: 'John Doe',
       organizationId: organization.id.toString(),
       serviceId: 'service-1',
+      status: 'CALLED',
     })
     await ticketRepository.create(ticket)
 
@@ -58,7 +58,6 @@ describe('UpdateTicketStatusService', () => {
     const organization = Organization.create({
       name: 'Org 1',
       slug: 'org-1',
-      ownerId: 'user-1',
     })
     await organizationRepository.create(organization)
 
@@ -66,6 +65,7 @@ describe('UpdateTicketStatusService', () => {
       guestName: 'John Doe',
       organizationId: organization.id.toString(),
       serviceId: 'service-1',
+      status: 'CALLED',
     })
     ticket.callCount = 1
     await ticketRepository.create(ticket)
