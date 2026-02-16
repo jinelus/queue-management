@@ -28,4 +28,4 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run tests
-        run: cd test && pnpm test
+        run: cd apps/api && pnpm test
