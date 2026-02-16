@@ -1,11 +1,10 @@
 import { createZodDto } from 'nestjs-zod'
 import { z } from 'zod'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Ticket, TicketProps } from '@/domain/master/entreprise/entities/ticket'
+import { Ticket } from '@/domain/master/entreprise/entities/ticket'
 import { Prisma, Ticket as PrismaTicket } from '../../generated/prisma/client'
-import { ToZodShape } from '../../zod-custom-shape'
 
-export const httpTicketSchema = z.object<ToZodShape<TicketProps & { id: string }>>({
+export const httpTicketSchema = z.object({
   id: z.ulid(),
   guestName: z.string(),
   status: z.enum(['WAITING', 'CALLED', 'SERVING', 'SERVED', 'ABSENT', 'CANCELLED']),
@@ -15,9 +14,9 @@ export const httpTicketSchema = z.object<ToZodShape<TicketProps & { id: string }
   servedById: z.string().optional(),
 
   joinedAt: z.string(),
-  calledAt: z.string(),
-  startedAt: z.string(),
-  completedAt: z.string(),
+  calledAt: z.string().optional(),
+  startedAt: z.string().optional(),
+  completedAt: z.string().optional(),
 })
 
 export class HttpTicket extends createZodDto(httpTicketSchema) {}

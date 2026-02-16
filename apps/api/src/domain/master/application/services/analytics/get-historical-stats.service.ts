@@ -35,7 +35,7 @@ export class GetHistoricalStatsService {
     days = 7,
     userId,
   }: GetHistoricalStatsServiceParams): Promise<GetHistoricalStatsServiceResponse> {
-    const { success } = await this.permissionFactory.userCan('create', 'service', { userId })
+    const { success } = await this.permissionFactory.userCan('get', 'service', { userId })
 
     if (!success) {
       return left(new NotAllowedError())

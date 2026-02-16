@@ -48,12 +48,16 @@ export class GetTicketPositionService {
       return left(new NotFoundError('Ticket does not belong to the organization'))
     }
 
-    if (ticket.status !== 'WAITING') {
+    if (ticket.status === 'CALLED') {
       return right({
         ticket,
-        position: null,
-        estimatedWaitTime: null,
+        position: 0,
+        estimatedWaitTime: 0,
       })
+    }
+
+    if (ticket.status !== 'WAITING') {
+      return left(new NotFoundError('Ticket is no longer in the queue'))
     }
 
     const service = await this.serviceRepository.findById(ticket.serviceId)

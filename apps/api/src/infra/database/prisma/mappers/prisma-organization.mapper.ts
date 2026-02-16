@@ -1,18 +1,17 @@
 import { createZodDto } from 'nestjs-zod'
 import { z } from 'zod'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Organization, OrganizationProps } from '@/domain/master/entreprise/entities/organization'
+import { Organization } from '@/domain/master/entreprise/entities/organization'
 import { Prisma, Organization as PrismaOrganization } from '../../generated/prisma/client'
-import { ToZodShape } from '../../zod-custom-shape'
 
-export const httpOrganizationSchema = z.object<ToZodShape<OrganizationProps & { id: string }>>({
+export const httpOrganizationSchema = z.object({
   id: z.ulid(),
   name: z.string(),
   description: z.string().optional(),
   slug: z.string(),
-  logoUrl: z.string().optional(),
-  logo: z.string().optional(),
-  metadata: z.string().optional(),
+  logoUrl: z.string().nullable(),
+  logo: z.string().nullable(),
+  metadata: z.string().nullable(),
 
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -60,9 +59,9 @@ export class PrismaOrganizationMapper {
       name: organization.name,
       description: organization.description,
       slug: organization.slug,
-      logoUrl: organization.logoUrl,
-      logo: organization.logo,
-      metadata: organization.metadata,
+      logoUrl: organization.logoUrl ?? null,
+      logo: organization.logo ?? null,
+      metadata: organization.metadata ?? null,
 
       createdAt: organization.createdAt?.toISOString(),
       updatedAt: organization.updatedAt?.toISOString(),
