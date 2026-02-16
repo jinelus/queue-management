@@ -59,7 +59,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run E2E tests
-        run: cd apps/api && pnpm prisma generate 
+        run: cd apps/api && pnpm prisma generate
+      - name: Run migrations
+        run: cd apps/api && pnpm prisma migrate deploy
       - name: Run E2E tests
         run: cd apps/api && pnpm vitest --config ./vitest.config.e2e.mts
 
