@@ -14,7 +14,7 @@ jobs:
   run-e2e-tests:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: postgresql://queue_user:queue_password@localhost:5432/queue_management
       BETTER_AUTH_SECRET: test-secret-for-ci
       BETTER_AUTH_URL: http://localhost:3333
       REDIS_HOST: localhost
@@ -30,13 +30,23 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRESQL_USERNAME: queue_user
-          POSTGRESQL_PASSWORD: queue_password
+          POSTGRES_USER: queue_user
+          POSTGRES_PASSWORD: queue_password
           POSTGRES_DB: queue_management
+        options: >-
+          --health-cmd "pg_isready -U queue_user -d queue_management"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       redis:
         image: redis:7-alpine
         ports:
           - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v4
