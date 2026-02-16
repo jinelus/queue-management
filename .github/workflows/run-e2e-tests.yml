@@ -1,0 +1,52 @@
+name: Run E2E Tests
+
+on:
+  pull_request:
+    branches: ['main', 'dev']
+    paths-ignore:
+        - '**/*.md'
+        - 'docs/**'
+        - '.gitignore'
+jobs:
+  run-e2e-tests:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
+      REDIS_URL: redis://localhost:6379
+    strategy:
+      matrix:
+        node-version: [20.11.0]
+
+    services:
+      postgres:
+        image: postgres:18
+        ports:
+          - 5432:5432
+        env:
+          POSTGRESQL_USERNAME: queue_user
+          POSTGRESQL_PASSWORD: queue_password
+          POSTGRES_DB: queue_management
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Generate Prisma Client
+        run: cd test && pnpm env:load prisma generate
+      - name: Run tests
+        run: pnpm test:e2e
+
