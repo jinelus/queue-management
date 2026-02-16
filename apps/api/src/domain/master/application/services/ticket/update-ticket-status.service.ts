@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
+import { BadRequestError } from '@/core/errors/bad-request-error'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { Ticket, TicketStatus } from '@/domain/master/entreprise/entities/ticket'
@@ -15,7 +16,7 @@ interface UpdateTicketStatusServiceParams {
 }
 
 type UpdateTicketStatusServiceResponse = Either<
-  NotAllowedError | NotFoundError,
+  NotAllowedError | NotFoundError | BadRequestError,
   {
     ticket: Ticket
   }
@@ -57,6 +58,20 @@ export class UpdateTicketStatusService {
 
     if (ticket.organizationId.toString() !== organization.id.toString()) {
       return left(new NotFoundError('Ticket not found'))
+    }
+
+    // Validate status transitions
+    const validTransitions: Record<string, string[]> = {
+      WAITING: ['CALLED', 'CANCELLED'],
+      CALLED: ['SERVING', 'ABSENT', 'WAITING'],
+      SERVING: ['SERVED', 'ABSENT'],
+      ABSENT: ['CALLED', 'CANCELLED'],
+    }
+
+    const allowedStatuses = validTransitions[ticket.status] ?? []
+
+    if (!allowedStatuses.includes(status)) {
+      return left(new BadRequestError(`Cannot transition from ${ticket.status} to ${status}`))
     }
 
     ticket.status = status
