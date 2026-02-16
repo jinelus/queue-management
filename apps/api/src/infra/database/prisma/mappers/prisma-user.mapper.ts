@@ -1,21 +1,20 @@
 import { createZodDto } from 'nestjs-zod'
 import { z } from 'zod'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { User, UserProps } from '@/domain/master/entreprise/entities/user'
+import { User } from '@/domain/master/entreprise/entities/user'
 import { Prisma, User as PrismaUser } from '../../generated/prisma/client'
-import { ToZodShape } from '../../zod-custom-shape'
 
-export const httpUserSchema = z.object<ToZodShape<UserProps & { id: string }>>({
+export const httpUserSchema = z.object({
   id: z.ulid(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
-  organizationId: z.ulid(),
+  organizationId: z.ulid().optional(),
 
-  banned: z.boolean().optional(),
-  banReason: z.string().optional(),
-  banExpires: z.string(),
-  image: z.string().optional(),
+  banned: z.boolean(),
+  banReason: z.string().nullable(),
+  banExpires: z.string().nullable(),
+  image: z.string().nullable(),
   role: z.string().optional(),
 
   createdAt: z.string(),
@@ -82,11 +81,11 @@ export class PrismaUserMapper {
       emailVerified: user.emailVerified,
       organizationId: user.organizationId?.toString(),
 
-      banExpires: user.banExpires?.toISOString(),
-      banned: user.banned,
-      banReason: user.banReason,
+      banExpires: user.banExpires?.toISOString() ?? null,
+      banned: user.banned ?? false,
+      banReason: user.banReason ?? null,
 
-      image: user.image,
+      image: user.image ?? null,
       role: user.role,
 
       createdAt: user.createdAt.toISOString(),
