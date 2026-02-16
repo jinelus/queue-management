@@ -26,13 +26,10 @@ describe('Get Analytics (E2E)', () => {
   it('[GET] /organizations/:organizationId/analytics - should get analytics', async () => {
     const organization = await makeOrganization(prisma)
     const employee = await makeEmployee(prisma, organization.id)
-    console.log(employee)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
       role: 'employee',
     })
-
-    console.log(token)
 
     const response = await request(app.getHttpServer())
       .get(`/organizations/${organization.id}/analytics`)
