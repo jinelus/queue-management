@@ -7,17 +7,22 @@ on:
         - '**/*.md'
         - 'docs/**'
         - '.gitignore'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 jobs:
   run-e2e-tests:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: postgresql://queue_user:queue_password@localhost:5432/queue_management
+      BETTER_AUTH_SECRET: test-secret-for-ci
+      BETTER_AUTH_URL: http://localhost:3333
       REDIS_HOST: localhost
       REDIS_PORT: 6379
       REDIS_URL: redis://localhost:6379
     strategy:
       matrix:
-        node-version: [20.11.0]
+        node-version: [24.0.0]
 
     services:
       postgres:
@@ -25,19 +30,27 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRESQL_USERNAME: queue_user
-          POSTGRESQL_PASSWORD: queue_password
+          POSTGRES_USER: queue_user
+          POSTGRES_PASSWORD: queue_password
           POSTGRES_DB: queue_management
+        options: >-
+          --health-cmd "pg_isready -U queue_user -d queue_management"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       redis:
         image: redis:7-alpine
         ports:
           - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 8
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -45,8 +58,10 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-      - name: Generate Prisma Client
-        run: cd test && pnpm env:load prisma generate
-      - name: Run tests
-        run: pnpm test:e2e
+      - name: Run E2E tests
+        run: cd apps/api && pnpm prisma generate
+      - name: Run migrations
+        run: cd apps/api && pnpm prisma migrate deploy
+      - name: Run E2E tests
+        run: cd apps/api && pnpm vitest --config ./vitest.config.e2e.mts
 

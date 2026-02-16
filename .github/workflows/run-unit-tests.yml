@@ -6,6 +6,9 @@ on:
         - '**/*.md'
         - 'docs/**'
         - '.gitignore'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -13,12 +16,10 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
     strategy:
       matrix:
-        node-version: [20.11.0]
+        node-version: [24.0.0]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 8
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -27,4 +28,4 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run tests
-        run: cd test && pnpm test
+        run: cd apps/api && pnpm env:load prisma generate && pnpm test
