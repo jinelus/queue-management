@@ -28,4 +28,4 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run tests
-        run: cd apps/api && pnpm test
+        run: cd apps/api && pnpm env:load prisma generate && pnpm test
