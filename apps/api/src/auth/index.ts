@@ -1,8 +1,8 @@
 import { PrismaPg } from '@prisma/adapter-pg'
 import { env } from '@repo/env'
-import { BetterAuthPlugin, betterAuth, ulid } from 'better-auth'
+import { BetterAuthPlugin, betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
-import { admin as adminPlugin, anonymous, bearer, organization } from 'better-auth/plugins'
+import { admin as adminPlugin, bearer, organization } from 'better-auth/plugins'
 import { PrismaClient } from '@/infra/database/generated/prisma/client'
 import { ac, admin, developer, employee, user } from './permissions'
 
@@ -57,11 +57,6 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
   },
   plugins: [
     bearer(),
-    anonymous({
-      generateRandomEmail() {
-        return `guest-${ulid()}@example.com`
-      },
-    }),
     organization(),
     adminPlugin({
       ...accessControl,

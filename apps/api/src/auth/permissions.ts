@@ -35,9 +35,10 @@ export const admin = ac.newRole({
 export const employee = ac.newRole({
   ...userAc.statements,
   organization: ['get', 'list'],
-  service: ['get', 'list'],
-  serviceStaff: ['get'],
-  ticket: ['assign', 'close', 'create', 'get', 'list'],
+  service: ['get', 'list', 'update'],
+  serviceStaff: ['get', 'list'],
+  ticket: ['assign', 'close', 'create', 'get', 'list', 'update'],
+  user: ['get', 'list'],
 })
 
 export const user = ac.newRole({

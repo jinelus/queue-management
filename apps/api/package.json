@@ -29,7 +29,6 @@
     "swagger": "pnpm env:load nest start --entryFile infra/main.swagger && pnpm lint swagger.json"
   },
   "dependencies": {
-    "@faker-js/faker": "github:faker-js/faker",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^11.1.12",
     "@nestjs/config": "^4.0.2",
@@ -58,6 +57,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.10",
+    "@faker-js/faker": "^10.2.0",
     "@nestjs/cli": "^11.0.16",
     "@nestjs/schematics": "^11.0.9",
     "@nestjs/testing": "^11.1.12",
@@ -79,22 +79,5 @@
     "unplugin-swc": "^1.5.9",
     "vite-tsconfig-paths": "^6.0.5",
     "vitest": "^4.0.18"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   }
 }

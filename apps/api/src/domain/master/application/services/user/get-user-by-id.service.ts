@@ -37,7 +37,7 @@ export class GetUserByIdService {
     const user = await this.userRepository.findById(userId)
 
     if (!user) {
-      left(new NotFoundError('User not found'))
+      return left(new NotFoundError('User not found'))
     }
 
     return right({

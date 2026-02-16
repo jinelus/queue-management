@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Either, left, right } from '@/core/either'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { Ticket } from '@/domain/master/entreprise/entities/ticket'
 import { QUEUE_EVENTS } from '@/infra/events/queue/queue.events'
@@ -13,7 +14,7 @@ interface LeaveQueueServiceParams {
 }
 
 type LeaveQueueServiceResponse = Either<
-  NotFoundError,
+  NotFoundError | NotAllowedError,
   {
     ticket: Ticket
   }
@@ -45,6 +46,10 @@ export class LeaveQueueService {
 
     if (ticket.organizationId.toString() !== organization.id.toString()) {
       return left(new NotFoundError('Ticket does not belong to the organization'))
+    }
+
+    if (ticket.status !== 'WAITING') {
+      return left(new NotAllowedError('Only tickets with WAITING status can leave the queue'))
     }
 
     ticket.status = 'CANCELLED'

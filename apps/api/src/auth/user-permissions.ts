@@ -16,7 +16,7 @@ export async function userCan<T extends keyof Statements>(
   if (role) {
     const userHasPermission = authClient.admin.checkRolePermission({
       role,
-      permissions: { [resource]: action },
+      permissions: { [resource]: [action] },
     })
 
     if (!userHasPermission) {
@@ -47,7 +47,7 @@ export async function userCan<T extends keyof Statements>(
 
   const userHasPermission = authClient.admin.checkRolePermission({
     role: (user.role as Roles) || 'user',
-    permissions: { [resource]: action },
+    permissions: { [resource]: [action] },
   })
 
   if (!userHasPermission) {
