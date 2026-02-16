@@ -97,8 +97,8 @@ describe('GetTicketPositionService', () => {
 
     expect(result.isRight()).toBe(true)
     if (result.isRight()) {
-      expect(result.value.position).toBeNull()
-      expect(result.value.estimatedWaitTime).toBeNull()
+      expect(result.value.position).toBe(0)
+      expect(result.value.estimatedWaitTime).toBe(0)
     }
   })
 })
