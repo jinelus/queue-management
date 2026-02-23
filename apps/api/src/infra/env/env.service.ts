@@ -13,6 +13,8 @@ type GetEnv<T extends keyof typeof env> = PathValue<
     REDIS_HOST: string
     REDIS_PORT: number
     REDIS_URL?: string
+    BACKEND_URL?: string
+    NEXT_PUBLIC_FRONT_END_URL?: string
   },
   T
 >

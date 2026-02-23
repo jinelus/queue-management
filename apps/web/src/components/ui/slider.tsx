@@ -20,7 +20,7 @@ function Slider({
 
   return (
     <SliderPrimitive.Root
-      data-slot="slider"
+      data-slot='slider'
       defaultValue={defaultValue}
       value={value}
       min={min}
@@ -32,13 +32,13 @@ function Slider({
       {...props}
     >
       <SliderPrimitive.Track
-        data-slot="slider-track"
+        data-slot='slider-track'
         className={cn(
           'relative grow overflow-hidden rounded-full bg-muted data-[orientation=horizontal]:h-1.5 data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-1.5',
         )}
       >
         <SliderPrimitive.Range
-          data-slot="slider-range"
+          data-slot='slider-range'
           className={cn(
             'absolute bg-primary data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
           )}
@@ -46,9 +46,9 @@ function Slider({
       </SliderPrimitive.Track>
       {Array.from({ length: _values.length }, (_, index) => (
         <SliderPrimitive.Thumb
-          data-slot="slider-thumb"
+          data-slot='slider-thumb'
           key={index}
-          className="block size-4 shrink-0 rounded-full border border-primary bg-white shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50"
+          className='block size-4 shrink-0 rounded-full border border-primary bg-white shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50'
         />
       ))}
     </SliderPrimitive.Root>

@@ -1,3 +1,5 @@
-export default function Home() {
-  return <main className="font-bold text-4xl">Started</main>
+import { LandingPage } from '@/components/landing/landing-page'
+
+export default function HomePage() {
+  return <LandingPage />
 }
