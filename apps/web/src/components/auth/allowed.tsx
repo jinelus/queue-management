@@ -3,11 +3,9 @@ import { redirect } from 'next/navigation'
 import { getToken } from '@/lib/token'
 
 export async function Allowed<T extends Parameters<typeof redirect>[0] | string>({
-  children,
   allow,
   redirectTo,
 }: {
-  children?: React.ReactNode | React.ReactNode[]
   redirectTo: Route<T>
   allow: 'authenticated' | 'unauthenticated'
 }) {
@@ -25,5 +23,5 @@ export async function Allowed<T extends Parameters<typeof redirect>[0] | string>
     }
   }
 
-  return <>{children}</>
+  return null
 }

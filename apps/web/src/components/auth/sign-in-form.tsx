@@ -20,8 +20,8 @@ import { Input } from '@/components/ui/input'
 import { authClient } from '@/lib/auth-client'
 
 const signInSchema = z.object({
-  email: z.email('Enter a valid email address.'),
-  password: z.string().min(8, 'Password must be at least 8 characters.'),
+  email: z.email({ error: 'Enter a valid email address.'}),
+  password: z.string().min(8, { error: 'Password must be at least 8 characters.'}),
 })
 
 type SignInFormValues = z.infer<typeof signInSchema>
@@ -45,9 +45,9 @@ export const SignInForm = () => {
         password: data.password,
       },
       {
-        onError: (error) => {
+        onError: (ctx) => {
           toast.error(
-            error instanceof Error ? error.message : 'Failed to sign in. Please try again.',
+            ctx.error.message ?? 'Failed to sign in. Please try again.',
           )
         },
         onSuccess: () => {
