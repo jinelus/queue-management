@@ -14,5 +14,11 @@
         "noStaticOnlyClass": "off"
       }
     }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "single"
+    }
   }
 }
