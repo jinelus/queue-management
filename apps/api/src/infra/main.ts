@@ -1,13 +1,14 @@
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: <> */
 
 import { NestFactory } from '@nestjs/core'
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger'
 import { env } from '@repo/env'
 import { apiReference } from '@scalar/nestjs-api-reference'
 import { cleanupOpenApiDoc } from 'nestjs-zod'
 import { AppModule } from './app.module'
 import { EnvService } from './env/env.service'
 import { RedisIoAdapter } from './http/adapters/redis-io.adapter'
+import { auth } from '@/auth'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -18,7 +19,7 @@ async function bootstrap() {
       credentials: true,
     },
   })
-
+  
   const configService = app.get(EnvService)
   const port = configService.get('PORT')
 
@@ -32,27 +33,49 @@ async function bootstrap() {
     .setDescription('A queue management API')
     .setVersion('1.0')
     .build()
+    
+    
+    const document = cleanupOpenApiDoc(
+      SwaggerModule.createDocument(app, config, {
+        deepScanRoutes: true,
+        operationIdFactory: (controllerKey: string) => controllerKey,
+      }),
+      {
+        version: '3.0',
+      },
+    )
+  
+    const betterAuthSchema = await auth.api.generateOpenAPISchema()
 
-  const document = cleanupOpenApiDoc(
-    SwaggerModule.createDocument(app, config, {
-      deepScanRoutes: true,
-      operationIdFactory: (controllerKey: string) => controllerKey,
-    }),
-    {
-      version: '3.1',
+  const allDocuments: OpenAPIObject = {
+  ...document,
+  paths: {
+    ...document.paths,
+    ...betterAuthSchema.paths,
+  },
+  components: {
+    ...document.components,
+    schemas: {
+      ...document.components?.schemas,
+      ...betterAuthSchema.components?.schemas,
     },
-  )
+    securitySchemes: {
+      ...document.components?.securitySchemes,
+      ...betterAuthSchema.components?.securitySchemes,
+    },
+  },
+} as OpenAPIObject
 
   app.use(
     '/scalar',
     apiReference({
-      content: document,
+      content: allDocuments,
       persistAuth: true,
       theme: 'bluePlanet',
     }),
   )
 
-  SwaggerModule.setup('swagger', app, document)
+  SwaggerModule.setup('swagger', app, allDocuments)
 
   await app.listen(port)
 }

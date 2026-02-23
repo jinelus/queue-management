@@ -10,8 +10,8 @@ import { cn } from '@/lib/utils'
 function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      data-slot="input-group"
-      role="group"
+      data-slot='input-group'
+      role='group'
       className={cn(
         'group/input-group relative flex w-full items-center rounded-md border border-input shadow-xs outline-none transition-[color,box-shadow] dark:bg-input/30',
         'h-9 min-w-0 has-[>textarea]:h-auto',
@@ -61,8 +61,8 @@ function InputGroupAddon({
 }: React.ComponentProps<'div'> & VariantProps<typeof inputGroupAddonVariants>) {
   return (
     <div
-      role="group"
-      data-slot="input-group-addon"
+      role='group'
+      data-slot='input-group-addon'
       data-align={align}
       className={cn(inputGroupAddonVariants({ align }), className)}
       onClick={(e) => {
@@ -124,7 +124,7 @@ function InputGroupText({ className, ...props }: React.ComponentProps<'span'>) {
 function InputGroupInput({ className, ...props }: React.ComponentProps<'input'>) {
   return (
     <Input
-      data-slot="input-group-control"
+      data-slot='input-group-control'
       className={cn(
         'flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent',
         className,
@@ -137,7 +137,7 @@ function InputGroupInput({ className, ...props }: React.ComponentProps<'input'>)
 function InputGroupTextarea({ className, ...props }: React.ComponentProps<'textarea'>) {
   return (
     <Textarea
-      data-slot="input-group-control"
+      data-slot='input-group-control'
       className={cn(
         'flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 dark:bg-transparent',
         className,

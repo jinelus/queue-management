@@ -756,7 +756,7 @@
       }
     },
     "/organizations/{organizationId}/services/{serviceId}/service-staff": {
-      "post": {
+      "get": {
         "description": "Retrieve a list of staff members assigned to a specific service within an organization.",
         "operationId": "GetServiceStaffByServiceIdController",
         "parameters": [
@@ -989,9 +989,9 @@
                 "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
               },
               "banned": { "type": "boolean" },
-              "banReason": { "type": "string" },
-              "banExpires": { "type": "string" },
-              "image": { "type": "string" },
+              "banReason": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+              "banExpires": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+              "image": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
               "role": { "type": "string" },
               "createdAt": { "type": "string" },
               "updatedAt": { "type": "string" }
@@ -1001,8 +1001,10 @@
               "name",
               "email",
               "emailVerified",
-              "organizationId",
+              "banned",
+              "banReason",
               "banExpires",
+              "image",
               "createdAt",
               "updatedAt"
             ],
@@ -1034,9 +1036,9 @@
                   "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
                 },
                 "banned": { "type": "boolean" },
-                "banReason": { "type": "string" },
-                "banExpires": { "type": "string" },
-                "image": { "type": "string" },
+                "banReason": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+                "banExpires": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+                "image": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
                 "role": { "type": "string" },
                 "createdAt": { "type": "string" },
                 "updatedAt": { "type": "string" }
@@ -1046,8 +1048,10 @@
                 "name",
                 "email",
                 "emailVerified",
-                "organizationId",
+                "banned",
+                "banReason",
                 "banExpires",
+                "image",
                 "createdAt",
                 "updatedAt"
               ],
@@ -1073,13 +1077,22 @@
               "name": { "type": "string" },
               "description": { "type": "string" },
               "slug": { "type": "string" },
-              "logoUrl": { "type": "string" },
-              "logo": { "type": "string" },
-              "metadata": { "type": "string" },
+              "logoUrl": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+              "logo": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+              "metadata": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
               "createdAt": { "type": "string" },
               "updatedAt": { "type": "string" }
             },
-            "required": ["id", "name", "slug", "createdAt", "updatedAt"],
+            "required": [
+              "id",
+              "name",
+              "slug",
+              "logoUrl",
+              "logo",
+              "metadata",
+              "createdAt",
+              "updatedAt"
+            ],
             "additionalProperties": false
           }
         },
@@ -1298,17 +1311,7 @@
               "startedAt": { "type": "string" },
               "completedAt": { "type": "string" }
             },
-            "required": [
-              "id",
-              "guestName",
-              "status",
-              "organizationId",
-              "serviceId",
-              "joinedAt",
-              "calledAt",
-              "startedAt",
-              "completedAt"
-            ],
+            "required": ["id", "guestName", "status", "organizationId", "serviceId", "joinedAt"],
             "additionalProperties": false
           }
         },
@@ -1350,17 +1353,7 @@
               "startedAt": { "type": "string" },
               "completedAt": { "type": "string" }
             },
-            "required": [
-              "id",
-              "guestName",
-              "status",
-              "organizationId",
-              "serviceId",
-              "joinedAt",
-              "calledAt",
-              "startedAt",
-              "completedAt"
-            ],
+            "required": ["id", "guestName", "status", "organizationId", "serviceId", "joinedAt"],
             "additionalProperties": false
           }
         },
@@ -1408,17 +1401,7 @@
               "startedAt": { "type": "string" },
               "completedAt": { "type": "string" }
             },
-            "required": [
-              "id",
-              "guestName",
-              "status",
-              "organizationId",
-              "serviceId",
-              "joinedAt",
-              "calledAt",
-              "startedAt",
-              "completedAt"
-            ],
+            "required": ["id", "guestName", "status", "organizationId", "serviceId", "joinedAt"],
             "additionalProperties": false
           }
         },
@@ -1450,17 +1433,7 @@
               "startedAt": { "type": "string" },
               "completedAt": { "type": "string" }
             },
-            "required": [
-              "id",
-              "guestName",
-              "status",
-              "organizationId",
-              "serviceId",
-              "joinedAt",
-              "calledAt",
-              "startedAt",
-              "completedAt"
-            ],
+            "required": ["id", "guestName", "status", "organizationId", "serviceId", "joinedAt"],
             "additionalProperties": false
           }
         },
@@ -1492,17 +1465,7 @@
               "startedAt": { "type": "string" },
               "completedAt": { "type": "string" }
             },
-            "required": [
-              "id",
-              "guestName",
-              "status",
-              "organizationId",
-              "serviceId",
-              "joinedAt",
-              "calledAt",
-              "startedAt",
-              "completedAt"
-            ],
+            "required": ["id", "guestName", "status", "organizationId", "serviceId", "joinedAt"],
             "additionalProperties": false
           },
           "position": { "anyOf": [{ "type": "number" }, { "type": "null" }] },
@@ -1536,17 +1499,7 @@
               "startedAt": { "type": "string" },
               "completedAt": { "type": "string" }
             },
-            "required": [
-              "id",
-              "guestName",
-              "status",
-              "organizationId",
-              "serviceId",
-              "joinedAt",
-              "calledAt",
-              "startedAt",
-              "completedAt"
-            ],
+            "required": ["id", "guestName", "status", "organizationId", "serviceId", "joinedAt"],
             "additionalProperties": false
           }
         },
