@@ -2,7 +2,7 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { env } from '@repo/env'
 import { BetterAuthPlugin, betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
-import { admin as adminPlugin, bearer, organization } from 'better-auth/plugins'
+import { admin as adminPlugin, bearer, openAPI, organization } from 'better-auth/plugins'
 import { PrismaClient } from '@/infra/database/generated/prisma/client'
 import { ac, admin, developer, employee, user } from './permissions'
 
@@ -24,15 +24,15 @@ export const accessControl = {
   },
 }
 
-const frontEndUrl = new URL(env.FRONT_END_URL)
+const frontEndUrl = new URL(env.NEXT_PUBLIC_FRONT_END_URL)
 const frontEndHost = frontEndUrl.hostname
 
 const domainParts = frontEndHost.split('.')
 const parentDomain = domainParts.length > 1 ? domainParts.slice(-2).join('.') : frontEndHost
 
-const isSecure = env.FRONT_END_URL.startsWith('https://')
+const isSecure = env.NEXT_PUBLIC_FRONT_END_URL.startsWith('https://')
 
-export const auth: ReturnType<typeof betterAuth> = betterAuth({
+export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
@@ -40,14 +40,15 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
     enabled: true,
     autoSignIn: true,
   },
-  trustedOrigins: [env.FRONT_END_URL],
+  baseURL: env.NEXT_PUBLIC_FRONT_END_URL,
+  trustedOrigins: [env.NEXT_PUBLIC_FRONT_END_URL],
   advanced: {
     useSecureCookies: isSecure,
     crossSubDomainCookies: {
       enabled: isSecure,
       domain: isSecure ? parentDomain : undefined,
     },
-    cookiePrefix: 'qm_app_',
+    cookiePrefix: 'qm_app',
   },
   session: {
     cookieCache: {
@@ -56,6 +57,7 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
     },
   },
   plugins: [
+    openAPI(),
     bearer(),
     organization(),
     adminPlugin({
