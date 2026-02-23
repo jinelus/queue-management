@@ -14,7 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bodyParser: false,
     cors: {
-      origin: env.FRONT_END_URL,
+      origin: env.NEXT_PUBLIC_FRONT_END_URL,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
       credentials: true,
     },
