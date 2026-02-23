@@ -117,7 +117,21 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  :root {
+    --font-sans: var(--font-geist-sans), "Inter", "DM Sans", system-ui, sans-serif;
+    --font-title: var(--font-geist-pixel-square), var(--font-geist-sans), "Inter", "DM Sans",
+      system-ui, sans-serif;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-title);
   }
 }
