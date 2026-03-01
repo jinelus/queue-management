@@ -5,10 +5,10 @@
   "author": "",
   "license": "UNLICENSED",
   "files": [
-    "./src/auth/permissions.ts"
+    "./src/auth/index.ts"
   ],
-  "main": "./src/auth/permissions.ts",
-  "exports": "./src/auth/permissions.ts",
+  "main": "./src/auth/index.ts",
+  "exports": "./src/auth/index.ts",
   "private": true,
   "scripts": {
     "build": "pnpm env:load nest build",

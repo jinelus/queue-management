@@ -137,9 +137,9 @@ export type {
   GetServiceStaffByServiceIdController401,
   GetServiceStaffByServiceIdController404,
   GetServiceStaffByServiceIdControllerError,
-  GetServiceStaffByServiceIdControllerMutation,
-  GetServiceStaffByServiceIdControllerMutationResponse,
   GetServiceStaffByServiceIdControllerPathParams,
+  GetServiceStaffByServiceIdControllerQuery,
+  GetServiceStaffByServiceIdControllerQueryResponse,
 } from './types/GetServiceStaffByServiceIdController.ts'
 export type { GetServiceStaffByServiceIdResponseDtoOutput } from './types/GetServiceStaffByServiceIdResponseDtoOutput.ts'
 export type {
@@ -357,8 +357,8 @@ export {
   getServiceStaffByServiceIdController401Schema,
   getServiceStaffByServiceIdController404Schema,
   getServiceStaffByServiceIdControllerErrorSchema,
-  getServiceStaffByServiceIdControllerMutationResponseSchema,
   getServiceStaffByServiceIdControllerPathParamsSchema,
+  getServiceStaffByServiceIdControllerQueryResponseSchema,
 } from './zod/getServiceStaffByServiceIdControllerSchema.ts'
 export { getServiceStaffByServiceIdResponseDtoOutputSchema } from './zod/getServiceStaffByServiceIdResponseDtoOutputSchema.ts'
 export {

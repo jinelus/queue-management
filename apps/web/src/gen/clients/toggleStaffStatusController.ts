@@ -3,8 +3,6 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   ToggleStaffStatusController401,
   ToggleStaffStatusController404,
@@ -12,6 +10,8 @@ import type {
   ToggleStaffStatusControllerMutationResponse,
   ToggleStaffStatusControllerPathParams,
 } from '../types/ToggleStaffStatusController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getToggleStaffStatusControllerUrl(
   organizationId: ToggleStaffStatusControllerPathParams['organizationId'],
@@ -51,5 +51,5 @@ export async function toggleStaffStatusController(
     data: requestData,
     ...requestConfig,
   })
-  return res.data
+  return res
 }

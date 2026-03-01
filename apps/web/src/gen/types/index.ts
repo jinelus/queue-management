@@ -116,9 +116,9 @@ export type {
   GetServiceStaffByServiceIdController401,
   GetServiceStaffByServiceIdController404,
   GetServiceStaffByServiceIdControllerError,
-  GetServiceStaffByServiceIdControllerMutation,
-  GetServiceStaffByServiceIdControllerMutationResponse,
   GetServiceStaffByServiceIdControllerPathParams,
+  GetServiceStaffByServiceIdControllerQuery,
+  GetServiceStaffByServiceIdControllerQueryResponse,
 } from './GetServiceStaffByServiceIdController.ts'
 export type { GetServiceStaffByServiceIdResponseDtoOutput } from './GetServiceStaffByServiceIdResponseDtoOutput.ts'
 export type {

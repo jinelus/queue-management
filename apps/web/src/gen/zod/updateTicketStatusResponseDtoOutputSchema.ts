@@ -15,8 +15,8 @@ export const updateTicketStatusResponseDtoOutputSchema = z.object({
     serviceId: z.string(),
     servedById: z.optional(z.string()),
     joinedAt: z.string(),
-    calledAt: z.string(),
-    startedAt: z.string(),
-    completedAt: z.string(),
+    calledAt: z.optional(z.string()),
+    startedAt: z.optional(z.string()),
+    completedAt: z.optional(z.string()),
   }),
 })

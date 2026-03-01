@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   GetTicketPositionController401,
   GetTicketPositionController404,
   GetTicketPositionControllerPathParams,
   GetTicketPositionControllerQueryResponse,
 } from '../types/GetTicketPositionController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getGetTicketPositionControllerUrl(
   organizationId: GetTicketPositionControllerPathParams['organizationId'],
@@ -44,5 +44,5 @@ export async function getTicketPositionController(
     url: getGetTicketPositionControllerUrl(organizationId, ticketId).url.toString(),
     ...requestConfig,
   })
-  return res.data
+  return res
 }

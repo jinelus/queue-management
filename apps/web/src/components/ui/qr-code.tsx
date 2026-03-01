@@ -3,8 +3,8 @@
 import { Slot as SlotPrimitive } from 'radix-ui'
 import * as React from 'react'
 import { useLazyRef } from '@/hooks/use-lazy-ref'
-import { cn } from '@/lib/utils'
 import { useComposedRefs } from '@/lib/compose-refs'
+import { cn } from '@/lib/utils'
 
 const ROOT_NAME = 'QRCode'
 const CANVAS_NAME = 'QRCodeCanvas'
