@@ -2,10 +2,10 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   NotFoundException,
   Param,
   Patch,
-  UnauthorizedException,
 } from '@nestjs/common'
 import {
   ApiBearerAuth,
@@ -97,7 +97,7 @@ export class ToggleStaffStatusController {
         case NotFoundError:
           throw new NotFoundException(error.message)
         case NotAllowedError:
-          throw new UnauthorizedException(error.message)
+          throw new ForbiddenException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

@@ -1,10 +1,10 @@
 import {
   BadRequestException,
   Controller,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
-  UnauthorizedException,
 } from '@nestjs/common'
 import {
   ApiBearerAuth,
@@ -14,7 +14,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { Roles, Session, type UserSession } from '@thallesp/nestjs-better-auth'
+import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
@@ -48,7 +48,6 @@ export class GetDashboardSummaryResponseDto extends createZodDto(getDashboardSum
 @ApiTags('Analytics')
 @Controller('organizations/:organizationId/dashboard')
 @ApiBearerAuth()
-@Roles(['admin'])
 export class GetDashboardSummaryController {
   constructor(private readonly getDashboardSummaryService: GetDashboardSummaryService) {}
 
@@ -88,7 +87,7 @@ export class GetDashboardSummaryController {
         case NotFoundError:
           throw new NotFoundException(error.message)
         case NotAllowedError:
-          throw new UnauthorizedException(error.message)
+          throw new ForbiddenException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

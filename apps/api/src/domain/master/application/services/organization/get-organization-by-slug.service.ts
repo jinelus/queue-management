@@ -29,16 +29,19 @@ export class GetOrganizationBySlugService {
     slug,
     userId,
   }: GetOrganizationBySlugServiceParams): Promise<GetOrganizationBySlugServiceResponse> {
-    const { success } = await this.userPermission.userCan('get', 'organization', { userId })
-
-    if (!success) {
-      return left(new NotAllowedError())
-    }
-
     const organization = await this.organizationRepository.findBySlug(slug)
 
     if (!organization) {
       return left(new NotFoundError())
+    }
+
+    const { success } = await this.userPermission.userCan('get', 'organization', {
+      userId,
+      organizationId: organization.id.toString(),
+    })
+
+    if (!success) {
+      return left(new NotAllowedError())
     }
 
     return right({

@@ -1,11 +1,11 @@
 import {
   BadRequestException,
   Controller,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
   Query,
-  UnauthorizedException,
 } from '@nestjs/common'
 import {
   ApiBearerAuth,
@@ -133,7 +133,7 @@ export class GetEmployeesUsersController {
         case NotFoundError:
           throw new NotFoundException(error.message)
         case NotAllowedError:
-          throw new UnauthorizedException(error.message)
+          throw new ForbiddenException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

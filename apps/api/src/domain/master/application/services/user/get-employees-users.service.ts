@@ -40,14 +40,13 @@ export class GetEmployeesUsersService {
     search,
     organizationId,
   }: GetEmployeesUsersServiceParams): Promise<GetEmployeesUsersServiceResponse> {
-    const { success } = await this.userPermission.userCan('list', 'user', { userId })
+    const { success } = await this.userPermission.userCan('list', 'user', { userId, organizationId })
 
     if (!success) {
       return left(new NotAllowedError('You are not allowed to access'))
     }
 
     const users = await this.userRepository.findUsers(organizationId, {
-      role: 'employee',
       order: order ?? 'desc',
       orderBy: orderBy ?? 'createdAt',
       page: page ?? 1,
@@ -56,7 +55,6 @@ export class GetEmployeesUsersService {
     })
 
     const total = await this.userRepository.count(organizationId, {
-      role: 'employee',
       search,
       order: 'desc',
       orderBy: orderBy ?? 'createdAt',

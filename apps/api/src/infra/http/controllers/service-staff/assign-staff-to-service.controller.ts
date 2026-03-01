@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   NotFoundException,
   Param,
   Post,
@@ -14,9 +15,10 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { Roles, Session, type UserSession } from '@thallesp/nestjs-better-auth'
+import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { AssignStaffToService } from '@/domain/master/application/services/service-staff/assign-staff-to-service.service'
 import {
@@ -46,7 +48,6 @@ export class AssignStaffToServiceResponseDto extends createZodDto(assignStaffToS
 @ApiTags('Service Staff')
 @Controller('organizations/:organizationId/service-staff/assign')
 @ApiBearerAuth()
-@Roles(['admin'])
 export class AssignStaffToServiceController {
   constructor(private readonly assignStaffToServiceService: AssignStaffToService) {}
 
@@ -88,6 +89,8 @@ export class AssignStaffToServiceController {
       switch (error.constructor) {
         case NotFoundError:
           throw new NotFoundException(error.message)
+        case NotAllowedError:
+          throw new ForbiddenException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

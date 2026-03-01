@@ -46,6 +46,7 @@ export class AssignStaffToService {
 
     const { success } = await this.permissionFactory.userCan('create', 'serviceStaff', {
       userId: actorId,
+      organizationId,
     })
 
     if (!success) {

@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get, Param, Query } from '@nestjs/common'
+import { Controller, ForbiddenException, Get, Param, Query } from '@nestjs/common'
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -82,7 +82,7 @@ export class GetAnalyticsController {
     })
 
     if (result.isLeft()) {
-      throw new BadRequestException()
+      throw new ForbiddenException(result.value.message)
     }
 
     return result.value

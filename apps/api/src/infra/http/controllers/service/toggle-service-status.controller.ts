@@ -14,7 +14,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { Roles, Session, type UserSession } from '@thallesp/nestjs-better-auth'
+import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
 import { NotFoundError } from '@/core/errors/not-found-error'
@@ -46,7 +46,6 @@ export class ToggleServiceStatusResponseDto extends createZodDto(toggleServiceSt
 @ApiTags('Services')
 @Controller('organizations/:organizationId/services/:serviceId/toggle-status')
 @ApiBearerAuth()
-@Roles(['admin'])
 export class ToggleServiceStatusController {
   constructor(private readonly toggleServiceStatusService: ToggleServiceStatusService) {}
 

@@ -48,6 +48,7 @@ export class GetDashboardSummaryService {
   }: GetDashboardSummaryServiceParams): Promise<GetDashboardSummaryServiceResponse> {
     const { success } = await this.permissionFactory.userCan('get', 'service', {
       userId,
+      organizationId,
     })
 
     if (!success) {

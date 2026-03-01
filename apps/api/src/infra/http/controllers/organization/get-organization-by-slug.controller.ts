@@ -1,4 +1,11 @@
-import { BadRequestException, Controller, Get, NotFoundException, Param } from '@nestjs/common'
+import {
+  BadRequestException,
+  Controller,
+  ForbiddenException,
+  Get,
+  NotFoundException,
+  Param,
+} from '@nestjs/common'
 import {
   ApiBearerAuth,
   ApiNotFoundResponse,
@@ -10,6 +17,7 @@ import {
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { GetOrganizationBySlugService } from '@/domain/master/application/services/organization/get-organization-by-slug.service'
 import {
@@ -69,6 +77,8 @@ export class GetOrganizationBySlugController {
       switch (error.constructor) {
         case NotFoundError:
           throw new NotFoundException(error.message)
+        case NotAllowedError:
+          throw new ForbiddenException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

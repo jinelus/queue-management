@@ -9,6 +9,7 @@ import { TicketRepository } from '../../repositories/ticket.repository'
 interface CallNextTicketServiceParams {
   serviceId: string
   staffId: string
+  organizationId: string
 }
 
 type CallNextTicketServiceResponse = Either<
@@ -28,9 +29,11 @@ export class CallNextTicketService {
   async execute({
     serviceId,
     staffId,
+    organizationId,
   }: CallNextTicketServiceParams): Promise<CallNextTicketServiceResponse> {
     const { success } = await this.permissionFactory.userCan('update', 'ticket', {
       userId: staffId,
+      organizationId,
     })
 
     if (!success) {

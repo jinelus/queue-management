@@ -35,7 +35,7 @@ export class ToggleServiceStatusService {
     userId,
     organizationId,
   }: ToggleServiceStatusServiceParams): Promise<ToggleServiceStatusServiceResponse> {
-    const { success } = await this.permissionFactory.userCan('update', 'service', { userId })
+    const { success } = await this.permissionFactory.userCan('update', 'service', { userId, organizationId })
 
     if (!success) {
       return left(new NotAllowedError())

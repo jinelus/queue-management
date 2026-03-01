@@ -45,6 +45,7 @@ export class ToggleStaffStatusService {
 
     const { success } = await this.permissionFactory.userCan('update', 'service', {
       userId: actorId,
+      organizationId,
     })
 
     if (!success) {
