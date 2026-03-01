@@ -25,6 +25,8 @@ const config: UserConfig = {
         path: './clients',
       },
       client: 'fetch',
+      dataReturnType: 'full',
+      importPath: './src/lib/api-client',
     }),
     pluginZod({
       output: {
