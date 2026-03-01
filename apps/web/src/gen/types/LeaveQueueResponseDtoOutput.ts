@@ -53,16 +53,16 @@ export type LeaveQueueResponseDtoOutput = {
      */
     joinedAt: string
     /**
-     * @type string
+     * @type string | undefined
      */
-    calledAt: string
+    calledAt?: string
     /**
-     * @type string
+     * @type string | undefined
      */
-    startedAt: string
+    startedAt?: string
     /**
-     * @type string
+     * @type string | undefined
      */
-    completedAt: string
+    completedAt?: string
   }
 }

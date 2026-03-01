@@ -3,8 +3,6 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   UpdateTicketStatusController401,
   UpdateTicketStatusController404,
@@ -12,6 +10,8 @@ import type {
   UpdateTicketStatusControllerMutationResponse,
   UpdateTicketStatusControllerPathParams,
 } from '../types/UpdateTicketStatusController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getUpdateTicketStatusControllerUrl(
   organizationId: UpdateTicketStatusControllerPathParams['organizationId'],
@@ -51,5 +51,5 @@ export async function updateTicketStatusController(
     data: requestData,
     ...requestConfig,
   })
-  return res.data
+  return res
 }

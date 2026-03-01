@@ -1,7 +1,8 @@
-import { ac, admin, developer, employee, user } from '@repo/api'
 import { env } from '@repo/env'
+import { BetterAuthClientPlugin } from 'better-auth'
 import { adminClient, organizationClient } from 'better-auth/client/plugins'
 import { createAuthClient } from 'better-auth/react'
+import { ac, admin, developer, employee, user } from '../../../api/src/auth/permissions'
 
 const accessControl = {
   ac,
@@ -13,15 +14,16 @@ const accessControl = {
   },
 }
 
-type AuthClient = ReturnType<typeof createAuthClient>
-
-export const authClient: AuthClient = createAuthClient({
+export const authClient = createAuthClient({
   plugins: [
     adminClient({
       ...accessControl,
-    } as Parameters<typeof adminClient>[0]),
+    }) as BetterAuthClientPlugin,
     organizationClient(),
   ],
   baseURL: env.NEXT_PUBLIC_FRONT_END_URL,
   basePath: '/reverse-proxy/auth',
+  fetchOptions: {
+    credentials: 'include',
+  },
 })

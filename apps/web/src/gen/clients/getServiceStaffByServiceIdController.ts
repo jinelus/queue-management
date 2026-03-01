@@ -3,21 +3,21 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   GetServiceStaffByServiceIdController401,
   GetServiceStaffByServiceIdController404,
-  GetServiceStaffByServiceIdControllerMutationResponse,
   GetServiceStaffByServiceIdControllerPathParams,
+  GetServiceStaffByServiceIdControllerQueryResponse,
 } from '../types/GetServiceStaffByServiceIdController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getGetServiceStaffByServiceIdControllerUrl(
   organizationId: GetServiceStaffByServiceIdControllerPathParams['organizationId'],
   serviceId: GetServiceStaffByServiceIdControllerPathParams['serviceId'],
 ) {
   const res = {
-    method: 'POST',
+    method: 'GET',
     url: `/organizations/${organizationId}/services/${serviceId}/service-staff` as const,
   }
   return res
@@ -36,15 +36,15 @@ export async function getServiceStaffByServiceIdController(
   const { client: request = fetch, ...requestConfig } = config
 
   const res = await request<
-    GetServiceStaffByServiceIdControllerMutationResponse,
+    GetServiceStaffByServiceIdControllerQueryResponse,
     ResponseErrorConfig<
       GetServiceStaffByServiceIdController401 | GetServiceStaffByServiceIdController404
     >,
     unknown
   >({
-    method: 'POST',
+    method: 'GET',
     url: getGetServiceStaffByServiceIdControllerUrl(organizationId, serviceId).url.toString(),
     ...requestConfig,
   })
-  return res.data
+  return res
 }

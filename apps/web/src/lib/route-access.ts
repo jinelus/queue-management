@@ -49,7 +49,9 @@ export const defaultRule: RouteRule = {
 }
 
 export function matchRouteRule(pathname: string): RouteRule {
-  const exactMatch = routeRules.find((rule) => (rule.match ?? 'exact') === 'exact' && rule.path === pathname)
+  const exactMatch = routeRules.find(
+    (rule) => (rule.match ?? 'exact') === 'exact' && rule.path === pathname,
+  )
 
   if (exactMatch) {
     return exactMatch

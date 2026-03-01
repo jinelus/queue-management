@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   GetDashboardSummaryController401,
   GetDashboardSummaryController404,
   GetDashboardSummaryControllerPathParams,
   GetDashboardSummaryControllerQueryResponse,
 } from '../types/GetDashboardSummaryController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getGetDashboardSummaryControllerUrl(
   organizationId: GetDashboardSummaryControllerPathParams['organizationId'],
@@ -42,5 +42,5 @@ export async function getDashboardSummaryController(
     url: getGetDashboardSummaryControllerUrl(organizationId).url.toString(),
     ...requestConfig,
   })
-  return res.data
+  return res
 }

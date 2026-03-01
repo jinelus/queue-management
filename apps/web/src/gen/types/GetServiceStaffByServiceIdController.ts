@@ -29,9 +29,9 @@ export type GetServiceStaffByServiceIdController404 = any
  */
 export type GetServiceStaffByServiceIdControllerError = GetServiceStaffByServiceIdResponseDtoOutput
 
-export type GetServiceStaffByServiceIdControllerMutationResponse = any
+export type GetServiceStaffByServiceIdControllerQueryResponse = any
 
-export type GetServiceStaffByServiceIdControllerMutation = {
+export type GetServiceStaffByServiceIdControllerQuery = {
   Response: any
   PathParams: GetServiceStaffByServiceIdControllerPathParams
   Errors: GetServiceStaffByServiceIdController401 | GetServiceStaffByServiceIdController404

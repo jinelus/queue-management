@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   GetAnalyticsController401,
   GetAnalyticsControllerPathParams,
   GetAnalyticsControllerQueryParams,
   GetAnalyticsControllerQueryResponse,
 } from '../types/GetAnalyticsController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getGetAnalyticsControllerUrl(
   organizationId: GetAnalyticsControllerPathParams['organizationId'],
@@ -44,5 +44,5 @@ export async function getAnalyticsController(
     params,
     ...requestConfig,
   })
-  return res.data
+  return res
 }

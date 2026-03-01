@@ -12,13 +12,13 @@
         "name": { "type": "string" },
         "description": { "type": "string" },
         "slug": { "type": "string" },
-        "logoUrl": { "type": "string" },
-        "logo": { "type": "string" },
-        "metadata": { "type": "string" },
+        "logoUrl": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+        "logo": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+        "metadata": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
         "createdAt": { "type": "string" },
         "updatedAt": { "type": "string" }
       },
-      "required": ["id", "name", "slug", "createdAt", "updatedAt"],
+      "required": ["id", "name", "slug", "logoUrl", "logo", "metadata", "createdAt", "updatedAt"],
       "additionalProperties": false
     }
   },

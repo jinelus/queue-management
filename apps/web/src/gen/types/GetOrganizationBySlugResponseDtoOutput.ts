@@ -25,18 +25,9 @@ export type GetOrganizationBySlugResponseDtoOutput = {
      * @type string
      */
     slug: string
-    /**
-     * @type string | undefined
-     */
-    logoUrl?: string
-    /**
-     * @type string | undefined
-     */
-    logo?: string
-    /**
-     * @type string | undefined
-     */
-    metadata?: string
+    logoUrl: string | null
+    logo: string | null
+    metadata: string | null
     /**
      * @type string
      */

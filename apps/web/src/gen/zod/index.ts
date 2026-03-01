@@ -90,8 +90,8 @@ export {
   getServiceStaffByServiceIdController401Schema,
   getServiceStaffByServiceIdController404Schema,
   getServiceStaffByServiceIdControllerErrorSchema,
-  getServiceStaffByServiceIdControllerMutationResponseSchema,
   getServiceStaffByServiceIdControllerPathParamsSchema,
+  getServiceStaffByServiceIdControllerQueryResponseSchema,
 } from './getServiceStaffByServiceIdControllerSchema.ts'
 export { getServiceStaffByServiceIdResponseDtoOutputSchema } from './getServiceStaffByServiceIdResponseDtoOutputSchema.ts'
 export {

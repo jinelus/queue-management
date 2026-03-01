@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <> */
 export function buildFormData<T = unknown>(data: T): FormData {
   const formData = new FormData()
 
