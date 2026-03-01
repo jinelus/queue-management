@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   GetServiceByIdController401,
   GetServiceByIdController404,
   GetServiceByIdControllerPathParams,
   GetServiceByIdControllerQueryResponse,
 } from '../types/GetServiceByIdController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getGetServiceByIdControllerUrl(
   organizationId: GetServiceByIdControllerPathParams['organizationId'],
@@ -44,5 +44,5 @@ export async function getServiceByIdController(
     url: getGetServiceByIdControllerUrl(organizationId, serviceId).url.toString(),
     ...requestConfig,
   })
-  return res.data
+  return res
 }

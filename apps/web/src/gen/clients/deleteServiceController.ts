@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   DeleteServiceController401,
   DeleteServiceController404,
   DeleteServiceControllerMutationResponse,
   DeleteServiceControllerPathParams,
 } from '../types/DeleteServiceController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getDeleteServiceControllerUrl(
   organizationId: DeleteServiceControllerPathParams['organizationId'],
@@ -44,5 +44,5 @@ export async function deleteServiceController(
     url: getDeleteServiceControllerUrl(organizationId, serviceId).url.toString(),
     ...requestConfig,
   })
-  return res.data
+  return res
 }

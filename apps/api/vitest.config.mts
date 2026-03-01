@@ -7,7 +7,8 @@ export default defineConfig({
     tsConfigPaths(),
     swc.vite({
       module: { type: 'es6' },
-    }),
+      // biome-ignore lint/suspicious/noExplicitAny: <>
+    }) as any,
   ],
   test: {
     globals: true,

@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   LeaveQueueController401,
   LeaveQueueController404,
   LeaveQueueControllerMutationResponse,
   LeaveQueueControllerPathParams,
 } from '../types/LeaveQueueController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getLeaveQueueControllerUrl(
   organizationId: LeaveQueueControllerPathParams['organizationId'],
@@ -44,5 +44,5 @@ export async function leaveQueueController(
     url: getLeaveQueueControllerUrl(organizationId, ticketId).url.toString(),
     ...requestConfig,
   })
-  return res.data
+  return res
 }
