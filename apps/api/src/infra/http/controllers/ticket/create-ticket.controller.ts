@@ -6,13 +6,7 @@ import {
   Param,
   Post,
 } from '@nestjs/common'
-import {
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { AllowAnonymous } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
@@ -22,6 +16,10 @@ import {
   httpTicketSchema,
   PrismaTicketMapper,
 } from '@/infra/database/prisma/mappers/prisma-ticket.mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const createTicketBody = z.object({
   guestName: z.string().min(1).max(255),
@@ -48,17 +46,18 @@ export class CreateTicketResponseDto extends createZodDto(createTicketResponse) 
 export class CreateTicketController {
   constructor(private readonly createTicketService: CreateTicketService) {}
 
-  @Post('')
+  @Post()
   @ApiOperation({
     summary: 'Create a new ticket',
     description: 'Create a new ticket within an organization.',
   })
+
   @ZodResponse({
     type: CreateTicketResponseDto,
     description: 'Successful response with created ticket details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

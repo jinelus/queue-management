@@ -469,8 +469,20 @@
           }
         },
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
+            }
+          },
           "default": {
             "description": "Successful response with created ticket details",
             "content": {
@@ -912,7 +924,14 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
           "default": {
             "description": "Successful response with analytics data",
             "content": {
@@ -1263,6 +1282,22 @@
         },
         "required": ["service"],
         "additionalProperties": false
+      },
+      "UnauthorizedErrorDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "number", "const": 401 },
+          "message": { "type": "string" }
+        },
+        "required": ["statusCode", "message"]
+      },
+      "NotFoundErrorDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "number", "const": 404 },
+          "message": { "type": "string" }
+        },
+        "required": ["statusCode", "message"]
       },
       "CreateTicketBodyDto": {
         "type": "object",
