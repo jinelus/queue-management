@@ -41,7 +41,6 @@ async function main() {
       name: 'Admin User',
       email: adminEmail,
       role: 'admin',
-      organizationId: organization.id,
       emailVerified: true,
     },
   })
@@ -57,7 +56,6 @@ async function main() {
       name: 'Staff One',
       email: staff1Email,
       role: 'staff',
-      organizationId: organization.id,
       emailVerified: true,
     },
   })
@@ -73,7 +71,6 @@ async function main() {
       name: 'Staff Two',
       email: staff2Email,
       role: 'staff',
-      organizationId: organization.id,
       emailVerified: true,
     },
   })
