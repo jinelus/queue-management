@@ -30,7 +30,7 @@ describe('Get Organization by Slug (E2E)', () => {
     const employee = await makeEmployee(prisma, organization.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -66,7 +66,7 @@ describe('Get Organization by Slug (E2E)', () => {
     const employee = await makeEmployee(prisma, organization.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())

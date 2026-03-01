@@ -6,6 +6,19 @@ import { User } from '@/domain/master/entreprise/entities/user'
 
 export class InMemoryUserRepository implements UserRepository {
   public user: User[] = []
+  public membersByOrg: Map<string, Set<string>> = new Map()
+
+  addMember(organizationId: string, userId: string): void {
+    if (!this.membersByOrg.has(organizationId)) {
+      this.membersByOrg.set(organizationId, new Set())
+    }
+    const members = this.membersByOrg.get(organizationId)
+    if (members) members.add(userId)
+  }
+
+  private isOrgMember(organizationId: string, userId: string): boolean {
+    return this.membersByOrg.get(organizationId)?.has(userId) ?? false
+  }
 
   async create(entity: User): Promise<void> {
     this.user.push(entity)
@@ -28,26 +41,24 @@ export class InMemoryUserRepository implements UserRepository {
   }
 
   async findAll(organizationId: string): Promise<User[]> {
-    return this.user.filter((u) => u.organizationId?.toString() === organizationId)
+    return this.user.filter((u) => this.isOrgMember(organizationId, u.id.toString()))
   }
 
   async count(organizationId: string, params?: FindUsersParams): Promise<number> {
-    const { role, search } = params ?? {}
+    const { search } = params ?? {}
     return this.user.filter((u) => {
-      const matchesOrganization = u.organizationId?.toString() === organizationId
-      const matchesRole = role ? u.role === role : true
+      const matchesOrganization = this.isOrgMember(organizationId, u.id.toString())
       const matchesSearch = search ? u.name.toLowerCase().includes(search.toLowerCase()) : true
-      return matchesOrganization && matchesRole && matchesSearch
+      return matchesOrganization && matchesSearch
     }).length
   }
 
   async findUsers(organizationId: string, params?: FindUsersParams): Promise<Array<User>> {
-    const { role, search } = params ?? {}
+    const { search } = params ?? {}
     return this.user.filter((u) => {
-      const matchesOrganization = u.organizationId?.toString() === organizationId
-      const matchesRole = role ? u.role === role : true
+      const matchesOrganization = this.isOrgMember(organizationId, u.id.toString())
       const matchesSearch = search ? u.name.toLowerCase().includes(search.toLowerCase()) : true
-      return matchesOrganization && matchesRole && matchesSearch
+      return matchesOrganization && matchesSearch
     })
   }
 }

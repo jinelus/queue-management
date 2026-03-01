@@ -21,13 +21,11 @@ describe('GetEmployeesUsersService', () => {
 
   it('should be able to get employees', async () => {
     const user1 = User.create({
-      organizationId: 'org-1',
       name: 'User 1',
       email: 'user1@example.com',
-      password: 'pass',
-      role: 'employee',
     })
     await userRepository.create(user1)
+    userRepository.addMember('org-1', user1.id.toString())
 
     permissionFactory.setPermission(true)
 

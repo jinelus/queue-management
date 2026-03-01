@@ -27,7 +27,6 @@ export async function makeUser(
       email: `${faker.internet.email()}-${ulid()}`,
       emailVerified: true,
       ...override,
-      role: 'user',
     },
   })
 
@@ -44,11 +43,6 @@ export async function makeEmployee(
     email: `${faker.internet.email()}-${ulid()}`,
     emailVerified: true,
     ...override,
-    role: 'employee',
-  }
-
-  if (organizationId) {
-    data.organization = { connect: { id: organizationId } }
   }
 
   const user = await prisma.user.create({ data })
@@ -70,11 +64,6 @@ export async function makeAdmin(
     email: `${faker.internet.email()}-${ulid()}`,
     emailVerified: true,
     ...override,
-    role: 'admin',
-  }
-
-  if (organizationId) {
-    data.organization = { connect: { id: organizationId } }
   }
 
   const user = await prisma.user.create({ data })

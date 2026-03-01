@@ -34,7 +34,7 @@ describe('Toggle Staff Status (E2E)', () => {
     })
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -55,7 +55,7 @@ describe('Toggle Staff Status (E2E)', () => {
     const serviceStaff = await makeServiceStaff(prisma, employee.id, service.id, { isOnline: true })
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -78,7 +78,7 @@ describe('Toggle Staff Status (E2E)', () => {
     })
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -113,7 +113,7 @@ describe('Toggle Staff Status (E2E)', () => {
     const fakeServiceStaffId = '01HMVVQXYXNQBPQVGZPFX3YV8Q'
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())

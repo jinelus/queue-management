@@ -28,7 +28,7 @@ describe('Get User by ID (E2E)', () => {
     const employee = await makeEmployee(prisma, organization.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -42,7 +42,6 @@ describe('Get User by ID (E2E)', () => {
       email: employee.email,
       role: employee.role,
       emailVerified: true,
-      organizationId: organization.id,
       image: null,
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
@@ -58,7 +57,7 @@ describe('Get User by ID (E2E)', () => {
     const targetUser = await makeEmployee(prisma, organization.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -86,7 +85,7 @@ describe('Get User by ID (E2E)', () => {
     const fakeUserId = '01HMVVQXYXNQBPQVGZPFX3YV8Q'
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
