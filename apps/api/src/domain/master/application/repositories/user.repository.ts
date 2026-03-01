@@ -3,7 +3,7 @@ import { Repository } from '@/core/repositories/repository'
 import { User } from '../../entreprise/entities/user'
 
 export interface FindUsersParams extends PaginationParams {
-  role?: 'employee'
+  memberRole?: string
 }
 
 export abstract class UserRepository extends Repository<User> {
