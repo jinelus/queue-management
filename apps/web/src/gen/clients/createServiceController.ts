@@ -3,8 +3,6 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   CreateServiceController401,
   CreateServiceController404,
@@ -12,6 +10,8 @@ import type {
   CreateServiceControllerMutationResponse,
   CreateServiceControllerPathParams,
 } from '../types/CreateServiceController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getCreateServiceControllerUrl(
   organizationId: CreateServiceControllerPathParams['organizationId'],
@@ -49,5 +49,5 @@ export async function createServiceController(
     data: requestData,
     ...requestConfig,
   })
-  return res.data
+  return res
 }

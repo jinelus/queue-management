@@ -28,4 +28,4 @@ export const getServiceStaffByServiceIdControllerErrorSchema = z.lazy(
   () => getServiceStaffByServiceIdResponseDtoOutputSchema,
 )
 
-export const getServiceStaffByServiceIdControllerMutationResponseSchema = z.any()
+export const getServiceStaffByServiceIdControllerQueryResponseSchema = z.any()

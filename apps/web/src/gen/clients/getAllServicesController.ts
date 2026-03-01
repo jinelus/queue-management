@@ -3,8 +3,6 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   GetAllServicesController401,
   GetAllServicesController404,
@@ -12,6 +10,8 @@ import type {
   GetAllServicesControllerQueryParams,
   GetAllServicesControllerQueryResponse,
 } from '../types/GetAllServicesController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getGetAllServicesControllerUrl(
   organizationId: GetAllServicesControllerPathParams['organizationId'],
@@ -45,5 +45,5 @@ export async function getAllServicesController(
     params,
     ...requestConfig,
   })
-  return res.data
+  return res
 }

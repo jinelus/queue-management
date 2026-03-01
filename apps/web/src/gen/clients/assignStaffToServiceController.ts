@@ -3,8 +3,6 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   AssignStaffToServiceController401,
   AssignStaffToServiceController404,
@@ -12,6 +10,8 @@ import type {
   AssignStaffToServiceControllerMutationResponse,
   AssignStaffToServiceControllerPathParams,
 } from '../types/AssignStaffToServiceController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getAssignStaffToServiceControllerUrl(
   organizationId: AssignStaffToServiceControllerPathParams['organizationId'],
@@ -49,5 +49,5 @@ export async function assignStaffToServiceController(
     data: requestData,
     ...requestConfig,
   })
-  return res.data
+  return res
 }

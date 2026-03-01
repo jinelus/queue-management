@@ -23,17 +23,7 @@
         "startedAt": { "type": "string" },
         "completedAt": { "type": "string" }
       },
-      "required": [
-        "id",
-        "guestName",
-        "status",
-        "organizationId",
-        "serviceId",
-        "joinedAt",
-        "calledAt",
-        "startedAt",
-        "completedAt"
-      ],
+      "required": ["id", "guestName", "status", "organizationId", "serviceId", "joinedAt"],
       "additionalProperties": false
     },
     "position": { "anyOf": [{ "type": "number" }, { "type": "null" }] },

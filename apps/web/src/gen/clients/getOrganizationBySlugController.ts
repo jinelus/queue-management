@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   GetOrganizationBySlugController401,
   GetOrganizationBySlugController404,
   GetOrganizationBySlugControllerPathParams,
   GetOrganizationBySlugControllerQueryResponse,
 } from '../types/GetOrganizationBySlugController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getGetOrganizationBySlugControllerUrl(
   slug: GetOrganizationBySlugControllerPathParams['slug'],
@@ -39,5 +39,5 @@ export async function getOrganizationBySlugController(
     url: getGetOrganizationBySlugControllerUrl(slug).url.toString(),
     ...requestConfig,
   })
-  return res.data
+  return res
 }

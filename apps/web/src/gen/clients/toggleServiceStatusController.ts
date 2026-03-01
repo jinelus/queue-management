@@ -3,8 +3,6 @@
  * Do not edit manually.
  */
 
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/fetch'
-import fetch from '@kubb/plugin-client/clients/fetch'
 import type {
   ToggleServiceStatusController401,
   ToggleServiceStatusController404,
@@ -12,6 +10,8 @@ import type {
   ToggleServiceStatusControllerMutationResponse,
   ToggleServiceStatusControllerPathParams,
 } from '../types/ToggleServiceStatusController.ts'
+import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
+import fetch from './src/lib/api-client'
 
 function getToggleServiceStatusControllerUrl(
   organizationId: ToggleServiceStatusControllerPathParams['organizationId'],
@@ -51,5 +51,5 @@ export async function toggleServiceStatusController(
     data: requestData,
     ...requestConfig,
   })
-  return res.data
+  return res
 }
