@@ -16,6 +16,7 @@ async function proxyRequest(request: Request) {
     method: request.method,
     headers,
     body,
+    credentials: 'include',
   })
 
   const newHeaders = new Headers(response.headers)
