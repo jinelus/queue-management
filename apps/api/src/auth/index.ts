@@ -4,7 +4,7 @@ import { BetterAuthPlugin, betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { admin as adminPlugin, bearer, openAPI, organization } from 'better-auth/plugins'
 import { PrismaClient } from '@/infra/database/generated/prisma/client'
-import { ac, admin, developer, employee, user } from './permissions'
+import { ac, admin, member, owner, user } from './permissions'
 
 const adapter = new PrismaPg({
   connectionString: env.DATABASE_URL,
@@ -17,9 +17,9 @@ export const prisma = new PrismaClient({
 export const accessControl = {
   ac,
   roles: {
+    owner,
     admin,
-    developer,
-    employee,
+    member,
     user,
   },
 }

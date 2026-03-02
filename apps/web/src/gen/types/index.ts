@@ -1,8 +1,8 @@
 export type { AssignStaffToServiceBodyDto } from './AssignStaffToServiceBodyDto.ts'
 export type {
+  AssignStaffToServiceController201,
   AssignStaffToServiceController401,
   AssignStaffToServiceController404,
-  AssignStaffToServiceControllerError,
   AssignStaffToServiceControllerMutation,
   AssignStaffToServiceControllerMutationRequest,
   AssignStaffToServiceControllerMutationResponse,
@@ -11,9 +11,9 @@ export type {
 export type { AssignStaffToServiceResponseDtoOutput } from './AssignStaffToServiceResponseDtoOutput.ts'
 export type { CreateServiceBodyDto } from './CreateServiceBodyDto.ts'
 export type {
+  CreateServiceController201,
   CreateServiceController401,
   CreateServiceController404,
-  CreateServiceControllerError,
   CreateServiceControllerMutation,
   CreateServiceControllerMutationRequest,
   CreateServiceControllerMutationResponse,
@@ -22,9 +22,9 @@ export type {
 export type { CreateServiceResponseDtoOutput } from './CreateServiceResponseDtoOutput.ts'
 export type { CreateTicketBodyDto } from './CreateTicketBodyDto.ts'
 export type {
+  CreateTicketController201,
   CreateTicketController401,
   CreateTicketController404,
-  CreateTicketControllerError,
   CreateTicketControllerMutation,
   CreateTicketControllerMutationRequest,
   CreateTicketControllerMutationResponse,
@@ -36,18 +36,18 @@ export type {
 } from './CreateTicketResponseDtoOutput.ts'
 export { ticketStatusEnum } from './CreateTicketResponseDtoOutput.ts'
 export type {
+  DeleteServiceController200,
   DeleteServiceController401,
   DeleteServiceController404,
-  DeleteServiceControllerError,
   DeleteServiceControllerMutation,
   DeleteServiceControllerMutationResponse,
   DeleteServiceControllerPathParams,
 } from './DeleteServiceController.ts'
 export type { DeleteServiceResponseDtoOutput } from './DeleteServiceResponseDtoOutput.ts'
 export type {
+  GetAllServicesController200,
   GetAllServicesController401,
   GetAllServicesController404,
-  GetAllServicesControllerError,
   GetAllServicesControllerPathParams,
   GetAllServicesControllerQuery,
   GetAllServicesControllerQueryParams,
@@ -61,8 +61,8 @@ export {
 } from './GetAllServicesController.ts'
 export type { GetAllServicesResponseDtoOutput } from './GetAllServicesResponseDtoOutput.ts'
 export type {
+  GetAnalyticsController200,
   GetAnalyticsController401,
-  GetAnalyticsControllerError,
   GetAnalyticsControllerPathParams,
   GetAnalyticsControllerQuery,
   GetAnalyticsControllerQueryParams,
@@ -70,18 +70,18 @@ export type {
 } from './GetAnalyticsController.ts'
 export type { GetAnalyticsResponseDtoOutput } from './GetAnalyticsResponseDtoOutput.ts'
 export type {
+  GetDashboardSummaryController200,
   GetDashboardSummaryController401,
   GetDashboardSummaryController404,
-  GetDashboardSummaryControllerError,
   GetDashboardSummaryControllerPathParams,
   GetDashboardSummaryControllerQuery,
   GetDashboardSummaryControllerQueryResponse,
 } from './GetDashboardSummaryController.ts'
 export type { GetDashboardSummaryResponseDtoOutput } from './GetDashboardSummaryResponseDtoOutput.ts'
 export type {
+  GetEmployeesUsersController200,
   GetEmployeesUsersController401,
   GetEmployeesUsersController404,
-  GetEmployeesUsersControllerError,
   GetEmployeesUsersControllerPathParams,
   GetEmployeesUsersControllerQuery,
   GetEmployeesUsersControllerQueryParams,
@@ -95,45 +95,45 @@ export {
 } from './GetEmployeesUsersController.ts'
 export type { GetEmployeesUsersResponseDtoOutput } from './GetEmployeesUsersResponseDtoOutput.ts'
 export type {
+  GetOrganizationBySlugController200,
   GetOrganizationBySlugController401,
   GetOrganizationBySlugController404,
-  GetOrganizationBySlugControllerError,
   GetOrganizationBySlugControllerPathParams,
   GetOrganizationBySlugControllerQuery,
   GetOrganizationBySlugControllerQueryResponse,
 } from './GetOrganizationBySlugController.ts'
 export type { GetOrganizationBySlugResponseDtoOutput } from './GetOrganizationBySlugResponseDtoOutput.ts'
 export type {
+  GetServiceByIdController200,
   GetServiceByIdController401,
   GetServiceByIdController404,
-  GetServiceByIdControllerError,
   GetServiceByIdControllerPathParams,
   GetServiceByIdControllerQuery,
   GetServiceByIdControllerQueryResponse,
 } from './GetServiceByIdController.ts'
 export type { GetServiceByIdResponseDtoOutput } from './GetServiceByIdResponseDtoOutput.ts'
 export type {
+  GetServiceStaffByServiceIdController200,
   GetServiceStaffByServiceIdController401,
   GetServiceStaffByServiceIdController404,
-  GetServiceStaffByServiceIdControllerError,
   GetServiceStaffByServiceIdControllerPathParams,
   GetServiceStaffByServiceIdControllerQuery,
   GetServiceStaffByServiceIdControllerQueryResponse,
 } from './GetServiceStaffByServiceIdController.ts'
 export type { GetServiceStaffByServiceIdResponseDtoOutput } from './GetServiceStaffByServiceIdResponseDtoOutput.ts'
 export type {
+  GetServiceStaffByStaffIdController200,
   GetServiceStaffByStaffIdController401,
   GetServiceStaffByStaffIdController404,
-  GetServiceStaffByStaffIdControllerError,
   GetServiceStaffByStaffIdControllerMutation,
   GetServiceStaffByStaffIdControllerMutationResponse,
   GetServiceStaffByStaffIdControllerPathParams,
 } from './GetServiceStaffByStaffIdController.ts'
 export type { GetServiceStaffByStaffIdResponseDtoOutput } from './GetServiceStaffByStaffIdResponseDtoOutput.ts'
 export type {
+  GetTicketPositionController200,
   GetTicketPositionController401,
   GetTicketPositionController404,
-  GetTicketPositionControllerError,
   GetTicketPositionControllerPathParams,
   GetTicketPositionControllerQuery,
   GetTicketPositionControllerQueryResponse,
@@ -144,8 +144,8 @@ export type {
 } from './GetTicketPositionResponseDtoOutput.ts'
 export { ticketStatusEnum5 } from './GetTicketPositionResponseDtoOutput.ts'
 export type {
+  GetUserByIdController200,
   GetUserByIdController404,
-  GetUserByIdControllerError,
   GetUserByIdControllerPathParams,
   GetUserByIdControllerQuery,
   GetUserByIdControllerQueryParams,
@@ -153,9 +153,9 @@ export type {
 } from './GetUserByIdController.ts'
 export type { GetUserByIdResponseDtoOutput } from './GetUserByIdResponseDtoOutput.ts'
 export type {
+  LeaveQueueController200,
   LeaveQueueController401,
   LeaveQueueController404,
-  LeaveQueueControllerError,
   LeaveQueueControllerMutation,
   LeaveQueueControllerMutationResponse,
   LeaveQueueControllerPathParams,
@@ -165,9 +165,10 @@ export type {
   TicketStatusEnum4Key,
 } from './LeaveQueueResponseDtoOutput.ts'
 export { ticketStatusEnum4 } from './LeaveQueueResponseDtoOutput.ts'
+export type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
 export type {
+  SnoozeTicketController200,
   SnoozeTicketController401,
-  SnoozeTicketControllerError,
   SnoozeTicketControllerMutation,
   SnoozeTicketControllerMutationResponse,
   SnoozeTicketControllerPathParams,
@@ -179,9 +180,9 @@ export type {
 export { ticketStatusEnum6 } from './SnoozeTicketResponseDtoOutput.ts'
 export type { ToggleServiceStatusBodyDto } from './ToggleServiceStatusBodyDto.ts'
 export type {
+  ToggleServiceStatusController200,
   ToggleServiceStatusController401,
   ToggleServiceStatusController404,
-  ToggleServiceStatusControllerError,
   ToggleServiceStatusControllerMutation,
   ToggleServiceStatusControllerMutationRequest,
   ToggleServiceStatusControllerMutationResponse,
@@ -190,9 +191,9 @@ export type {
 export type { ToggleServiceStatusResponseDtoOutput } from './ToggleServiceStatusResponseDtoOutput.ts'
 export type { ToggleStaffStatusBodyDto } from './ToggleStaffStatusBodyDto.ts'
 export type {
+  ToggleStaffStatusController200,
   ToggleStaffStatusController401,
   ToggleStaffStatusController404,
-  ToggleStaffStatusControllerError,
   ToggleStaffStatusControllerMutation,
   ToggleStaffStatusControllerMutationRequest,
   ToggleStaffStatusControllerMutationResponse,
@@ -201,9 +202,9 @@ export type {
 export type { ToggleStaffStatusResponseDtoOutput } from './ToggleStaffStatusResponseDtoOutput.ts'
 export type { TransferTicketBodyDto } from './TransferTicketBodyDto.ts'
 export type {
+  TransferTicketController200,
   TransferTicketController401,
   TransferTicketController404,
-  TransferTicketControllerError,
   TransferTicketControllerMutation,
   TransferTicketControllerMutationRequest,
   TransferTicketControllerMutationResponse,
@@ -214,11 +215,12 @@ export type {
   TransferTicketResponseDtoOutput,
 } from './TransferTicketResponseDtoOutput.ts'
 export { ticketStatusEnum3 } from './TransferTicketResponseDtoOutput.ts'
+export type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 export type { UpdateServiceBodyDto } from './UpdateServiceBodyDto.ts'
 export type {
+  UpdateServiceController200,
   UpdateServiceController401,
   UpdateServiceController404,
-  UpdateServiceControllerError,
   UpdateServiceControllerMutation,
   UpdateServiceControllerMutationRequest,
   UpdateServiceControllerMutationResponse,
@@ -231,9 +233,9 @@ export type {
 } from './UpdateTicketStatusBodyDto.ts'
 export { updateTicketStatusBodyDtoStatusEnum } from './UpdateTicketStatusBodyDto.ts'
 export type {
+  UpdateTicketStatusController200,
   UpdateTicketStatusController401,
   UpdateTicketStatusController404,
-  UpdateTicketStatusControllerError,
   UpdateTicketStatusControllerMutation,
   UpdateTicketStatusControllerMutationRequest,
   UpdateTicketStatusControllerMutationResponse,

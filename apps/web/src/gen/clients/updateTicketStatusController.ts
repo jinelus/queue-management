@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   UpdateTicketStatusController401,
   UpdateTicketStatusController404,
@@ -10,8 +12,6 @@ import type {
   UpdateTicketStatusControllerMutationResponse,
   UpdateTicketStatusControllerPathParams,
 } from '../types/UpdateTicketStatusController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getUpdateTicketStatusControllerUrl(
   organizationId: UpdateTicketStatusControllerPathParams['organizationId'],
@@ -34,7 +34,7 @@ export async function updateTicketStatusController(
   ticketId: UpdateTicketStatusControllerPathParams['ticketId'],
   data: UpdateTicketStatusControllerMutationRequest,
   config: Partial<RequestConfig<UpdateTicketStatusControllerMutationRequest>> & {
-    client?: typeof fetch
+    client?: Client
   } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config

@@ -74,7 +74,7 @@ describe('Assign Staff to Service (E2E)', () => {
     const employee = await makeEmployee(prisma, organization.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -85,7 +85,7 @@ describe('Assign Staff to Service (E2E)', () => {
         staffId: employee.id,
       })
 
-    expect(response.statusCode).toBe(403)
+    expect(response.statusCode).toBe(401)
   })
 
   it('[POST] /organizations/:organizationId/service-staff/assign - should return 404 when service does not exist', async () => {

@@ -1,16 +1,10 @@
-import { BadRequestException, Controller, Get, Param, Query } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { Controller, Get, Param, Query, UnauthorizedException } from '@nestjs/common'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
 import { GetHistoricalStatsService } from '@/domain/master/application/services/analytics/get-historical-stats.service'
+import { ApiZodUnauthorizedResponse } from '../../errors/swagger-zod-error.decorator'
 
 export const getAnalyticsParams = z.object({
   organizationId: z.string(),
@@ -51,10 +45,11 @@ export class GetAnalyticsController {
     description: 'Retrieve served tickets count and average service duration.',
   })
   @ZodResponse({
+    status: 200,
     type: GetAnalyticsResponseDto,
     description: 'Successful response with analytics data',
   })
-  @ApiUnauthorizedResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',
@@ -82,9 +77,12 @@ export class GetAnalyticsController {
     })
 
     if (result.isLeft()) {
-      throw new BadRequestException()
+      throw new UnauthorizedException(result.value.message)
     }
-
-    return result.value
+    const { servedTicketsByDay, avgDurationByEmployee } = result.value
+    return {
+      servedTicketsByDay,
+      avgDurationByEmployee,
+    }
   }
 }

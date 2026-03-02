@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "statusCode": { "type": "number", "const": 401 },
+    "message": { "type": "string" }
+  },
+  "required": ["statusCode", "message"],
+  "x-readme-ref-name": "UnauthorizedErrorDto"
+}

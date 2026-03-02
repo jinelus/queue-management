@@ -7,15 +7,7 @@ import {
   Query,
   UnauthorizedException,
 } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
@@ -26,6 +18,10 @@ import {
   httpUserSchema,
   PrismaUserMapper,
 } from '@/infra/database/prisma/mappers/prisma-user.mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const getEmployeesUsersParams = z.object({
   organizationId: z.ulid(),
@@ -62,11 +58,12 @@ export class GetEmployeesUsersController {
     description: 'Retrieve employees users within an organization.',
   })
   @ZodResponse({
+    status: 200,
     type: GetEmployeesUsersResponseDto,
     description: 'Successful response with user details',
   })
-  @ApiUnauthorizedResponse()
-  @ApiNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

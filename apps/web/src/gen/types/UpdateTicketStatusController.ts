@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 import type { UpdateTicketStatusBodyDto } from './UpdateTicketStatusBodyDto.ts'
 import type { UpdateTicketStatusResponseDtoOutput } from './UpdateTicketStatusResponseDtoOutput.ts'
 
@@ -21,21 +23,27 @@ export type UpdateTicketStatusControllerPathParams = {
   ticketId: string
 }
 
-export type UpdateTicketStatusController401 = any
-
-export type UpdateTicketStatusController404 = any
-
 /**
  * @description Successful response with updated ticket details
  */
-export type UpdateTicketStatusControllerError = UpdateTicketStatusResponseDtoOutput
+export type UpdateTicketStatusController200 = UpdateTicketStatusResponseDtoOutput
+
+/**
+ * @description Unauthorized
+ */
+export type UpdateTicketStatusController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type UpdateTicketStatusController404 = NotFoundErrorDto
 
 export type UpdateTicketStatusControllerMutationRequest = UpdateTicketStatusBodyDto
 
-export type UpdateTicketStatusControllerMutationResponse = any
+export type UpdateTicketStatusControllerMutationResponse = UpdateTicketStatusController200
 
 export type UpdateTicketStatusControllerMutation = {
-  Response: any
+  Response: UpdateTicketStatusController200
   Request: UpdateTicketStatusControllerMutationRequest
   PathParams: UpdateTicketStatusControllerPathParams
   Errors: UpdateTicketStatusController401 | UpdateTicketStatusController404

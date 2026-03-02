@@ -42,7 +42,7 @@ export class CreateServiceService {
     userId,
     maxCapacity,
   }: CreateServiceServiceParams): Promise<CreateServiceServiceResponse> {
-    const { success } = await this.permissionFactory.userCan('create', 'service', { userId })
+    const { success } = await this.permissionFactory.userCan('create', 'service', { userId, organizationId })
 
     if (!success) {
       return left(new NotAllowedError())

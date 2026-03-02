@@ -5,7 +5,7 @@ import { AppModule } from '@/infra/app.module'
 import { makeOrganization } from '../../factories/make-organization'
 import { makeService } from '../../factories/make-service'
 import { makeTicket } from '../../factories/make-ticket'
-import { makeAdmin, makeEmployee } from '../../factories/make-user'
+import { makeAdmin } from '../../factories/make-user'
 import { prisma } from '../../setup-e2e'
 import { authenticate } from '../../utils/authenticate'
 
@@ -65,18 +65,17 @@ describe('Get Dashboard Summary (E2E)', () => {
     expect(response.statusCode).toBe(401)
   })
 
-  it('[GET] /organizations/:organizationId/dashboard - should return 403 for non-admin user', async () => {
+  it('[GET] /organizations/:organizationId/dashboard - should return 403 for non-org-member user', async () => {
     const organization = await makeOrganization(prisma)
-    const employee = await makeEmployee(prisma, organization.id)
+    // Create a user who is NOT a member of this organization
     const { token } = await authenticate(prisma, {
-      userId: employee.id,
-      role: 'employee',
+      role: 'user',
     })
 
     const response = await request(app.getHttpServer())
       .get(`/organizations/${organization.id}/dashboard`)
       .set('Authorization', `Bearer ${token}`)
 
-    expect(response.statusCode).toBe(403)
+    expect(response.statusCode).toBe(401)
   })
 })

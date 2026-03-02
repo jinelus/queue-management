@@ -4,6 +4,8 @@
  */
 
 import type { GetEmployeesUsersResponseDtoOutput } from './GetEmployeesUsersResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type GetEmployeesUsersControllerPathParams = {
   /**
@@ -61,19 +63,25 @@ export type GetEmployeesUsersControllerQueryParams = {
   search?: string
 }
 
-export type GetEmployeesUsersController401 = any
-
-export type GetEmployeesUsersController404 = any
-
 /**
  * @description Successful response with user details
  */
-export type GetEmployeesUsersControllerError = GetEmployeesUsersResponseDtoOutput
+export type GetEmployeesUsersController200 = GetEmployeesUsersResponseDtoOutput
 
-export type GetEmployeesUsersControllerQueryResponse = any
+/**
+ * @description Unauthorized
+ */
+export type GetEmployeesUsersController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type GetEmployeesUsersController404 = NotFoundErrorDto
+
+export type GetEmployeesUsersControllerQueryResponse = GetEmployeesUsersController200
 
 export type GetEmployeesUsersControllerQuery = {
-  Response: any
+  Response: GetEmployeesUsersController200
   PathParams: GetEmployeesUsersControllerPathParams
   QueryParams: GetEmployeesUsersControllerQueryParams
   Errors: GetEmployeesUsersController401 | GetEmployeesUsersController404

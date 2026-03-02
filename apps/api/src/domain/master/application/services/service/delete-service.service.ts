@@ -27,7 +27,7 @@ export class DeleteServiceService {
     userId,
     organizationId,
   }: DeleteServiceServiceParams): Promise<DeleteServiceServiceResponse> {
-    const { success } = await this.permissionFactory.userCan('delete', 'service', { userId })
+    const { success } = await this.permissionFactory.userCan('delete', 'service', { userId, organizationId })
 
     if (!success) {
       return left(new NotAllowedError())

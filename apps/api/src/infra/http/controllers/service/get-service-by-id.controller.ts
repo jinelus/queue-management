@@ -1,11 +1,5 @@
 import { BadRequestException, Controller, Get, NotFoundException, Param } from '@nestjs/common'
-import {
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { AllowAnonymous } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
@@ -15,6 +9,10 @@ import {
   httpServiceSchema,
   PrismaServiceMapper,
 } from '@/infra/database/prisma/mappers/prisma-service-mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const getServiceByIdParams = z.object({
   organizationId: z.ulid(),
@@ -41,11 +39,12 @@ export class GetServiceByIdController {
     description: 'Retrieve a specific service within an organization by its ID.',
   })
   @ZodResponse({
+    status: 200,
     type: GetServiceByIdResponseDto,
     description: 'Successful response with the service details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

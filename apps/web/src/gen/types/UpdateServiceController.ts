@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 import type { UpdateServiceBodyDto } from './UpdateServiceBodyDto.ts'
 import type { UpdateServiceResponseDtoOutput } from './UpdateServiceResponseDtoOutput.ts'
 
@@ -21,21 +23,27 @@ export type UpdateServiceControllerPathParams = {
   serviceId: string
 }
 
-export type UpdateServiceController401 = any
-
-export type UpdateServiceController404 = any
-
 /**
  * @description Successful response with updated service details
  */
-export type UpdateServiceControllerError = UpdateServiceResponseDtoOutput
+export type UpdateServiceController200 = UpdateServiceResponseDtoOutput
+
+/**
+ * @description Unauthorized
+ */
+export type UpdateServiceController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type UpdateServiceController404 = NotFoundErrorDto
 
 export type UpdateServiceControllerMutationRequest = UpdateServiceBodyDto
 
-export type UpdateServiceControllerMutationResponse = any
+export type UpdateServiceControllerMutationResponse = UpdateServiceController200
 
 export type UpdateServiceControllerMutation = {
-  Response: any
+  Response: UpdateServiceController200
   Request: UpdateServiceControllerMutationRequest
   PathParams: UpdateServiceControllerPathParams
   Errors: UpdateServiceController401 | UpdateServiceController404

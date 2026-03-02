@@ -6,20 +6,17 @@ import {
   Param,
   UnauthorizedException,
 } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
-import { Roles, Session, type UserSession } from '@thallesp/nestjs-better-auth'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
+import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { GetDashboardSummaryService } from '@/domain/master/application/services/analytics/get-dashboard-summary.service'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const getDashboardSummaryParams = z.object({
   organizationId: z.string(),
@@ -48,7 +45,6 @@ export class GetDashboardSummaryResponseDto extends createZodDto(getDashboardSum
 @ApiTags('Analytics')
 @Controller('organizations/:organizationId/dashboard')
 @ApiBearerAuth()
-@Roles(['admin'])
 export class GetDashboardSummaryController {
   constructor(private readonly getDashboardSummaryService: GetDashboardSummaryService) {}
 
@@ -59,11 +55,12 @@ export class GetDashboardSummaryController {
       'Retrieve a summary of all services with queue counts, active staff, and alert status.',
   })
   @ZodResponse({
+    status: 200,
     type: GetDashboardSummaryResponseDto,
     description: 'Successful response with dashboard summary',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

@@ -15,29 +15,33 @@ import { authClient } from '@/lib/auth-client'
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const { data: session, isPending } = authClient.useSession()
+  const { data: activeOrg } = authClient.useActiveOrganization()
 
   if (isPending || !session) {
     return null
   }
 
-  const user = session.user as typeof session.user & { role?: string }
+  const currentMember = activeOrg?.members?.find(
+    (m: { userId: string }) => m.userId === session.user.id,
+  )
+  const memberRole = currentMember?.role ?? null
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
         <OrgSwitcher />
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>
-        <SidebarNav role={user.role} />
+        <SidebarNav role={memberRole} />
       </SidebarContent>
       <SidebarFooter>
         <SidebarUser
           user={{
-            name: user.name,
-            email: user.email,
-            image: user.image,
-            role: user.role ?? 'user',
+            name: session.user.name,
+            email: session.user.email,
+            image: session.user.image,
+            role: memberRole ?? 'user',
           }}
         />
       </SidebarFooter>

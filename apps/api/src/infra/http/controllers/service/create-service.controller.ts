@@ -5,24 +5,23 @@ import {
   NotFoundException,
   Param,
   Post,
+  UnauthorizedException,
 } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
-import { Roles, Session, type UserSession } from '@thallesp/nestjs-better-auth'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
+import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { CreateServiceService } from '@/domain/master/application/services/service/create-service.service'
 import {
   httpServiceSchema,
   PrismaServiceMapper,
 } from '@/infra/database/prisma/mappers/prisma-service-mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const createServiceBody = z.object({
   name: z.string().min(1).max(255),
@@ -49,7 +48,6 @@ export class CreateServiceResponseDto extends createZodDto(createServiceResponse
 @ApiTags('Services')
 @Controller('organizations/:organizationId/services')
 @ApiBearerAuth()
-@Roles(['admin'])
 export class CreateServiceController {
   constructor(private readonly createServiceService: CreateServiceService) {}
 
@@ -59,11 +57,12 @@ export class CreateServiceController {
     description: 'Create a new service within an organization.',
   })
   @ZodResponse({
+    status: 201,
     type: CreateServiceResponseDto,
     description: 'Successful response with created service details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',
@@ -94,6 +93,8 @@ export class CreateServiceController {
       switch (error.constructor) {
         case NotFoundError:
           throw new NotFoundException(error.message)
+        case NotAllowedError:
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

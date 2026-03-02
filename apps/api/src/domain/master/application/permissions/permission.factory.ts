@@ -1,18 +1,13 @@
 import { Injectable } from '@nestjs/common'
-import { Roles, Statements, userCan } from '@/auth/user-permissions'
+import { Statements, userCan } from '@/auth/user-permissions'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
-import * as Repository from '../repositories/user.repository'
-
-type UserCanParams = Parameters<typeof userCan>
 
 @Injectable()
 export class PermissionFactory {
-  constructor(private userRepository: Repository.UserRepository) {}
-
   async userCan<T extends keyof Statements>(
     action: Statements[T][number],
     resource: T,
-    { userId }: Omit<UserCanParams['2'], 'role'>,
+    { userId, organizationId }: { userId: string; organizationId: string },
   ): Promise<{
     error: NotAllowedError | null
     success: boolean
@@ -23,23 +18,26 @@ export class PermissionFactory {
         success: false,
       }
     }
-    const user = await this.userRepository.findById(userId)
 
-    if (!user) {
+    if (!organizationId) {
       return {
-        error: new NotAllowedError('User not found'),
+        error: new NotAllowedError('Organization ID is required'),
         success: false,
       }
     }
 
-    if (!user.role) {
+    const result = await userCan<T>(action, resource, { userId, organizationId })
+
+    if (!result.success) {
       return {
-        error: new NotAllowedError('User role not found'),
+        error: new NotAllowedError(result.error?.message ?? 'Permission denied'),
         success: false,
       }
     }
 
-    const role = user.role as Roles
-    return userCan<T>(action, resource, { role })
+    return {
+      error: null,
+      success: true,
+    }
   }
 }

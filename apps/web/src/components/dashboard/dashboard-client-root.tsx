@@ -20,14 +20,17 @@ export function DashboardClientRoot({
     return <CreateFirstOrganizationCard organizations={organizations} />
   }
 
+  const currentMember = activeOrg?.members?.find((m: { userId: string }) => m.userId === user.id)
+  const memberRole = currentMember?.role
+
   return (
     <div className="space-y-4">
-      <Permission role={user.role} allowRoles={['admin', 'developer', 'owner', 'employee']}>
-        <AdminEmployeeDashboard role={user.role} organizationName={activeOrg.name} />
+      <Permission role={memberRole} allowRoles={['owner', 'admin']}>
+        <AdminEmployeeDashboard role={memberRole} organizationName={activeOrg.name} />
       </Permission>
 
-      <Permission role={user.role} allowRoles={['member', 'user']}>
-        <MemberDashboard role={user.role} organizationName={activeOrg.name} />
+      <Permission role={memberRole} allowRoles={['member']}>
+        <MemberDashboard role={memberRole} organizationName={activeOrg.name} />
       </Permission>
     </div>
   )

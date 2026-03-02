@@ -5,7 +5,7 @@ import { makeSession } from '../factories/make-session'
 
 interface AuthenticateOptions {
   userId?: string
-  role?: 'user' | 'employee' | 'admin'
+  role?: 'user' | 'member' | 'admin'
   organizationId?: string
 }
 
@@ -13,10 +13,11 @@ export async function authenticate(prisma: PrismaClient, options: AuthenticateOp
   const { userId, role = 'user', organizationId } = options
 
   let finalUserId = userId
+  let orgId = organizationId
 
   if (!finalUserId) {
-    if (role === 'admin' || role === 'employee') {
-      const orgId = organizationId ?? (await makeOrganization(prisma)).id
+    if (role === 'admin' || role === 'member') {
+      orgId = orgId ?? (await makeOrganization(prisma)).id
       if (role === 'admin') {
         const user = await makeAdmin(prisma, orgId)
         finalUserId = user.id
@@ -31,7 +32,7 @@ export async function authenticate(prisma: PrismaClient, options: AuthenticateOp
   }
 
   const session = await makeSession(prisma, finalUserId, {
-    ...(organizationId ? { activeOrganizationId: organizationId } : {}),
+    ...(orgId ? { activeOrganizationId: orgId } : {}),
   })
 
   return {

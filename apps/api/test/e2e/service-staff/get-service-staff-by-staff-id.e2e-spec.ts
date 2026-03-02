@@ -34,14 +34,14 @@ describe('Get Service Staff by Staff ID (E2E)', () => {
     await makeServiceStaff(prisma, employee.id, service2.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
       .post(`/organizations/${organization.id}/by-staff/service-staff`)
       .set('Authorization', `Bearer ${token}`)
 
-    expect(response.statusCode).toBe(201)
+    expect(response.statusCode).toBe(200)
     expect(response.body.servicesStaff).toBeInstanceOf(Array)
     expect(response.body.servicesStaff).toHaveLength(2)
   })

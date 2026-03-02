@@ -5,6 +5,8 @@
 
 import type { AssignStaffToServiceBodyDto } from './AssignStaffToServiceBodyDto.ts'
 import type { AssignStaffToServiceResponseDtoOutput } from './AssignStaffToServiceResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type AssignStaffToServiceControllerPathParams = {
   /**
@@ -15,21 +17,27 @@ export type AssignStaffToServiceControllerPathParams = {
   organizationId: string
 }
 
-export type AssignStaffToServiceController401 = any
-
-export type AssignStaffToServiceController404 = any
-
 /**
  * @description Successful response with created service details
  */
-export type AssignStaffToServiceControllerError = AssignStaffToServiceResponseDtoOutput
+export type AssignStaffToServiceController201 = AssignStaffToServiceResponseDtoOutput
+
+/**
+ * @description Unauthorized
+ */
+export type AssignStaffToServiceController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type AssignStaffToServiceController404 = NotFoundErrorDto
 
 export type AssignStaffToServiceControllerMutationRequest = AssignStaffToServiceBodyDto
 
-export type AssignStaffToServiceControllerMutationResponse = any
+export type AssignStaffToServiceControllerMutationResponse = AssignStaffToServiceController201
 
 export type AssignStaffToServiceControllerMutation = {
-  Response: any
+  Response: AssignStaffToServiceController201
   Request: AssignStaffToServiceControllerMutationRequest
   PathParams: AssignStaffToServiceControllerPathParams
   Errors: AssignStaffToServiceController401 | AssignStaffToServiceController404

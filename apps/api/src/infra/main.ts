@@ -5,10 +5,10 @@ import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger'
 import { env } from '@repo/env'
 import { apiReference } from '@scalar/nestjs-api-reference'
 import { cleanupOpenApiDoc } from 'nestjs-zod'
+import { auth } from '@/auth'
 import { AppModule } from './app.module'
 import { EnvService } from './env/env.service'
 import { RedisIoAdapter } from './http/adapters/redis-io.adapter'
-import { auth } from '@/auth'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -19,7 +19,7 @@ async function bootstrap() {
       credentials: true,
     },
   })
-  
+
   const configService = app.get(EnvService)
   const port = configService.get('PORT')
 
@@ -33,38 +33,37 @@ async function bootstrap() {
     .setDescription('A queue management API')
     .setVersion('1.0')
     .build()
-    
-    
-    const document = cleanupOpenApiDoc(
-      SwaggerModule.createDocument(app, config, {
-        deepScanRoutes: true,
-        operationIdFactory: (controllerKey: string) => controllerKey,
-      }),
-      {
-        version: '3.0',
-      },
-    )
-  
-    const betterAuthSchema = await auth.api.generateOpenAPISchema()
+
+  const document = cleanupOpenApiDoc(
+    SwaggerModule.createDocument(app, config, {
+      deepScanRoutes: true,
+      operationIdFactory: (controllerKey: string) => controllerKey,
+    }),
+    {
+      version: '3.0',
+    },
+  )
+
+  const betterAuthSchema = await auth.api.generateOpenAPISchema()
 
   const allDocuments: OpenAPIObject = {
-  ...document,
-  paths: {
-    ...document.paths,
-    ...betterAuthSchema.paths,
-  },
-  components: {
-    ...document.components,
-    schemas: {
-      ...document.components?.schemas,
-      ...betterAuthSchema.components?.schemas,
+    ...document,
+    paths: {
+      ...document.paths,
+      ...betterAuthSchema.paths,
     },
-    securitySchemes: {
-      ...document.components?.securitySchemes,
-      ...betterAuthSchema.components?.securitySchemes,
+    components: {
+      ...document.components,
+      schemas: {
+        ...document.components?.schemas,
+        ...betterAuthSchema.components?.schemas,
+      },
+      securitySchemes: {
+        ...document.components?.securitySchemes,
+        ...betterAuthSchema.components?.securitySchemes,
+      },
     },
-  },
-} as OpenAPIObject
+  } as OpenAPIObject
 
   app.use(
     '/scalar',

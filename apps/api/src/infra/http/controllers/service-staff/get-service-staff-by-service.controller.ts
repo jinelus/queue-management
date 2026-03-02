@@ -1,12 +1,5 @@
 import { BadRequestException, Controller, Get, NotFoundException, Param } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
@@ -16,6 +9,10 @@ import {
   httpServiceStaffSchema,
   PrismaServiceStaffMapper,
 } from '@/infra/database/prisma/mappers/prisma-service-staff.mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const getServiceStaffByServiceIdParams = z.object({
   organizationId: z.ulid(),
@@ -47,11 +44,12 @@ export class GetServiceStaffByServiceIdController {
       'Retrieve a list of staff members assigned to a specific service within an organization.',
   })
   @ZodResponse({
+    status: 200,
     type: GetServiceStaffByServiceIdResponseDto,
     description: 'Successful response with service staff details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

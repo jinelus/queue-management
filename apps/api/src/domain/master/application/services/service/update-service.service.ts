@@ -37,7 +37,7 @@ export class UpdateServiceService {
     isActive,
     organizationId,
   }: UpdateServiceServiceParams): Promise<UpdateServiceServiceResponse> {
-    const { success } = await this.permissionFactory.userCan('update', 'service', { userId })
+    const { success } = await this.permissionFactory.userCan('update', 'service', { userId, organizationId })
     if (!success) return left(new NotAllowedError())
 
     const organization = await this.organizationRepository.findById(organizationId)

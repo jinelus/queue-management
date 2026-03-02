@@ -6,47 +6,31 @@ export type Statements = typeof statements
 
 export type Roles = keyof typeof accessControl.roles
 
-type UserCanParams = { role: Roles; userId?: string } | { role?: Roles; userId: string }
+interface UserCanParams {
+  userId: string
+  organizationId: string
+}
 
 export async function userCan<T extends keyof Statements>(
   action: Statements[T][number],
   resource: T,
-  { role, userId }: UserCanParams,
+  { userId, organizationId }: UserCanParams,
 ): Promise<{ error: Error | null; success: boolean }> {
-  if (role) {
-    const userHasPermission = authClient.admin.checkRolePermission({
-      role,
-      permissions: { [resource]: [action] },
-    })
-
-    if (!userHasPermission) {
-      return {
-        error: new Error('User does not have permission'),
-        success: false,
-      }
-    }
-
-    return {
-      error: null,
-      success: true,
-    }
-  }
-
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
+  const member = await prisma.member.findFirst({
+    where: { userId, organizationId },
   })
 
-  if (!user) {
+  if (!member) {
     return {
-      error: new Error('User does not exist'),
+      error: new Error('User is not a member of this organization'),
       success: false,
     }
   }
 
+  const role = member.role as Roles
+
   const userHasPermission = authClient.admin.checkRolePermission({
-    role: (user.role as Roles) || 'user',
+    role,
     permissions: { [resource]: [action] },
   })
 

@@ -34,7 +34,7 @@ describe('Update Ticket Status (E2E)', () => {
     })
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -57,7 +57,7 @@ describe('Update Ticket Status (E2E)', () => {
     })
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -82,7 +82,7 @@ describe('Update Ticket Status (E2E)', () => {
     })
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     // First serve it
@@ -114,7 +114,7 @@ describe('Update Ticket Status (E2E)', () => {
     })
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -148,7 +148,7 @@ describe('Update Ticket Status (E2E)', () => {
     const fakeTicketId = '01HMVVQXYXNQBPQVGZPFX3YV8Q'
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -170,7 +170,7 @@ describe('Update Ticket Status (E2E)', () => {
     })
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())

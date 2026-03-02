@@ -1,0 +1,25 @@
+diff --git a/dist/plugins/index.d.mts b/dist/plugins/index.d.mts
+index 7fedecfec637b3e8037991c4ce2d52f70104692a..0987c277f1e146c4eaf37579fdb3d711b10faf4d 100644
+--- a/dist/plugins/index.d.mts
++++ b/dist/plugins/index.d.mts
+@@ -1,3 +1,4 @@
++export { createAuthMiddleware, createAuthEndpoint, optionsMiddleware } from '@better-auth/core/api';
+ import { InferOptionSchema, InferPluginContext, InferPluginErrorCodes, InferPluginIDs } from "../types/plugins.mjs";
+ import { HIDE_METADATA } from "../utils/hide-metadata.mjs";
+ import { AccessControl, Role, Statements, SubArray, Subset } from "./access/types.mjs";
+diff --git a/dist/plugins/index.mjs b/dist/plugins/index.mjs
+index 33da11c3705bea246e86d748b72016d78aede920..9c9612948f5cbfd92248900ebbf8e51ed22e6ac8 100644
+--- a/dist/plugins/index.mjs
++++ b/dist/plugins/index.mjs
+@@ -1,3 +1,4 @@
++import { createAuthMiddleware, createAuthEndpoint, optionsMiddleware } from '@better-auth/core/api';
+ import { HIDE_METADATA } from "../utils/hide-metadata.mjs";
+ import { createAccessControl, role } from "./access/access.mjs";
+ import "./access/index.mjs";
+@@ -47,4 +48,4 @@ import { testUtils } from "./test-utils/index.mjs";
+ import { twoFactor } from "./two-factor/index.mjs";
+ import { username } from "./username/index.mjs";
+ 
+-export { MULTI_SESSION_ERROR_CODES as ERROR_CODES, HIDE_METADATA, TWO_FACTOR_ERROR_CODES, USERNAME_ERROR_CODES, admin, anonymous, auth0, bearer, captcha, createAccessControl, createJwk, customSession, deviceAuthorization, deviceAuthorizationOptionsSchema, emailOTP, generateExportedKeyPair, genericOAuth, getClient, getJwtToken, getMCPProtectedResourceMetadata, getMCPProviderMetadata, getMetadata, getOrgAdapter, gumroad, hasPermission, haveIBeenPwned, hubspot, jwt, keycloak, lastLoginMethod, line, magicLink, mcp, microsoftEntraId, multiSession, oAuthDiscoveryMetadata, oAuthProtectedResourceMetadata, oAuthProxy, oidcProvider, okta, oneTap, oneTimeToken, openAPI, organization, parseRoles, patreon, phoneNumber, role, signJWT, siwe, slack, testUtils, toExpJWT, twoFactor, twoFactorClient, username, verifyJWT, withMcpAuth };
+\ No newline at end of file
++export { createAuthMiddleware, createAuthEndpoint, optionsMiddleware, MULTI_SESSION_ERROR_CODES as ERROR_CODES, HIDE_METADATA, TWO_FACTOR_ERROR_CODES, USERNAME_ERROR_CODES, admin, anonymous, auth0, bearer, captcha, createAccessControl, createJwk, customSession, deviceAuthorization, deviceAuthorizationOptionsSchema, emailOTP, generateExportedKeyPair, genericOAuth, getClient, getJwtToken, getMCPProtectedResourceMetadata, getMCPProviderMetadata, getMetadata, getOrgAdapter, gumroad, hasPermission, haveIBeenPwned, hubspot, jwt, keycloak, lastLoginMethod, line, magicLink, mcp, microsoftEntraId, multiSession, oAuthDiscoveryMetadata, oAuthProtectedResourceMetadata, oAuthProxy, oidcProvider, okta, oneTap, oneTimeToken, openAPI, organization, parseRoles, patreon, phoneNumber, role, signJWT, siwe, slack, testUtils, toExpJWT, twoFactor, twoFactorClient, username, verifyJWT, withMcpAuth };

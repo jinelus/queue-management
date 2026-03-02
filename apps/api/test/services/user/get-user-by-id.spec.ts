@@ -20,18 +20,15 @@ describe('GetUserByIdService', () => {
     const organization = Organization.create({
       name: 'Org 1',
       slug: 'org-1',
-      ownerId: 'user-1',
     })
     await organizationRepository.create(organization)
 
     const user = User.create({
-      organizationId: organization.id.toString(),
       name: 'User 1',
       email: 'user1@example.com',
-      password: 'pass',
-      role: 'employee',
     })
     await userRepository.create(user)
+    userRepository.addMember(organization.id.toString(), user.id.toString())
 
     const result = await sut.execute({
       userId: user.id.toString(),

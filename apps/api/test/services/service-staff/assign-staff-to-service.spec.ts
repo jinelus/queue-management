@@ -40,7 +40,6 @@ describe('AssignStaffToService', () => {
     const organization = Organization.create({
       name: 'Org 1',
       slug: 'org-1',
-      ownerId: 'user-1',
     })
     await organizationRepository.create(organization)
 
@@ -48,17 +47,16 @@ describe('AssignStaffToService', () => {
       organizationId: organization.id.toString(),
       name: 'Service 1',
       isActive: true,
+      description: 'Description',
     })
     await serviceRepository.create(service)
 
     const user = User.create({
-      organizationId: organization.id.toString(),
       name: 'Staff 1',
       email: 'staff@example.com',
-      password: 'pass',
-      role: 'employee',
     })
     await userRepository.create(user)
+    userRepository.addMember(organization.id.toString(), user.id.toString())
 
     permissionFactory.setPermission(true)
 
@@ -81,7 +79,6 @@ describe('AssignStaffToService', () => {
     const organization = Organization.create({
       name: 'Org 1',
       slug: 'org-1',
-      ownerId: 'user-1',
     })
     await organizationRepository.create(organization)
 
@@ -89,17 +86,16 @@ describe('AssignStaffToService', () => {
       organizationId: organization.id.toString(),
       name: 'Service 1',
       isActive: true,
+      description: 'Description',
     })
     await serviceRepository.create(service)
 
     const user = User.create({
-      organizationId: organization.id.toString(),
       name: 'Staff 1',
       email: 'staff@example.com',
-      password: 'pass',
-      role: 'employee',
     })
     await userRepository.create(user)
+    userRepository.addMember(organization.id.toString(), user.id.toString())
 
     const existing = ServiceStaff.create({
       serviceId: service.id.toString(),
@@ -128,7 +124,6 @@ describe('AssignStaffToService', () => {
     const organization = Organization.create({
       name: 'Org 1',
       slug: 'org-1',
-      ownerId: 'user-1',
     })
     await organizationRepository.create(organization)
 
@@ -136,17 +131,16 @@ describe('AssignStaffToService', () => {
       organizationId: organization.id.toString(),
       name: 'Service 1',
       isActive: true,
+      description: 'Description',
     })
     await serviceRepository.create(service)
 
     const user = User.create({
-      organizationId: organization.id.toString(),
       name: 'Staff 1',
       email: 'staff@example.com',
-      password: 'pass',
-      role: 'employee',
     })
     await userRepository.create(user)
+    userRepository.addMember(organization.id.toString(), user.id.toString())
 
     const existing = ServiceStaff.create({
       serviceId: service.id.toString(),

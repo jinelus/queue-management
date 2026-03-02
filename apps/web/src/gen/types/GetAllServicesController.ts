@@ -4,6 +4,8 @@
  */
 
 import type { GetAllServicesResponseDtoOutput } from './GetAllServicesResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type GetAllServicesControllerPathParams = {
   /**
@@ -59,19 +61,25 @@ export type GetAllServicesControllerQueryParams = {
   search?: string
 }
 
-export type GetAllServicesController401 = any
-
-export type GetAllServicesController404 = any
-
 /**
  * @description Successful response with all services details
  */
-export type GetAllServicesControllerError = GetAllServicesResponseDtoOutput
+export type GetAllServicesController200 = GetAllServicesResponseDtoOutput
 
-export type GetAllServicesControllerQueryResponse = any
+/**
+ * @description Unauthorized
+ */
+export type GetAllServicesController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type GetAllServicesController404 = NotFoundErrorDto
+
+export type GetAllServicesControllerQueryResponse = GetAllServicesController200
 
 export type GetAllServicesControllerQuery = {
-  Response: any
+  Response: GetAllServicesController200
   PathParams: GetAllServicesControllerPathParams
   QueryParams: GetAllServicesControllerQueryParams
   Errors: GetAllServicesController401 | GetAllServicesController404

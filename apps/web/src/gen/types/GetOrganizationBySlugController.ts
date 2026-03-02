@@ -4,6 +4,8 @@
  */
 
 import type { GetOrganizationBySlugResponseDtoOutput } from './GetOrganizationBySlugResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type GetOrganizationBySlugControllerPathParams = {
   /**
@@ -13,19 +15,25 @@ export type GetOrganizationBySlugControllerPathParams = {
   slug: string
 }
 
-export type GetOrganizationBySlugController401 = any
-
-export type GetOrganizationBySlugController404 = any
-
 /**
  * @description Successful response with organization details
  */
-export type GetOrganizationBySlugControllerError = GetOrganizationBySlugResponseDtoOutput
+export type GetOrganizationBySlugController200 = GetOrganizationBySlugResponseDtoOutput
 
-export type GetOrganizationBySlugControllerQueryResponse = any
+/**
+ * @description Unauthorized
+ */
+export type GetOrganizationBySlugController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type GetOrganizationBySlugController404 = NotFoundErrorDto
+
+export type GetOrganizationBySlugControllerQueryResponse = GetOrganizationBySlugController200
 
 export type GetOrganizationBySlugControllerQuery = {
-  Response: any
+  Response: GetOrganizationBySlugController200
   PathParams: GetOrganizationBySlugControllerPathParams
   Errors: GetOrganizationBySlugController401 | GetOrganizationBySlugController404
 }
