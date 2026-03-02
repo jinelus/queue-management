@@ -19,6 +19,7 @@ import {
   PrismaServiceStaffMapper,
 } from '@/infra/database/prisma/mappers/prisma-service-staff.mapper'
 import {
+  ApiZodBadRequestResponse,
   ApiZodNotFoundResponse,
   ApiZodUnauthorizedResponse,
 } from '../../errors/swagger-zod-error.decorator'
@@ -61,6 +62,7 @@ export class ToggleStaffStatusController {
   })
   @ApiZodNotFoundResponse()
   @ApiZodUnauthorizedResponse()
+  @ApiZodBadRequestResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',
