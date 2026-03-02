@@ -1,11 +1,5 @@
 import { BadRequestException, Controller, Get, NotFoundException, Param } from '@nestjs/common'
-import {
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { AllowAnonymous } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
@@ -15,6 +9,10 @@ import {
   httpTicketSchema,
   PrismaTicketMapper,
 } from '@/infra/database/prisma/mappers/prisma-ticket.mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const getTicketPositionParams = z.object({
   organizationId: z.ulid(),
@@ -43,11 +41,12 @@ export class GetTicketPositionController {
     description: 'Retrieve the position of a ticket within an organization.',
   })
   @ZodResponse({
+    status: 200,
     type: GetTicketPositionResponseDto,
     description: 'Successful response with ticket position details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

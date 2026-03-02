@@ -7,14 +7,7 @@ import {
   Param,
   Post,
 } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
@@ -25,6 +18,10 @@ import {
   httpServiceSchema,
   PrismaServiceMapper,
 } from '@/infra/database/prisma/mappers/prisma-service-mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const createServiceBody = z.object({
   name: z.string().min(1).max(255),
@@ -60,11 +57,12 @@ export class CreateServiceController {
     description: 'Create a new service within an organization.',
   })
   @ZodResponse({
+    status: 201,
     type: CreateServiceResponseDto,
     description: 'Successful response with created service details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

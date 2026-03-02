@@ -6,14 +6,7 @@ import {
   NotFoundException,
   Param,
 } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
@@ -24,6 +17,10 @@ import {
   httpOrganizationSchema,
   PrismaOrganizationMapper,
 } from '@/infra/database/prisma/mappers/prisma-organization.mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const getOrganizationBySlugParams = z.object({
   slug: z.string(),
@@ -49,11 +46,12 @@ export class GetOrganizationBySlugController {
     description: 'Retrieve an organization by its unique slug.',
   })
   @ZodResponse({
+    status: 200,
     type: GetOrganizationBySlugResponseDto,
     description: 'Successful response with organization details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'slug',
     description: 'The unique slug of the organization',

@@ -45,6 +45,7 @@ export class GetAnalyticsController {
     description: 'Retrieve served tickets count and average service duration.',
   })
   @ZodResponse({
+    status: 200,
     type: GetAnalyticsResponseDto,
     description: 'Successful response with analytics data',
   })

@@ -1,11 +1,5 @@
 import { BadRequestException, Controller, NotFoundException, Param, Patch } from '@nestjs/common'
-import {
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { AllowAnonymous } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
@@ -15,6 +9,10 @@ import {
   httpTicketSchema,
   PrismaTicketMapper,
 } from '@/infra/database/prisma/mappers/prisma-ticket.mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const leaveQueueParams = z.object({
   organizationId: z.ulid(),
@@ -41,11 +39,12 @@ export class LeaveQueueController {
     description: 'Leave the queue for a ticket within an organization.',
   })
   @ZodResponse({
+    status: 200,
     type: LeaveQueueResponseDto,
     description: 'Successful response with left ticket details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

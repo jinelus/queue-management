@@ -30,13 +30,18 @@
           }
         ],
         "responses": {
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with user details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/GetUserByIdResponseDto_Output" }
               }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -98,14 +103,26 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with user details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/GetEmployeesUsersResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -128,14 +145,26 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with organization details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/GetOrganizationBySlugResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -170,14 +199,26 @@
           }
         },
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "201": {
             "description": "Successful response with created service details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/CreateServiceResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -237,14 +278,26 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with all services details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/GetAllServicesResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -281,14 +334,26 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with deleted service details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/DeleteServiceResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -332,14 +397,26 @@
           }
         },
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with updated service details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/UpdateServiceResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -385,14 +462,26 @@
           }
         },
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with toggled service status details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/ToggleServiceStatusResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -430,14 +519,26 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with the service details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/GetServiceByIdResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -469,6 +570,14 @@
           }
         },
         "responses": {
+          "201": {
+            "description": "Successful response with created ticket details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CreateTicketResponseDto_Output" }
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -481,14 +590,6 @@
             "description": "Not Found",
             "content": {
               "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
-            }
-          },
-          "default": {
-            "description": "Successful response with created ticket details",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/CreateTicketResponseDto_Output" }
-              }
             }
           }
         },
@@ -533,14 +634,26 @@
           }
         },
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with updated ticket details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/UpdateTicketStatusResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -586,14 +699,26 @@
           }
         },
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with transferred ticket details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/TransferTicketResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -631,14 +756,26 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with left ticket details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/LeaveQueueResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -675,14 +812,26 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with ticket position details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/GetTicketPositionResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -711,12 +860,19 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with updated ticket details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/SnoozeTicketResponseDto_Output" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
               }
             }
           }
@@ -751,14 +907,26 @@
           }
         },
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "201": {
             "description": "Successful response with created service details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/AssignStaffToServiceResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -796,9 +964,7 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with service staff details",
             "content": {
               "application/json": {
@@ -806,6 +972,20 @@
                   "$ref": "#/components/schemas/GetServiceStaffByServiceIdResponseDto_Output"
                 }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -832,9 +1012,7 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with service staff details",
             "content": {
               "application/json": {
@@ -842,6 +1020,20 @@
                   "$ref": "#/components/schemas/GetServiceStaffByStaffIdResponseDto_Output"
                 }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -887,14 +1079,26 @@
           }
         },
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with updated service staff details",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/ToggleStaffStatusResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -924,19 +1128,19 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "Successful response with analytics data",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetAnalyticsResponseDto_Output" }
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
-              }
-            }
-          },
-          "default": {
-            "description": "Successful response with analytics data",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/GetAnalyticsResponseDto_Output" }
               }
             }
           }
@@ -960,14 +1164,26 @@
           }
         ],
         "responses": {
-          "401": { "description": "" },
-          "404": { "description": "" },
-          "default": {
+          "200": {
             "description": "Successful response with dashboard summary",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/GetDashboardSummaryResponseDto_Output" }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
             }
           }
         },
@@ -988,6 +1204,14 @@
   "components": {
     "securitySchemes": { "bearer": { "scheme": "bearer", "bearerFormat": "JWT", "type": "http" } },
     "schemas": {
+      "NotFoundErrorDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "number", "const": 404 },
+          "message": { "type": "string" }
+        },
+        "required": ["statusCode", "message"]
+      },
       "GetUserByIdResponseDto_Output": {
         "type": "object",
         "properties": {
@@ -1027,6 +1251,14 @@
         },
         "required": ["user"],
         "additionalProperties": false
+      },
+      "UnauthorizedErrorDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "number", "const": 401 },
+          "message": { "type": "string" }
+        },
+        "required": ["statusCode", "message"]
       },
       "GetEmployeesUsersResponseDto_Output": {
         "type": "object",
@@ -1282,22 +1514,6 @@
         },
         "required": ["service"],
         "additionalProperties": false
-      },
-      "UnauthorizedErrorDto": {
-        "type": "object",
-        "properties": {
-          "statusCode": { "type": "number", "const": 401 },
-          "message": { "type": "string" }
-        },
-        "required": ["statusCode", "message"]
-      },
-      "NotFoundErrorDto": {
-        "type": "object",
-        "properties": {
-          "statusCode": { "type": "number", "const": 404 },
-          "message": { "type": "string" }
-        },
-        "required": ["statusCode", "message"]
       },
       "CreateTicketBodyDto": {
         "type": "object",

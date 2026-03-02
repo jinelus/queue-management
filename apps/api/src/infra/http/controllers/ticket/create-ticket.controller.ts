@@ -53,6 +53,7 @@ export class CreateTicketController {
   })
 
   @ZodResponse({
+    status: 201,
     type: CreateTicketResponseDto,
     description: 'Successful response with created ticket details',
   })
