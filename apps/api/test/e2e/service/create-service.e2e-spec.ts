@@ -74,7 +74,7 @@ describe('Create Service (E2E)', () => {
     const employee = await makeEmployee(prisma, organization.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -87,7 +87,7 @@ describe('Create Service (E2E)', () => {
     expect(response.statusCode).toBe(403)
   })
 
-  it('[POST] /organizations/:organizationId/services - should return 404 when organization does not exist', async () => {
+  it('[POST] /organizations/:organizationId/services - should return 403 when user is not a member of the organization', async () => {
     const organization = await makeOrganization(prisma)
     const admin = await makeAdmin(prisma, organization.id)
     const { token } = await authenticate(prisma, {
@@ -103,7 +103,7 @@ describe('Create Service (E2E)', () => {
         name: 'Customer Support',
       })
 
-    expect(response.statusCode).toBe(404)
+    expect(response.statusCode).toBe(403)
   })
 
   it('[POST] /organizations/:organizationId/services - should return 400 for invalid data', async () => {

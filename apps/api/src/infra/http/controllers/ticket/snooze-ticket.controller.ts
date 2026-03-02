@@ -6,7 +6,7 @@ import {
   Param,
   Patch,
 } from '@nestjs/common'
-import { ApiOperation, ApiParam, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
 import { NotFoundError } from '@/core/errors/not-found-error'
@@ -15,6 +15,7 @@ import {
   httpTicketSchema,
   PrismaTicketMapper,
 } from '@/infra/database/prisma/mappers/prisma-ticket.mapper'
+import { ApiZodUnauthorizedResponse } from '../../errors/swagger-zod-error.decorator'
 
 export const snoozeTicketParams = z.object({
   organizationId: z.string(),
@@ -39,10 +40,11 @@ export class SnoozeTicketController {
     description: 'Move a ticket to the back of the waiting queue.',
   })
   @ZodResponse({
+    status: 200,
     type: SnoozeTicketResponseDto,
     description: 'Successful response with updated ticket details',
   })
-  @ApiUnauthorizedResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

@@ -5,6 +5,8 @@
 
 import type { CreateTicketBodyDto } from './CreateTicketBodyDto.ts'
 import type { CreateTicketResponseDtoOutput } from './CreateTicketResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type CreateTicketControllerPathParams = {
   /**
@@ -15,21 +17,27 @@ export type CreateTicketControllerPathParams = {
   organizationId: string
 }
 
-export type CreateTicketController401 = any
-
-export type CreateTicketController404 = any
-
 /**
  * @description Successful response with created ticket details
  */
-export type CreateTicketControllerError = CreateTicketResponseDtoOutput
+export type CreateTicketController201 = CreateTicketResponseDtoOutput
+
+/**
+ * @description Unauthorized
+ */
+export type CreateTicketController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type CreateTicketController404 = NotFoundErrorDto
 
 export type CreateTicketControllerMutationRequest = CreateTicketBodyDto
 
-export type CreateTicketControllerMutationResponse = any
+export type CreateTicketControllerMutationResponse = CreateTicketController201
 
 export type CreateTicketControllerMutation = {
-  Response: any
+  Response: CreateTicketController201
   Request: CreateTicketControllerMutationRequest
   PathParams: CreateTicketControllerPathParams
   Errors: CreateTicketController401 | CreateTicketController404

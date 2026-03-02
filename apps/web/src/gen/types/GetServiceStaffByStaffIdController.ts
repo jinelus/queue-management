@@ -4,6 +4,8 @@
  */
 
 import type { GetServiceStaffByStaffIdResponseDtoOutput } from './GetServiceStaffByStaffIdResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type GetServiceStaffByStaffIdControllerPathParams = {
   /**
@@ -14,19 +16,26 @@ export type GetServiceStaffByStaffIdControllerPathParams = {
   organizationId: string
 }
 
-export type GetServiceStaffByStaffIdController401 = any
-
-export type GetServiceStaffByStaffIdController404 = any
-
 /**
  * @description Successful response with service staff details
  */
-export type GetServiceStaffByStaffIdControllerError = GetServiceStaffByStaffIdResponseDtoOutput
+export type GetServiceStaffByStaffIdController200 = GetServiceStaffByStaffIdResponseDtoOutput
 
-export type GetServiceStaffByStaffIdControllerMutationResponse = any
+/**
+ * @description Unauthorized
+ */
+export type GetServiceStaffByStaffIdController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type GetServiceStaffByStaffIdController404 = NotFoundErrorDto
+
+export type GetServiceStaffByStaffIdControllerMutationResponse =
+  GetServiceStaffByStaffIdController200
 
 export type GetServiceStaffByStaffIdControllerMutation = {
-  Response: any
+  Response: GetServiceStaffByStaffIdController200
   PathParams: GetServiceStaffByStaffIdControllerPathParams
   Errors: GetServiceStaffByStaffIdController401 | GetServiceStaffByStaffIdController404
 }

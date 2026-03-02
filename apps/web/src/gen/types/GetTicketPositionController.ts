@@ -4,6 +4,8 @@
  */
 
 import type { GetTicketPositionResponseDtoOutput } from './GetTicketPositionResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type GetTicketPositionControllerPathParams = {
   /**
@@ -20,19 +22,25 @@ export type GetTicketPositionControllerPathParams = {
   ticketId: string
 }
 
-export type GetTicketPositionController401 = any
-
-export type GetTicketPositionController404 = any
-
 /**
  * @description Successful response with ticket position details
  */
-export type GetTicketPositionControllerError = GetTicketPositionResponseDtoOutput
+export type GetTicketPositionController200 = GetTicketPositionResponseDtoOutput
 
-export type GetTicketPositionControllerQueryResponse = any
+/**
+ * @description Unauthorized
+ */
+export type GetTicketPositionController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type GetTicketPositionController404 = NotFoundErrorDto
+
+export type GetTicketPositionControllerQueryResponse = GetTicketPositionController200
 
 export type GetTicketPositionControllerQuery = {
-  Response: any
+  Response: GetTicketPositionController200
   PathParams: GetTicketPositionControllerPathParams
   Errors: GetTicketPositionController401 | GetTicketPositionController404
 }

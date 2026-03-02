@@ -28,7 +28,7 @@ describe('Get Analytics (E2E)', () => {
     const employee = await makeEmployee(prisma, organization.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -47,10 +47,8 @@ describe('Get Analytics (E2E)', () => {
     const employee = await makeEmployee(prisma, organization.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
-
-    console.log(token)
 
     const response = await request(app.getHttpServer())
       .get(`/organizations/${organization.id}/analytics`)

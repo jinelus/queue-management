@@ -15,7 +15,7 @@ export const statements = {
 
 export const ac = createAccessControl(statements)
 
-export const developer = ac.newRole({
+export const owner = ac.newRole({
   ...adminAc.statements,
   organization: [...statements.organization],
   service: [...statements.service],
@@ -32,7 +32,7 @@ export const admin = ac.newRole({
   ticket: [...statements.ticket],
 })
 
-export const employee = ac.newRole({
+export const member = ac.newRole({
   ...userAc.statements,
   organization: ['get', 'list'],
   service: ['get', 'list', 'update'],

@@ -4,6 +4,8 @@
  */
 
 import type { GetDashboardSummaryResponseDtoOutput } from './GetDashboardSummaryResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type GetDashboardSummaryControllerPathParams = {
   /**
@@ -13,19 +15,25 @@ export type GetDashboardSummaryControllerPathParams = {
   organizationId: string
 }
 
-export type GetDashboardSummaryController401 = any
-
-export type GetDashboardSummaryController404 = any
-
 /**
  * @description Successful response with dashboard summary
  */
-export type GetDashboardSummaryControllerError = GetDashboardSummaryResponseDtoOutput
+export type GetDashboardSummaryController200 = GetDashboardSummaryResponseDtoOutput
 
-export type GetDashboardSummaryControllerQueryResponse = any
+/**
+ * @description Unauthorized
+ */
+export type GetDashboardSummaryController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type GetDashboardSummaryController404 = NotFoundErrorDto
+
+export type GetDashboardSummaryControllerQueryResponse = GetDashboardSummaryController200
 
 export type GetDashboardSummaryControllerQuery = {
-  Response: any
+  Response: GetDashboardSummaryController200
   PathParams: GetDashboardSummaryControllerPathParams
   Errors: GetDashboardSummaryController401 | GetDashboardSummaryController404
 }

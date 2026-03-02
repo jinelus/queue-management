@@ -32,7 +32,6 @@ model Organization {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  users    User[]
   services Service[]
   tickets  Ticket[]
 
@@ -114,9 +113,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  organizationId String?
-  organization   Organization? @relation(fields: [organizationId], references: [id])
-  role           String
+  role           String        @default("user")
 
   servedTickets    Ticket[]
   assignedServices ServiceStaff[]

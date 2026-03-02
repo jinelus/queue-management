@@ -38,6 +38,7 @@ export class UpdateTicketStatusService {
   }: UpdateTicketStatusServiceParams): Promise<UpdateTicketStatusServiceResponse> {
     const { success } = await this.permissionFactory.userCan('update', 'ticket', {
       userId: staffId,
+      organizationId,
     })
 
     if (!success) {

@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   ToggleStaffStatusController401,
   ToggleStaffStatusController404,
@@ -10,8 +12,6 @@ import type {
   ToggleStaffStatusControllerMutationResponse,
   ToggleStaffStatusControllerPathParams,
 } from '../types/ToggleStaffStatusController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getToggleStaffStatusControllerUrl(
   organizationId: ToggleStaffStatusControllerPathParams['organizationId'],
@@ -32,9 +32,9 @@ function getToggleStaffStatusControllerUrl(
 export async function toggleStaffStatusController(
   organizationId: ToggleStaffStatusControllerPathParams['organizationId'],
   serviceStaffId: ToggleStaffStatusControllerPathParams['serviceStaffId'],
-  data?: ToggleStaffStatusControllerMutationRequest,
+  data: ToggleStaffStatusControllerMutationRequest,
   config: Partial<RequestConfig<ToggleStaffStatusControllerMutationRequest>> & {
-    client?: typeof fetch
+    client?: Client
   } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config

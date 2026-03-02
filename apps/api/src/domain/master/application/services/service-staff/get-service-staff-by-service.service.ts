@@ -42,6 +42,7 @@ export class GetServiceStaffByServiceId {
 
     const { success } = await this.permissionFactory.userCan('get', 'serviceStaff', {
       userId: actorId,
+      organizationId,
     })
 
     if (!success) {

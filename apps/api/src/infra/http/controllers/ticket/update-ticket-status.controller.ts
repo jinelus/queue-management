@@ -2,19 +2,12 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   NotFoundException,
   Param,
   Put,
-  UnauthorizedException,
 } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
@@ -25,6 +18,10 @@ import {
   httpTicketSchema,
   PrismaTicketMapper,
 } from '@/infra/database/prisma/mappers/prisma-ticket.mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const updateTicketStatusBody = z.object({
   status: z.enum(['WAITING', 'CALLED', 'SERVING', 'SERVED', 'ABSENT', 'CANCELLED']),
@@ -57,11 +54,12 @@ export class UpdateTicketStatusController {
     description: 'Update the status of a ticket within an organization.',
   })
   @ZodResponse({
+    status: 200,
     type: UpdateTicketStatusResponseDto,
     description: 'Successful response with updated ticket details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',
@@ -95,7 +93,7 @@ export class UpdateTicketStatusController {
         case NotFoundError:
           throw new NotFoundException(error.message)
         case NotAllowedError:
-          throw new UnauthorizedException(error.message)
+          throw new ForbiddenException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

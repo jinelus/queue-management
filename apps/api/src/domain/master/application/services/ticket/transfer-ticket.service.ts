@@ -45,6 +45,7 @@ export class TransferTicketService {
   }: TransferTicketServiceParams): Promise<TransferTicketServiceResponse> {
     const { success } = await this.permissionFactory.userCan('update', 'ticket', {
       userId: staffId,
+      organizationId,
     })
 
     if (!success) {

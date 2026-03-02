@@ -45,6 +45,7 @@ export class CallNextWithRetryService {
   }: CallNextWithRetryServiceParams): Promise<CallNextWithRetryServiceResponse> {
     const { success } = await this.permissionFactory.userCan('update', 'ticket', {
       userId: staffId,
+      organizationId,
     })
 
     if (!success) {

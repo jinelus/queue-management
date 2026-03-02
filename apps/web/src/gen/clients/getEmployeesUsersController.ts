@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   GetEmployeesUsersController401,
   GetEmployeesUsersController404,
@@ -10,8 +12,6 @@ import type {
   GetEmployeesUsersControllerQueryParams,
   GetEmployeesUsersControllerQueryResponse,
 } from '../types/GetEmployeesUsersController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getGetEmployeesUsersControllerUrl(
   organizationId: GetEmployeesUsersControllerPathParams['organizationId'],
@@ -31,7 +31,7 @@ function getGetEmployeesUsersControllerUrl(
 export async function getEmployeesUsersController(
   organizationId: GetEmployeesUsersControllerPathParams['organizationId'],
   params?: GetEmployeesUsersControllerQueryParams,
-  config: Partial<RequestConfig> & { client?: typeof fetch } = {},
+  config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config
 

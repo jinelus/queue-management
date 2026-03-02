@@ -34,7 +34,7 @@ describe('Transfer Ticket (E2E)', () => {
     const ticket = await makeTicket(prisma, organization.id, sourceService.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -61,7 +61,7 @@ describe('Transfer Ticket (E2E)', () => {
     const ticket = await makeTicket(prisma, organization.id, sourceService.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -98,7 +98,7 @@ describe('Transfer Ticket (E2E)', () => {
     const fakeTicketId = '01HMVVQXYXNQBPQVGZPFX3YV8Q'
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -119,7 +119,7 @@ describe('Transfer Ticket (E2E)', () => {
     const fakeServiceId = '01HMVVQXYXNQBPQVGZPFX3YV8Q'
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())

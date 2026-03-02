@@ -19,7 +19,7 @@ export class PrismaUserRepository implements UserRepository {
 
   async findAll(organizationId: string): Promise<User[]> {
     const users = await this.prisma.user.findMany({
-      where: { organizationId },
+      where: { members: { some: { organizationId } } },
     })
     return users.map(PrismaUserMapper.toDomain)
   }
@@ -50,11 +50,15 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async count(organizationId: string, params?: FindUsersParams): Promise<number> {
-    const { role, search } = params ?? {}
+    const { memberRole, search } = params ?? {}
     const count = await this.prisma.user.count({
       where: {
-        organizationId,
-        role,
+        members: {
+          some: {
+            organizationId,
+            ...(memberRole ? { role: memberRole } : {}),
+          },
+        },
         name: {
           contains: search,
           mode: 'insensitive',
@@ -66,12 +70,16 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async findUsers(organizationId: string, params?: FindUsersParams): Promise<Array<User>> {
-    const { order, orderBy, page, perPage, role, search } = params ?? {}
+    const { order, orderBy, page, perPage, memberRole, search } = params ?? {}
 
     const users = await this.prisma.user.findMany({
       where: {
-        organizationId,
-        role,
+        members: {
+          some: {
+            organizationId,
+            ...(memberRole ? { role: memberRole } : {}),
+          },
+        },
         name: {
           contains: search,
           mode: 'insensitive',

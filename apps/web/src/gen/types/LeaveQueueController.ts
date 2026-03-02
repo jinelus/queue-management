@@ -4,6 +4,8 @@
  */
 
 import type { LeaveQueueResponseDtoOutput } from './LeaveQueueResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type LeaveQueueControllerPathParams = {
   /**
@@ -20,19 +22,25 @@ export type LeaveQueueControllerPathParams = {
   ticketId: string
 }
 
-export type LeaveQueueController401 = any
-
-export type LeaveQueueController404 = any
-
 /**
  * @description Successful response with left ticket details
  */
-export type LeaveQueueControllerError = LeaveQueueResponseDtoOutput
+export type LeaveQueueController200 = LeaveQueueResponseDtoOutput
 
-export type LeaveQueueControllerMutationResponse = any
+/**
+ * @description Unauthorized
+ */
+export type LeaveQueueController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type LeaveQueueController404 = NotFoundErrorDto
+
+export type LeaveQueueControllerMutationResponse = LeaveQueueController200
 
 export type LeaveQueueControllerMutation = {
-  Response: any
+  Response: LeaveQueueController200
   PathParams: LeaveQueueControllerPathParams
   Errors: LeaveQueueController401 | LeaveQueueController404
 }

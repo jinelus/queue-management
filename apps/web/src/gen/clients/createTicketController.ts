@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   CreateTicketController401,
   CreateTicketController404,
@@ -10,8 +12,6 @@ import type {
   CreateTicketControllerMutationResponse,
   CreateTicketControllerPathParams,
 } from '../types/CreateTicketController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getCreateTicketControllerUrl(
   organizationId: CreateTicketControllerPathParams['organizationId'],
@@ -32,7 +32,7 @@ export async function createTicketController(
   organizationId: CreateTicketControllerPathParams['organizationId'],
   data: CreateTicketControllerMutationRequest,
   config: Partial<RequestConfig<CreateTicketControllerMutationRequest>> & {
-    client?: typeof fetch
+    client?: Client
   } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config

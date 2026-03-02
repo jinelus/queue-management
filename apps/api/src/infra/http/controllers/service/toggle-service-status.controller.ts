@@ -6,15 +6,8 @@ import {
   Param,
   Patch,
 } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
-import { Roles, Session, type UserSession } from '@thallesp/nestjs-better-auth'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
+import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
 import { NotFoundError } from '@/core/errors/not-found-error'
@@ -23,6 +16,10 @@ import {
   httpServiceSchema,
   PrismaServiceMapper,
 } from '@/infra/database/prisma/mappers/prisma-service-mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const toggleServiceStatusBody = z.object({
   isActive: z.boolean(),
@@ -46,7 +43,6 @@ export class ToggleServiceStatusResponseDto extends createZodDto(toggleServiceSt
 @ApiTags('Services')
 @Controller('organizations/:organizationId/services/:serviceId/toggle-status')
 @ApiBearerAuth()
-@Roles(['admin'])
 export class ToggleServiceStatusController {
   constructor(private readonly toggleServiceStatusService: ToggleServiceStatusService) {}
 
@@ -56,11 +52,12 @@ export class ToggleServiceStatusController {
     description: 'Toggle the active status of a service within an organization.',
   })
   @ZodResponse({
+    status: 200,
     type: ToggleServiceStatusResponseDto,
     description: 'Successful response with toggled service status details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

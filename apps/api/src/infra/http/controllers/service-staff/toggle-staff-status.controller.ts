@@ -2,19 +2,12 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   NotFoundException,
   Param,
   Patch,
-  UnauthorizedException,
 } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
@@ -25,6 +18,10 @@ import {
   httpServiceStaffSchema,
   PrismaServiceStaffMapper,
 } from '@/infra/database/prisma/mappers/prisma-service-staff.mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const toggleStaffStatusBody = z.object({
   isOnline: z.boolean().optional(),
@@ -58,11 +55,12 @@ export class ToggleStaffStatusController {
     description: 'Toggle the online status or close counter mode for a staff member assignment.',
   })
   @ZodResponse({
+    status: 200,
     type: ToggleStaffStatusResponseDto,
     description: 'Successful response with updated service staff details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',
@@ -97,7 +95,7 @@ export class ToggleStaffStatusController {
         case NotFoundError:
           throw new NotFoundException(error.message)
         case NotAllowedError:
-          throw new UnauthorizedException(error.message)
+          throw new ForbiddenException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

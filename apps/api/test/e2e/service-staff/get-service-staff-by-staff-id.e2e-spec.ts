@@ -34,7 +34,7 @@ describe('Get Service Staff by Staff ID (E2E)', () => {
     await makeServiceStaff(prisma, employee.id, service2.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())

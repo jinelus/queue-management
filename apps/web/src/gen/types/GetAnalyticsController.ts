@@ -4,6 +4,7 @@
  */
 
 import type { GetAnalyticsResponseDtoOutput } from './GetAnalyticsResponseDtoOutput.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type GetAnalyticsControllerPathParams = {
   /**
@@ -24,17 +25,20 @@ export type GetAnalyticsControllerQueryParams = {
   days?: number
 }
 
-export type GetAnalyticsController401 = any
-
 /**
  * @description Successful response with analytics data
  */
-export type GetAnalyticsControllerError = GetAnalyticsResponseDtoOutput
+export type GetAnalyticsController200 = GetAnalyticsResponseDtoOutput
 
-export type GetAnalyticsControllerQueryResponse = any
+/**
+ * @description Unauthorized
+ */
+export type GetAnalyticsController401 = UnauthorizedErrorDto
+
+export type GetAnalyticsControllerQueryResponse = GetAnalyticsController200
 
 export type GetAnalyticsControllerQuery = {
-  Response: any
+  Response: GetAnalyticsController200
   PathParams: GetAnalyticsControllerPathParams
   QueryParams: GetAnalyticsControllerQueryParams
   Errors: GetAnalyticsController401

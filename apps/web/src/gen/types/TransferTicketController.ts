@@ -3,8 +3,10 @@
  * Do not edit manually.
  */
 
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
 import type { TransferTicketBodyDto } from './TransferTicketBodyDto.ts'
 import type { TransferTicketResponseDtoOutput } from './TransferTicketResponseDtoOutput.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type TransferTicketControllerPathParams = {
   /**
@@ -21,21 +23,27 @@ export type TransferTicketControllerPathParams = {
   ticketId: string
 }
 
-export type TransferTicketController401 = any
-
-export type TransferTicketController404 = any
-
 /**
  * @description Successful response with transferred ticket details
  */
-export type TransferTicketControllerError = TransferTicketResponseDtoOutput
+export type TransferTicketController200 = TransferTicketResponseDtoOutput
+
+/**
+ * @description Unauthorized
+ */
+export type TransferTicketController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type TransferTicketController404 = NotFoundErrorDto
 
 export type TransferTicketControllerMutationRequest = TransferTicketBodyDto
 
-export type TransferTicketControllerMutationResponse = any
+export type TransferTicketControllerMutationResponse = TransferTicketController200
 
 export type TransferTicketControllerMutation = {
-  Response: any
+  Response: TransferTicketController200
   Request: TransferTicketControllerMutationRequest
   PathParams: TransferTicketControllerPathParams
   Errors: TransferTicketController401 | TransferTicketController404

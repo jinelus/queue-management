@@ -5,6 +5,8 @@
 
 import type { CreateServiceBodyDto } from './CreateServiceBodyDto.ts'
 import type { CreateServiceResponseDtoOutput } from './CreateServiceResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type CreateServiceControllerPathParams = {
   /**
@@ -15,21 +17,27 @@ export type CreateServiceControllerPathParams = {
   organizationId: string
 }
 
-export type CreateServiceController401 = any
-
-export type CreateServiceController404 = any
-
 /**
  * @description Successful response with created service details
  */
-export type CreateServiceControllerError = CreateServiceResponseDtoOutput
+export type CreateServiceController201 = CreateServiceResponseDtoOutput
+
+/**
+ * @description Unauthorized
+ */
+export type CreateServiceController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type CreateServiceController404 = NotFoundErrorDto
 
 export type CreateServiceControllerMutationRequest = CreateServiceBodyDto
 
-export type CreateServiceControllerMutationResponse = any
+export type CreateServiceControllerMutationResponse = CreateServiceController201
 
 export type CreateServiceControllerMutation = {
-  Response: any
+  Response: CreateServiceController201
   Request: CreateServiceControllerMutationRequest
   PathParams: CreateServiceControllerPathParams
   Errors: CreateServiceController401 | CreateServiceController404

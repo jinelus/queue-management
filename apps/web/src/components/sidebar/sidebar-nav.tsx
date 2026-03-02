@@ -45,13 +45,13 @@ const mainNavItems: NavItem[] = [
     title: 'Services',
     href: '/dashboard/services',
     icon: Briefcase,
-    allowRoles: ['admin', 'developer', 'employee'],
+    allowRoles: ['owner', 'admin', 'member'],
   },
   {
     title: 'Staff',
     href: '/dashboard/staff',
     icon: UserCog,
-    allowRoles: ['admin', 'developer'],
+    allowRoles: ['owner', 'admin'],
   },
 ]
 
@@ -60,19 +60,19 @@ const adminNavItems: NavItem[] = [
     title: 'Members',
     href: '/dashboard/members',
     icon: Users,
-    allowRoles: ['admin', 'developer', 'owner'],
+    allowRoles: ['owner', 'admin'],
   },
   {
     title: 'Analytics',
     href: '/dashboard/analytics',
     icon: BarChart3,
-    allowRoles: ['admin', 'developer', 'owner'],
+    allowRoles: ['owner', 'admin'],
   },
   {
     title: 'Settings',
     href: '/dashboard/settings',
     icon: Settings,
-    allowRoles: ['admin', 'developer', 'owner'],
+    allowRoles: ['owner', 'admin'],
   },
 ]
 
@@ -105,7 +105,7 @@ export function SidebarNav({ role }: SidebarNavProps) {
         </SidebarGroupContent>
       </SidebarGroup>
 
-      <Permission role={role} allowRoles={['admin', 'developer', 'owner']}>
+      <Permission role={role} allowRoles={['owner', 'admin']}>
         <SidebarGroup>
           <SidebarGroupLabel>Administration</SidebarGroupLabel>
           <SidebarGroupContent>

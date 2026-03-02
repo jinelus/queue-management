@@ -6,15 +6,8 @@ import {
   Param,
   Put,
 } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger'
-import { Roles, Session, type UserSession } from '@thallesp/nestjs-better-auth'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
+import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
 import { NotFoundError } from '@/core/errors/not-found-error'
@@ -23,6 +16,10 @@ import {
   httpServiceSchema,
   PrismaServiceMapper,
 } from '@/infra/database/prisma/mappers/prisma-service-mapper'
+import {
+  ApiZodNotFoundResponse,
+  ApiZodUnauthorizedResponse,
+} from '../../errors/swagger-zod-error.decorator'
 
 export const updateServiceBody = z.object({
   isActive: z.boolean().optional(),
@@ -49,7 +46,6 @@ export class UpdateServiceResponseDto extends createZodDto(updateServiceResponse
 @ApiTags('Services')
 @Controller('organizations/:organizationId/services/:serviceId')
 @ApiBearerAuth()
-@Roles(['admin'])
 export class UpdateServiceController {
   constructor(private readonly updateServiceService: UpdateServiceService) {}
 
@@ -59,11 +55,12 @@ export class UpdateServiceController {
     description: 'Update the details of a service within an organization.',
   })
   @ZodResponse({
+    status: 200,
     type: UpdateServiceResponseDto,
     description: 'Successful response with updated service details',
   })
-  @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiZodNotFoundResponse()
+  @ApiZodUnauthorizedResponse()
   @ApiParam({
     name: 'organizationId',
     description: 'The unique identifier of the organization',

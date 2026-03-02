@@ -32,7 +32,7 @@ describe('Get Service Staff by Service (E2E)', () => {
     await makeServiceStaff(prisma, employee.id, service.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -52,7 +52,7 @@ describe('Get Service Staff by Service (E2E)', () => {
     const employee = await makeEmployee(prisma, organization.id)
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
@@ -80,7 +80,7 @@ describe('Get Service Staff by Service (E2E)', () => {
     const fakeServiceId = '01HMVVQXYXNQBPQVGZPFX3YV8Q'
     const { token } = await authenticate(prisma, {
       userId: employee.id,
-      role: 'employee',
+      role: 'member',
     })
 
     const response = await request(app.getHttpServer())
