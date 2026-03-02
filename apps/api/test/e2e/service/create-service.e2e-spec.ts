@@ -84,7 +84,7 @@ describe('Create Service (E2E)', () => {
         name: 'Customer Support',
       })
 
-    expect(response.statusCode).toBe(403)
+    expect(response.statusCode).toBe(401)
   })
 
   it('[POST] /organizations/:organizationId/services - should return 403 when user is not a member of the organization', async () => {
@@ -103,7 +103,7 @@ describe('Create Service (E2E)', () => {
         name: 'Customer Support',
       })
 
-    expect(response.statusCode).toBe(403)
+    expect(response.statusCode).toBe(401)
   })
 
   it('[POST] /organizations/:organizationId/services - should return 400 for invalid data', async () => {

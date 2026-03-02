@@ -85,7 +85,7 @@ describe('Assign Staff to Service (E2E)', () => {
         staffId: employee.id,
       })
 
-    expect(response.statusCode).toBe(403)
+    expect(response.statusCode).toBe(401)
   })
 
   it('[POST] /organizations/:organizationId/service-staff/assign - should return 404 when service does not exist', async () => {

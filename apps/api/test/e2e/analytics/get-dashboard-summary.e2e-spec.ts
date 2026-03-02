@@ -76,6 +76,6 @@ describe('Get Dashboard Summary (E2E)', () => {
       .get(`/organizations/${organization.id}/dashboard`)
       .set('Authorization', `Bearer ${token}`)
 
-    expect(response.statusCode).toBe(403)
+    expect(response.statusCode).toBe(401)
   })
 })

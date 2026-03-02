@@ -2,10 +2,10 @@ import {
   BadRequestException,
   Body,
   Controller,
-  ForbiddenException,
   NotFoundException,
   Param,
   Put,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
@@ -93,7 +93,7 @@ export class UpdateTicketStatusController {
         case NotFoundError:
           throw new NotFoundException(error.message)
         case NotAllowedError:
-          throw new ForbiddenException(error.message)
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException(error.message)
       }
