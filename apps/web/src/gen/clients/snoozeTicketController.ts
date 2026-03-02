@@ -3,13 +3,13 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   SnoozeTicketController401,
   SnoozeTicketControllerMutationResponse,
   SnoozeTicketControllerPathParams,
 } from '../types/SnoozeTicketController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getSnoozeTicketControllerUrl(
   organizationId: SnoozeTicketControllerPathParams['organizationId'],
@@ -30,7 +30,7 @@ function getSnoozeTicketControllerUrl(
 export async function snoozeTicketController(
   organizationId: SnoozeTicketControllerPathParams['organizationId'],
   ticketId: SnoozeTicketControllerPathParams['ticketId'],
-  config: Partial<RequestConfig> & { client?: typeof fetch } = {},
+  config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config
 

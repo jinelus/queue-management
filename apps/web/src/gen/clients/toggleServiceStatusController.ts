@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   ToggleServiceStatusController401,
   ToggleServiceStatusController404,
@@ -10,8 +12,6 @@ import type {
   ToggleServiceStatusControllerMutationResponse,
   ToggleServiceStatusControllerPathParams,
 } from '../types/ToggleServiceStatusController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getToggleServiceStatusControllerUrl(
   organizationId: ToggleServiceStatusControllerPathParams['organizationId'],
@@ -34,7 +34,7 @@ export async function toggleServiceStatusController(
   serviceId: ToggleServiceStatusControllerPathParams['serviceId'],
   data: ToggleServiceStatusControllerMutationRequest,
   config: Partial<RequestConfig<ToggleServiceStatusControllerMutationRequest>> & {
-    client?: typeof fetch
+    client?: Client
   } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config

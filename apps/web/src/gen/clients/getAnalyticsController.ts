@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   GetAnalyticsController401,
   GetAnalyticsControllerPathParams,
   GetAnalyticsControllerQueryParams,
   GetAnalyticsControllerQueryResponse,
 } from '../types/GetAnalyticsController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getGetAnalyticsControllerUrl(
   organizationId: GetAnalyticsControllerPathParams['organizationId'],
@@ -30,7 +30,7 @@ function getGetAnalyticsControllerUrl(
 export async function getAnalyticsController(
   organizationId: GetAnalyticsControllerPathParams['organizationId'],
   params?: GetAnalyticsControllerQueryParams,
-  config: Partial<RequestConfig> & { client?: typeof fetch } = {},
+  config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config
 

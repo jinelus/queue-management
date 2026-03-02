@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   GetServiceStaffByServiceIdController401,
   GetServiceStaffByServiceIdController404,
   GetServiceStaffByServiceIdControllerPathParams,
   GetServiceStaffByServiceIdControllerQueryResponse,
 } from '../types/GetServiceStaffByServiceIdController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getGetServiceStaffByServiceIdControllerUrl(
   organizationId: GetServiceStaffByServiceIdControllerPathParams['organizationId'],
@@ -31,7 +31,7 @@ function getGetServiceStaffByServiceIdControllerUrl(
 export async function getServiceStaffByServiceIdController(
   organizationId: GetServiceStaffByServiceIdControllerPathParams['organizationId'],
   serviceId: GetServiceStaffByServiceIdControllerPathParams['serviceId'],
-  config: Partial<RequestConfig> & { client?: typeof fetch } = {},
+  config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config
 

@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   GetTicketPositionController401,
   GetTicketPositionController404,
   GetTicketPositionControllerPathParams,
   GetTicketPositionControllerQueryResponse,
 } from '../types/GetTicketPositionController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getGetTicketPositionControllerUrl(
   organizationId: GetTicketPositionControllerPathParams['organizationId'],
@@ -31,7 +31,7 @@ function getGetTicketPositionControllerUrl(
 export async function getTicketPositionController(
   organizationId: GetTicketPositionControllerPathParams['organizationId'],
   ticketId: GetTicketPositionControllerPathParams['ticketId'],
-  config: Partial<RequestConfig> & { client?: typeof fetch } = {},
+  config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config
 

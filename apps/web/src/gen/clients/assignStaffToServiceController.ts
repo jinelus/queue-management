@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   AssignStaffToServiceController401,
   AssignStaffToServiceController404,
@@ -10,8 +12,6 @@ import type {
   AssignStaffToServiceControllerMutationResponse,
   AssignStaffToServiceControllerPathParams,
 } from '../types/AssignStaffToServiceController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getAssignStaffToServiceControllerUrl(
   organizationId: AssignStaffToServiceControllerPathParams['organizationId'],
@@ -32,7 +32,7 @@ export async function assignStaffToServiceController(
   organizationId: AssignStaffToServiceControllerPathParams['organizationId'],
   data: AssignStaffToServiceControllerMutationRequest,
   config: Partial<RequestConfig<AssignStaffToServiceControllerMutationRequest>> & {
-    client?: typeof fetch
+    client?: Client
   } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config

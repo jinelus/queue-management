@@ -3,8 +3,10 @@
  * Do not edit manually.
  */
 
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
 import type { ToggleServiceStatusBodyDto } from './ToggleServiceStatusBodyDto.ts'
 import type { ToggleServiceStatusResponseDtoOutput } from './ToggleServiceStatusResponseDtoOutput.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type ToggleServiceStatusControllerPathParams = {
   /**
@@ -21,21 +23,27 @@ export type ToggleServiceStatusControllerPathParams = {
   serviceId: string
 }
 
-export type ToggleServiceStatusController401 = any
-
-export type ToggleServiceStatusController404 = any
-
 /**
  * @description Successful response with toggled service status details
  */
-export type ToggleServiceStatusControllerError = ToggleServiceStatusResponseDtoOutput
+export type ToggleServiceStatusController200 = ToggleServiceStatusResponseDtoOutput
+
+/**
+ * @description Unauthorized
+ */
+export type ToggleServiceStatusController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type ToggleServiceStatusController404 = NotFoundErrorDto
 
 export type ToggleServiceStatusControllerMutationRequest = ToggleServiceStatusBodyDto
 
-export type ToggleServiceStatusControllerMutationResponse = any
+export type ToggleServiceStatusControllerMutationResponse = ToggleServiceStatusController200
 
 export type ToggleServiceStatusControllerMutation = {
-  Response: any
+  Response: ToggleServiceStatusController200
   Request: ToggleServiceStatusControllerMutationRequest
   PathParams: ToggleServiceStatusControllerPathParams
   Errors: ToggleServiceStatusController401 | ToggleServiceStatusController404

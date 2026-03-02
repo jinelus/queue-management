@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   GetOrganizationBySlugController401,
   GetOrganizationBySlugController404,
   GetOrganizationBySlugControllerPathParams,
   GetOrganizationBySlugControllerQueryResponse,
 } from '../types/GetOrganizationBySlugController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getGetOrganizationBySlugControllerUrl(
   slug: GetOrganizationBySlugControllerPathParams['slug'],
@@ -26,7 +26,7 @@ function getGetOrganizationBySlugControllerUrl(
  */
 export async function getOrganizationBySlugController(
   slug: GetOrganizationBySlugControllerPathParams['slug'],
-  config: Partial<RequestConfig> & { client?: typeof fetch } = {},
+  config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config
 

@@ -4,6 +4,7 @@
  */
 
 import type { SnoozeTicketResponseDtoOutput } from './SnoozeTicketResponseDtoOutput.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type SnoozeTicketControllerPathParams = {
   /**
@@ -18,17 +19,20 @@ export type SnoozeTicketControllerPathParams = {
   ticketId: string
 }
 
-export type SnoozeTicketController401 = any
-
 /**
  * @description Successful response with updated ticket details
  */
-export type SnoozeTicketControllerError = SnoozeTicketResponseDtoOutput
+export type SnoozeTicketController200 = SnoozeTicketResponseDtoOutput
 
-export type SnoozeTicketControllerMutationResponse = any
+/**
+ * @description Unauthorized
+ */
+export type SnoozeTicketController401 = UnauthorizedErrorDto
+
+export type SnoozeTicketControllerMutationResponse = SnoozeTicketController200
 
 export type SnoozeTicketControllerMutation = {
-  Response: any
+  Response: SnoozeTicketController200
   PathParams: SnoozeTicketControllerPathParams
   Errors: SnoozeTicketController401
 }

@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   LeaveQueueController401,
   LeaveQueueController404,
   LeaveQueueControllerMutationResponse,
   LeaveQueueControllerPathParams,
 } from '../types/LeaveQueueController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getLeaveQueueControllerUrl(
   organizationId: LeaveQueueControllerPathParams['organizationId'],
@@ -31,7 +31,7 @@ function getLeaveQueueControllerUrl(
 export async function leaveQueueController(
   organizationId: LeaveQueueControllerPathParams['organizationId'],
   ticketId: LeaveQueueControllerPathParams['ticketId'],
-  config: Partial<RequestConfig> & { client?: typeof fetch } = {},
+  config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config
 

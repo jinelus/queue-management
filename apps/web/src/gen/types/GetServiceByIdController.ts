@@ -4,6 +4,8 @@
  */
 
 import type { GetServiceByIdResponseDtoOutput } from './GetServiceByIdResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type GetServiceByIdControllerPathParams = {
   /**
@@ -20,19 +22,25 @@ export type GetServiceByIdControllerPathParams = {
   serviceId: string
 }
 
-export type GetServiceByIdController401 = any
-
-export type GetServiceByIdController404 = any
-
 /**
  * @description Successful response with the service details
  */
-export type GetServiceByIdControllerError = GetServiceByIdResponseDtoOutput
+export type GetServiceByIdController200 = GetServiceByIdResponseDtoOutput
 
-export type GetServiceByIdControllerQueryResponse = any
+/**
+ * @description Unauthorized
+ */
+export type GetServiceByIdController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type GetServiceByIdController404 = NotFoundErrorDto
+
+export type GetServiceByIdControllerQueryResponse = GetServiceByIdController200
 
 export type GetServiceByIdControllerQuery = {
-  Response: any
+  Response: GetServiceByIdController200
   PathParams: GetServiceByIdControllerPathParams
   Errors: GetServiceByIdController401 | GetServiceByIdController404
 }

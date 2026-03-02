@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   GetAllServicesController401,
   GetAllServicesController404,
@@ -10,8 +12,6 @@ import type {
   GetAllServicesControllerQueryParams,
   GetAllServicesControllerQueryResponse,
 } from '../types/GetAllServicesController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getGetAllServicesControllerUrl(
   organizationId: GetAllServicesControllerPathParams['organizationId'],
@@ -31,7 +31,7 @@ function getGetAllServicesControllerUrl(
 export async function getAllServicesController(
   organizationId: GetAllServicesControllerPathParams['organizationId'],
   params?: GetAllServicesControllerQueryParams,
-  config: Partial<RequestConfig> & { client?: typeof fetch } = {},
+  config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config
 

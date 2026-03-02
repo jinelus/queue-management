@@ -4,6 +4,8 @@
  */
 
 import type { DeleteServiceResponseDtoOutput } from './DeleteServiceResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type DeleteServiceControllerPathParams = {
   /**
@@ -20,19 +22,25 @@ export type DeleteServiceControllerPathParams = {
   serviceId: string
 }
 
-export type DeleteServiceController401 = any
-
-export type DeleteServiceController404 = any
-
 /**
  * @description Successful response with deleted service details
  */
-export type DeleteServiceControllerError = DeleteServiceResponseDtoOutput
+export type DeleteServiceController200 = DeleteServiceResponseDtoOutput
 
-export type DeleteServiceControllerMutationResponse = any
+/**
+ * @description Unauthorized
+ */
+export type DeleteServiceController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type DeleteServiceController404 = NotFoundErrorDto
+
+export type DeleteServiceControllerMutationResponse = DeleteServiceController200
 
 export type DeleteServiceControllerMutation = {
-  Response: any
+  Response: DeleteServiceController200
   PathParams: DeleteServiceControllerPathParams
   Errors: DeleteServiceController401 | DeleteServiceController404
 }

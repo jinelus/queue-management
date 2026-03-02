@@ -4,6 +4,7 @@
  */
 
 import type { GetUserByIdResponseDtoOutput } from './GetUserByIdResponseDtoOutput.ts'
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
 
 export type GetUserByIdControllerPathParams = {
   /**
@@ -23,17 +24,20 @@ export type GetUserByIdControllerQueryParams = {
   targetUserId?: string
 }
 
-export type GetUserByIdController404 = any
-
 /**
  * @description Successful response with user details
  */
-export type GetUserByIdControllerError = GetUserByIdResponseDtoOutput
+export type GetUserByIdController200 = GetUserByIdResponseDtoOutput
 
-export type GetUserByIdControllerQueryResponse = any
+/**
+ * @description Not Found
+ */
+export type GetUserByIdController404 = NotFoundErrorDto
+
+export type GetUserByIdControllerQueryResponse = GetUserByIdController200
 
 export type GetUserByIdControllerQuery = {
-  Response: any
+  Response: GetUserByIdController200
   PathParams: GetUserByIdControllerPathParams
   QueryParams: GetUserByIdControllerQueryParams
   Errors: GetUserByIdController404

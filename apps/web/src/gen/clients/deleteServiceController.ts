@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
+import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
+import fetch from '@/lib/api-client'
 import type {
   DeleteServiceController401,
   DeleteServiceController404,
   DeleteServiceControllerMutationResponse,
   DeleteServiceControllerPathParams,
 } from '../types/DeleteServiceController.ts'
-import type { RequestConfig, ResponseErrorConfig } from './src/lib/api-client'
-import fetch from './src/lib/api-client'
 
 function getDeleteServiceControllerUrl(
   organizationId: DeleteServiceControllerPathParams['organizationId'],
@@ -31,7 +31,7 @@ function getDeleteServiceControllerUrl(
 export async function deleteServiceController(
   organizationId: DeleteServiceControllerPathParams['organizationId'],
   serviceId: DeleteServiceControllerPathParams['serviceId'],
-  config: Partial<RequestConfig> & { client?: typeof fetch } = {},
+  config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config
 

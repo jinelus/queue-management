@@ -3,8 +3,10 @@
  * Do not edit manually.
  */
 
+import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
 import type { ToggleStaffStatusBodyDto } from './ToggleStaffStatusBodyDto.ts'
 import type { ToggleStaffStatusResponseDtoOutput } from './ToggleStaffStatusResponseDtoOutput.ts'
+import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
 
 export type ToggleStaffStatusControllerPathParams = {
   /**
@@ -21,21 +23,27 @@ export type ToggleStaffStatusControllerPathParams = {
   serviceStaffId: string
 }
 
-export type ToggleStaffStatusController401 = any
-
-export type ToggleStaffStatusController404 = any
-
 /**
  * @description Successful response with updated service staff details
  */
-export type ToggleStaffStatusControllerError = ToggleStaffStatusResponseDtoOutput
+export type ToggleStaffStatusController200 = ToggleStaffStatusResponseDtoOutput
+
+/**
+ * @description Unauthorized
+ */
+export type ToggleStaffStatusController401 = UnauthorizedErrorDto
+
+/**
+ * @description Not Found
+ */
+export type ToggleStaffStatusController404 = NotFoundErrorDto
 
 export type ToggleStaffStatusControllerMutationRequest = ToggleStaffStatusBodyDto
 
-export type ToggleStaffStatusControllerMutationResponse = any
+export type ToggleStaffStatusControllerMutationResponse = ToggleStaffStatusController200
 
 export type ToggleStaffStatusControllerMutation = {
-  Response: any
+  Response: ToggleStaffStatusController200
   Request: ToggleStaffStatusControllerMutationRequest
   PathParams: ToggleStaffStatusControllerPathParams
   Errors: ToggleStaffStatusController401 | ToggleStaffStatusController404

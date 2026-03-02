@@ -26,11 +26,6 @@ export type GetEmployeesUsersResponseDtoOutput = {
      */
     emailVerified: boolean
     /**
-     * @pattern ^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$
-     * @type string | undefined, ulid
-     */
-    organizationId?: string
-    /**
      * @type boolean
      */
     banned: boolean
