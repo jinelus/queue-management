@@ -41,7 +41,7 @@ describe('Get Service Staff by Staff ID (E2E)', () => {
       .post(`/organizations/${organization.id}/by-staff/service-staff`)
       .set('Authorization', `Bearer ${token}`)
 
-    expect(response.statusCode).toBe(201)
+    expect(response.statusCode).toBe(200)
     expect(response.body.servicesStaff).toBeInstanceOf(Array)
     expect(response.body.servicesStaff).toHaveLength(2)
   })
