@@ -17,5 +17,10 @@
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "better-auth@1.5.0": "patches/better-auth@1.5.0.patch"
+    }
   }
 }
