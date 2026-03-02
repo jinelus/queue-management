@@ -112,4 +112,6 @@ export const httpClient = async <TData = unknown, TError = unknown, TVariables =
   }
 }
 
+export type Client = typeof httpClient
+
 export default httpClient
