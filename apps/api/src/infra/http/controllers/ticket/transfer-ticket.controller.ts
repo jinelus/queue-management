@@ -2,11 +2,11 @@ import {
   BadRequestException,
   Body,
   Controller,
-  ForbiddenException,
   NotFoundException,
   Param,
   Put,
   Session,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { type UserSession } from '@thallesp/nestjs-better-auth'
@@ -97,7 +97,7 @@ export class TransferTicketController {
         case NotFoundError:
           throw new NotFoundException(error.message)
         case NotAllowedError:
-          throw new ForbiddenException(error.message)
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

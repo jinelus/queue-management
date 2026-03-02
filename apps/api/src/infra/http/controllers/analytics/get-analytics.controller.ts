@@ -1,4 +1,4 @@
-import { Controller, ForbiddenException, Get, Param, Query } from '@nestjs/common'
+import { Controller, Get, Param, Query, UnauthorizedException } from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
@@ -77,7 +77,7 @@ export class GetAnalyticsController {
     })
 
     if (result.isLeft()) {
-      throw new ForbiddenException(result.value.message)
+      throw new UnauthorizedException(result.value.message)
     }
     const { servedTicketsByDay, avgDurationByEmployee } = result.value
     return {
