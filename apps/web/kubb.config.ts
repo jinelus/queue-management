@@ -2,7 +2,6 @@ import type { UserConfig } from '@kubb/core'
 import { pluginClient } from '@kubb/plugin-client'
 import { pluginOas } from '@kubb/plugin-oas'
 import { pluginTs } from '@kubb/plugin-ts'
-import { pluginZod } from '@kubb/plugin-zod'
 
 const config: UserConfig = {
   root: '.',
@@ -24,14 +23,8 @@ const config: UserConfig = {
       output: {
         path: './clients',
       },
-      client: 'fetch',
       dataReturnType: 'full',
-      importPath: './src/lib/api-client',
-    }),
-    pluginZod({
-      output: {
-        path: './zod',
-      },
+      importPath: '@/lib/api-client',
     }),
   ],
 }
