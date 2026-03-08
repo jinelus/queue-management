@@ -16,9 +16,9 @@ export function proxy(request: NextRequest) {
   }
 
   const shouldRedirectToSignIn = routeRule.access === 'authenticated-only' && !isAuthenticated
-  const shouldRedirectToDashboard = routeRule.access === 'unauthenticated-only' && isAuthenticated
+  const shouldRedirectToOrg = routeRule.access === 'unauthenticated-only' && isAuthenticated
 
-  if (shouldRedirectToSignIn || shouldRedirectToDashboard) {
+  if (shouldRedirectToSignIn || shouldRedirectToOrg) {
     const url = request.nextUrl.clone()
     url.pathname = routeRule.redirectTo
     return NextResponse.redirect(url)
