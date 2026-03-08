@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { authClient } from '@/lib/auth-client'
-import { toSlug } from '../../../utils/format'
+import { toSlug } from '@/utils/format'
 import { Form, FormField, FormItem, FormLabel } from '../ui/form'
 
 const createOrganizationSchema = z.object({

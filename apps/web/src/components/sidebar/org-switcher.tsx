@@ -22,7 +22,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { authClient } from '@/lib/auth-client'
-import { getInitials } from '../../../utils/format'
+import { getInitials } from '@/utils/format'
 import { Button } from '../ui/button'
 
 export function OrgSwitcher() {

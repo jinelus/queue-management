@@ -15,7 +15,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { authClient } from '@/lib/auth-client'
-import { formatDate, getInitials } from '../../../../../utils/format'
+import { formatDate, getInitials } from '@/utils/format'
 
 const roleBadgeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
   owner: 'default',

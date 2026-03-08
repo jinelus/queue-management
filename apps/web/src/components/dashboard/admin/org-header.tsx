@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { getInitials } from '../../../../utils/format'
+import { getInitials } from '@/utils/format'
 
 type OrgHeaderProps = {
   name: string
