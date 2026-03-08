@@ -63,7 +63,7 @@ export const SignUpForm = () => {
           toast.success(
             'Account created successfully! Please check your email to verify your account.',
           )
-          router.push('/dashboard' as Route)
+          router.push('/org' as Route)
           form.reset()
           return
         },
@@ -72,18 +72,18 @@ export const SignUpForm = () => {
   }
 
   return (
-    <Card className='border-border/80 bg-card/90 backdrop-blur'>
-      <CardContent className='pt-6'>
+    <Card className="border-border/80 bg-card/90 backdrop-blur">
+      <CardContent className="pt-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4' noValidate>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
             <FormField
               control={form.control}
-              name='name'
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full name</FormLabel>
                   <FormControl>
-                    <Input type='text' placeholder='Jane Doe' autoComplete='name' {...field} />
+                    <Input type="text" placeholder="Jane Doe" autoComplete="name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -92,15 +92,15 @@ export const SignUpForm = () => {
 
             <FormField
               control={form.control}
-              name='email'
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                      type='email'
-                      placeholder='you@company.com'
-                      autoComplete='email'
+                      type="email"
+                      placeholder="you@company.com"
+                      autoComplete="email"
                       {...field}
                     />
                   </FormControl>
@@ -111,15 +111,15 @@ export const SignUpForm = () => {
 
             <FormField
               control={form.control}
-              name='password'
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
-                      type='password'
-                      placeholder='••••••••'
-                      autoComplete='new-password'
+                      type="password"
+                      placeholder="••••••••"
+                      autoComplete="new-password"
                       {...field}
                     />
                   </FormControl>
@@ -130,15 +130,15 @@ export const SignUpForm = () => {
 
             <FormField
               control={form.control}
-              name='confirmPassword'
+              name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Confirm password</FormLabel>
                   <FormControl>
                     <Input
-                      type='password'
-                      placeholder='••••••••'
-                      autoComplete='new-password'
+                      type="password"
+                      placeholder="••••••••"
+                      autoComplete="new-password"
                       {...field}
                     />
                   </FormControl>
@@ -148,8 +148,8 @@ export const SignUpForm = () => {
             />
 
             <Button
-              type='submit'
-              className='w-full'
+              type="submit"
+              className="w-full"
               disabled={form.formState.isSubmitting || !form.formState.isValid}
             >
               {form.formState.isSubmitting ? 'Creating account...' : 'Sign Up'}
