@@ -1,7 +1,7 @@
 import { Route } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { tryCatch } from '../../utils/trycatch'
+import { tryCatch } from '../utils/trycatch'
 import { authClient } from './auth-client'
 
 export async function getCurrentUser() {

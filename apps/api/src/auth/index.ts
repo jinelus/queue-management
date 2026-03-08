@@ -3,6 +3,7 @@ import { env } from '@repo/env'
 import { BetterAuthPlugin, betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { admin as adminPlugin, bearer, openAPI, organization } from 'better-auth/plugins'
+import { ulid } from 'ulid'
 import { PrismaClient } from '@/infra/database/generated/prisma/client'
 import { ac, admin, member, owner, user } from './permissions'
 
@@ -47,6 +48,9 @@ export const auth = betterAuth({
     crossSubDomainCookies: {
       enabled: isSecure,
       domain: isSecure ? parentDomain : undefined,
+    },
+    database: {
+      generateId: () => ulid(),
     },
     cookiePrefix: 'qm_app',
   },

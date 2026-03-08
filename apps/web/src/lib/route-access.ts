@@ -18,20 +18,20 @@ export const routeRules: RouteRule[] = [
   {
     path: '/auth/signin',
     access: 'unauthenticated-only',
-    redirectTo: '/dashboard',
+    redirectTo: '/org',
     match: 'exact',
   },
   {
     path: '/auth/signup',
     access: 'unauthenticated-only',
-    redirectTo: '/dashboard',
+    redirectTo: '/org',
     match: 'exact',
   },
   {
-    path: '/dashboard',
+    path: '/org',
     access: 'authenticated-only',
     redirectTo: '/auth/signin',
-    match: 'prefix',
+    match: 'exact',
   },
   {
     path: '/',

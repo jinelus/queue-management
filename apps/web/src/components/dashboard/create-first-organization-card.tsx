@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { authClient } from '@/lib/auth-client'
-import { OrganizationOutput } from '../../../utils/types'
+import { OrganizationOutput } from '@/utils/types'
 import { Form, FormField, FormItem, FormLabel } from '../ui/form'
 
 const createOrganizationSchema = z.object({
@@ -68,7 +68,7 @@ export function CreateFirstOrganizationCard({ organizations }: CreateFirstOrgani
         onSuccess: (response) => {
           toast.success('Organization created successfully.')
           setOpen(false)
-          router.push(`/dashboard/${response.data.slug}` as Route)
+          router.push(`/${response.data.slug}` as Route)
           form.reset()
         },
         onError: (error) => {
@@ -83,7 +83,7 @@ export function CreateFirstOrganizationCard({ organizations }: CreateFirstOrgani
   const hasOrganizations = organizations.length > 0
 
   return (
-    <Card className='mx-auto w-full max-w-xl'>
+    <Card className="mx-auto w-full max-w-xl">
       <CardHeader>
         <CardTitle>Your organizations</CardTitle>
         <CardDescription>
@@ -92,17 +92,17 @@ export function CreateFirstOrganizationCard({ organizations }: CreateFirstOrgani
             : 'You do not have an organization yet. Create your first one to continue.'}
         </CardDescription>
       </CardHeader>
-      <CardContent className='space-y-4'>
+      <CardContent className="space-y-4">
         {hasOrganizations ? (
-          <ul className='space-y-2'>
+          <ul className="space-y-2">
             {organizations.map((organization) => (
-              <li key={organization.id} className='rounded-md border p-3'>
-                <p className='font-medium'>{organization.name ?? 'Unnamed organization'}</p>
+              <li key={organization.id} className="rounded-md border p-3">
+                <p className="font-medium">{organization.name ?? 'Unnamed organization'}</p>
               </li>
             ))}
           </ul>
         ) : (
-          <p className='text-muted-foreground text-sm'>No organization created yet.</p>
+          <p className="text-muted-foreground text-sm">No organization created yet.</p>
         )}
 
         <Dialog open={open} onOpenChange={setOpen}>
@@ -117,21 +117,21 @@ export function CreateFirstOrganizationCard({ organizations }: CreateFirstOrgani
               </DialogDescription>
             </DialogHeader>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
+              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
                 <FormField
                   control={form.control}
-                  name='name'
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Organization name</FormLabel>
-                      <Input {...field} placeholder='My organization' />
+                      <Input {...field} placeholder="My organization" />
                     </FormItem>
                   )}
                 />
 
                 <DialogFooter>
                   <Button
-                    type='submit'
+                    type="submit"
                     disabled={form.formState.isSubmitting || !form.formState.isValid}
                   >
                     {form.formState.isSubmitting ? 'Creating...' : 'Create organization'}
