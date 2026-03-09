@@ -2,7 +2,8 @@
 
 import { ChevronsUpDown, LogOut, User } from 'lucide-react'
 import { Route } from 'next'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { useParams, useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -41,6 +42,7 @@ type SidebarUserProps = {
 export function SidebarUser({ user }: SidebarUserProps) {
   const { isMobile } = useSidebar()
   const router = useRouter()
+  const params = useParams<{ slug: string }>()
 
   async function handleSignOut() {
     await authClient.signOut({
@@ -58,46 +60,46 @@ export function SidebarUser({ user }: SidebarUserProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              size='lg'
-              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className='h-8 w-8 rounded-lg'>
-                <AvatarFallback className='rounded-lg'>{getInitials(user.name)}</AvatarFallback>
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarFallback className="rounded-lg">{getInitials(user.name)}</AvatarFallback>
               </Avatar>
-              <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-medium'>{user.name}</span>
-                <span className='truncate text-muted-foreground text-xs'>{user.email}</span>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate text-muted-foreground text-xs">{user.email}</span>
               </div>
-              <ChevronsUpDown className='ml-auto size-4' />
+              <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             side={isMobile ? 'bottom' : 'right'}
-            align='end'
+            align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className='p-0 font-normal'>
-              <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarFallback className='rounded-lg'>{getInitials(user.name)}</AvatarFallback>
+            <DropdownMenuLabel className="p-0 font-normal">
+              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarFallback className="rounded-lg">{getInitials(user.name)}</AvatarFallback>
                 </Avatar>
-                <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-medium'>{user.name}</span>
-                  <span className='truncate text-muted-foreground text-xs'>{user.email}</span>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate text-muted-foreground text-xs">{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <a href='/dashboard/profile' className='gap-2'>
-                <User className='size-4' />
+              <Link href={`/${params.slug}/profile` as Route} className="gap-2">
+                <User className="size-4" />
                 Profile
-              </a>
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut} className='gap-2'>
-              <LogOut className='size-4' />
+            <DropdownMenuItem onClick={handleSignOut} className="gap-2">
+              <LogOut className="size-4" />
               Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>

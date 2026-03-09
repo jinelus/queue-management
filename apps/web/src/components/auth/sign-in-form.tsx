@@ -50,28 +50,28 @@ export const SignInForm = () => {
         },
         onSuccess: () => {
           toast.success('Signed in successfully!')
-          router.push('/dashboard' as Route)
+          router.push('/org' as Route)
         },
       },
     )
   }
 
   return (
-    <Card className='border-border/80 bg-card/90 backdrop-blur'>
-      <CardContent className='pt-6'>
+    <Card className="border-border/80 bg-card/90 backdrop-blur">
+      <CardContent className="pt-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4' noValidate>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
             <FormField
               control={form.control}
-              name='email'
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                      type='email'
-                      placeholder='you@company.com'
-                      autoComplete='email'
+                      type="email"
+                      placeholder="you@company.com"
+                      autoComplete="email"
                       {...field}
                     />
                   </FormControl>
@@ -82,15 +82,15 @@ export const SignInForm = () => {
 
             <FormField
               control={form.control}
-              name='password'
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
-                      type='password'
-                      placeholder='••••••••'
-                      autoComplete='current-password'
+                      type="password"
+                      placeholder="••••••••"
+                      autoComplete="current-password"
                       {...field}
                     />
                   </FormControl>
@@ -100,8 +100,8 @@ export const SignInForm = () => {
             />
 
             <Button
-              type='submit'
-              className='w-full'
+              type="submit"
+              className="w-full"
               disabled={form.formState.isSubmitting || !form.formState.isValid}
             >
               {form.formState.isSubmitting ? 'Signing in...' : 'Sign In'}

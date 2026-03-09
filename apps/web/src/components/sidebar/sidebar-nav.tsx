@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { Route } from 'next'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { Permission } from '@/components/auth/permission'
 import {
   SidebarGroup,
@@ -25,7 +25,7 @@ import {
 
 type NavItem = {
   title: string
-  href: string
+  path: string
   icon: LucideIcon
   allowRoles?: string[]
 }
@@ -33,23 +33,23 @@ type NavItem = {
 const mainNavItems: NavItem[] = [
   {
     title: 'Dashboard',
-    href: '/dashboard',
+    path: '',
     icon: LayoutDashboard,
   },
   {
     title: 'Tickets',
-    href: '/dashboard/tickets',
+    path: '/tickets',
     icon: Ticket,
   },
   {
     title: 'Services',
-    href: '/dashboard/services',
+    path: '/services',
     icon: Briefcase,
     allowRoles: ['owner', 'admin', 'member'],
   },
   {
     title: 'Staff',
-    href: '/dashboard/staff',
+    path: '/staff',
     icon: UserCog,
     allowRoles: ['owner', 'admin'],
   },
@@ -58,19 +58,19 @@ const mainNavItems: NavItem[] = [
 const adminNavItems: NavItem[] = [
   {
     title: 'Members',
-    href: '/dashboard/members',
+    path: '/members',
     icon: Users,
     allowRoles: ['owner', 'admin'],
   },
   {
     title: 'Analytics',
-    href: '/dashboard/analytics',
+    path: '/analytics',
     icon: BarChart3,
     allowRoles: ['owner', 'admin'],
   },
   {
     title: 'Settings',
-    href: '/dashboard/settings',
+    path: '/settings',
     icon: Settings,
     allowRoles: ['owner', 'admin'],
   },
@@ -82,6 +82,12 @@ type SidebarNavProps = {
 
 export function SidebarNav({ role }: SidebarNavProps) {
   const pathname = usePathname()
+  const params = useParams<{ slug: string }>()
+  const slug = params.slug
+
+  function href(path: string) {
+    return `/${slug}${path}` as Route
+  }
 
   return (
     <>
@@ -90,10 +96,10 @@ export function SidebarNav({ role }: SidebarNavProps) {
         <SidebarGroupContent>
           <SidebarMenu>
             {mainNavItems.map((item) => (
-              <Permission key={item.href} role={role} allowRoles={item.allowRoles}>
+              <Permission key={item.path} role={role} allowRoles={item.allowRoles}>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild isActive={pathname === item.href}>
-                    <Link href={item.href as Route}>
+                  <SidebarMenuButton asChild isActive={pathname === href(item.path)}>
+                    <Link href={href(item.path)}>
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>
@@ -111,10 +117,10 @@ export function SidebarNav({ role }: SidebarNavProps) {
           <SidebarGroupContent>
             <SidebarMenu>
               {adminNavItems.map((item) => (
-                <Permission key={item.href} role={role} allowRoles={item.allowRoles}>
+                <Permission key={item.path} role={role} allowRoles={item.allowRoles}>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname === item.href}>
-                      <Link href={item.href as Route}>
+                    <SidebarMenuButton asChild isActive={pathname === href(item.path)}>
+                      <Link href={href(item.path)}>
                         <item.icon />
                         <span>{item.title}</span>
                       </Link>
