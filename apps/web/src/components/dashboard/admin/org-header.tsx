@@ -8,11 +8,10 @@ type OrgHeaderProps = {
   name: string
   slug: string
   logo?: string | null
-  createdAt?: Date
   membersCount: number
 }
 
-export function OrgHeader({ name, slug, logo, createdAt, membersCount }: OrgHeaderProps) {
+export function OrgHeader({ name, slug, logo, membersCount }: OrgHeaderProps) {
   return (
     <div className="flex items-start gap-5">
       <Avatar className="h-16 w-16 rounded-xl text-lg">
@@ -35,11 +34,7 @@ export function OrgHeader({ name, slug, logo, createdAt, membersCount }: OrgHead
           <span className="text-muted-foreground text-xs">
             {membersCount} {membersCount === 1 ? 'member' : 'members'}
           </span>
-          {createdAt && (
-            <span className="text-muted-foreground text-xs">
-              · Created {new Date(createdAt).toLocaleDateString()}
-            </span>
-          )}
+          
         </div>
       </div>
     </div>

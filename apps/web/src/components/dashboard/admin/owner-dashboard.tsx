@@ -55,7 +55,6 @@ export function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
         name={activeOrg.name}
         slug={activeOrg.slug}
         logo={activeOrg.logo}
-        createdAt={activeOrg.createdAt}
         membersCount={membersCount}
       />
 
