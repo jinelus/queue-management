@@ -1,33 +1,15 @@
-'use client'
 
-import { Permission } from '@/components/auth/permission'
-import { OwnerDashboard } from '@/components/dashboard/admin/owner-dashboard'
-import { DashboardShellSkeleton } from '@/components/dashboard/dashboard-shell-skeleton'
-import { MemberDashboard } from '@/components/dashboard/member/member-dashboard'
-import { authClient } from '@/lib/auth-client'
+import { Container } from '@/components/custom/container'
+import { OrgWrapper } from '@/components/dashboard/admin/org-wrapper'
+import { Suspense } from 'react'
 
-export default function OrgDashboardPage() {
-  const { data: session } = authClient.useSession()
-  const { data: activeOrg, isPending } = authClient.useActiveOrganization()
-
-  if (isPending || !activeOrg) {
-    return <DashboardShellSkeleton />
-  }
-
-  const currentMember = activeOrg?.members?.find(
-    (m: { userId: string }) => m.userId === session?.user?.id,
-  )
-  const memberRole = currentMember?.role
-
+export default function OrgDashboardPage(props: PageProps<'/[slug]'>) {
+  
   return (
-    <div className="space-y-4">
-      <Permission role={memberRole} allowRoles={['owner', 'admin']}>
-        <OwnerDashboard activeOrg={activeOrg} />
-      </Permission>
-
-      <Permission role={memberRole} allowRoles={['member']}>
-        <MemberDashboard role={memberRole} organizationName={activeOrg.name} />
-      </Permission>
-    </div>
+    <Container>
+      <Suspense>
+        <OrgWrapper {...props} />
+      </Suspense>
+    </Container>
   )
 }

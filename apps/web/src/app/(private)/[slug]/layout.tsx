@@ -4,16 +4,17 @@ import { AppSidebar } from '@/components/sidebar/app-sidebar'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 
-export default function OrgSlugLayout({
+export default async function OrgSlugLayout({
   children,
   params,
 }: {
   children: React.ReactNode
   params: Promise<{ slug: string }>
 }) {
+
   return (
     <SidebarProvider>
-      <Suspense>
+      <Suspense fallback={null}>
         <ListSyncOrganizations params={params} />
       </Suspense>
       <AppSidebar />
@@ -24,7 +25,9 @@ export default function OrgSlugLayout({
             <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
           </div>
         </header>
-        <main className="flex-1 p-4 md:p-6">{children}</main>
+        <main className="flex-1 p-4 md:p-6">
+            {children}
+        </main>
       </SidebarInset>
     </SidebarProvider>
   )
