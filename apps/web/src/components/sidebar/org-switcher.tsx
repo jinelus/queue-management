@@ -38,9 +38,9 @@ export function OrgSwitcher() {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton size="lg" className="animate-pulse">
-            <div className="h-8 w-8 rounded-lg bg-muted" />
-            <div className="h-4 w-24 rounded bg-muted" />
+          <SidebarMenuButton size='lg' className='animate-pulse'>
+            <div className='h-8 w-8 rounded-lg bg-muted' />
+            <div className='h-4 w-24 rounded bg-muted' />
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
@@ -53,60 +53,60 @@ export function OrgSwitcher() {
         <DropdownMenu open={open} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              size='lg'
+              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
               {activeOrg && (
-                <Avatar className="h-8 w-8 rounded-lg">
+                <Avatar className='h-8 w-8 rounded-lg'>
                   {activeOrg?.logo && <AvatarImage src={activeOrg.logo} alt={activeOrg.name} />}
-                  <AvatarFallback className="rounded-lg text-xs">
+                  <AvatarFallback className='rounded-lg text-xs'>
                     {getInitials(activeOrg.name)}
                   </AvatarFallback>
                 </Avatar>
               )}
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">
+              <div className='grid flex-1 text-left text-sm leading-tight'>
+                <span className='truncate font-medium'>
                   {activeOrg?.name ?? 'Select organization'}
                 </span>
-                <span className="truncate text-muted-foreground text-xs">
+                <span className='truncate text-muted-foreground text-xs'>
                   {activeOrg?.slug ?? 'No org selected'}
                 </span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            align="start"
+            className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
+            align='start'
             side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-muted-foreground text-xs">
+            <DropdownMenuLabel className='text-muted-foreground text-xs'>
               Organizations
             </DropdownMenuLabel>
             {organizations?.map((org) => (
               <DropdownMenuItem
                 key={org.id}
-                className="gap-2 p-2"
+                className='gap-2 p-2'
                 asChild
                 onSelect={() => setOpen(false)}
               >
                 <Link href={`/${org.slug}` as Route}>
-                  <Avatar className="h-6 w-6 rounded-md">
+                  <Avatar className='h-6 w-6 rounded-md'>
                     {org.logo && <AvatarImage src={org.logo} alt={org.name} />}
-                    <AvatarFallback className="rounded-md text-xs">
+                    <AvatarFallback className='rounded-md text-xs'>
                       {getInitials(org.name)}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="truncate">{org.name}</span>
+                  <span className='truncate'>{org.name}</span>
                   {params.slug === org.slug && (
-                    <span className="ml-auto h-2 w-2 rounded-full bg-primary" />
+                    <span className='ml-auto h-2 w-2 rounded-full bg-primary' />
                   )}
                 </Link>
               </DropdownMenuItem>
             ))}
             {(!organizations || organizations.length === 0) && (
-              <DropdownMenuItem disabled className="text-muted-foreground text-xs">
+              <DropdownMenuItem disabled className='text-muted-foreground text-xs'>
                 No organizations found
               </DropdownMenuItem>
             )}
@@ -114,13 +114,13 @@ export function OrgSwitcher() {
             <CreateOrganizationDialog
               trigger={
                 <Button
-                  className="w-full items-center justify-center gap-2 p-2 hover:bg-background/50"
+                  className='w-full items-center justify-center gap-2 p-2 hover:bg-background/50'
                   variant={'ghost'}
                 >
-                  <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                    <Plus className="size-4" />
+                  <div className='flex size-6 items-center justify-center rounded-md border bg-background'>
+                    <Plus className='size-4' />
                   </div>
-                  <span className="font-medium text-muted-foreground">Create organization</span>
+                  <span className='font-medium text-muted-foreground'>Create organization</span>
                 </Button>
               }
             />
