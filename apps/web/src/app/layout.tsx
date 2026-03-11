@@ -2,6 +2,7 @@ import { GeistPixelSquare } from 'geist/font/pixel'
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next'
 import './globals.css'
+import { Toaster } from '@/components/ui/sonner'
 
 export const metadata: Metadata = {
   title: 'QSpot',
@@ -14,8 +15,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en' className={`${GeistSans.variable} ${GeistPixelSquare.variable}`}>
-      <body className='antialiased'>{children}</body>
+    <html lang="en" className={`${GeistSans.variable} ${GeistPixelSquare.variable}`}>
+      <body className="antialiased">
+        {children}
+        <Toaster position="top-right" richColors />
+      </body>
     </html>
   )
 }

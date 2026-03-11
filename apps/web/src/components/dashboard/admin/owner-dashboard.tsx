@@ -1,6 +1,8 @@
 import { ArrowRightIcon, LayoutDashboard, Settings, Shield, Users } from 'lucide-react'
 import { Route } from 'next'
 import Link from 'next/link'
+import { listMembers } from '@/actions/members'
+import { listServices } from '@/actions/services'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -8,6 +10,7 @@ import { OrgAnalyticsCharts } from './org-analytics-charts'
 import { OrgHeader } from './org-header'
 import { OrgMembersPreview } from './org-members-preview'
 import { OrgOverview } from './org-overview'
+import { OrgServicesPreview } from './org-services-preview'
 import { OrgUsageStats } from './org-usage-stats'
 
 export type OrgMember = {
@@ -45,12 +48,15 @@ function buildUsageStats(membersCount: number) {
   ]
 }
 
-export function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
+export async function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
   const membersCount = activeOrg.members?.length ?? 0
   const stats = buildUsageStats(membersCount)
 
+  const { members } = await listMembers({ organizationSlug: activeOrg.slug, params: { limit: 5 } })
+  const { services } = await listServices(activeOrg.id)
+
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <OrgHeader
         name={activeOrg.name}
         slug={activeOrg.slug}
@@ -64,27 +70,27 @@ export function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
 
       <Separator />
 
-      <Tabs defaultValue="overview">
-        <TabsList variant="line">
-          <TabsTrigger value="overview">
-            <LayoutDashboard className="size-4" />
+      <Tabs defaultValue='overview'>
+        <TabsList variant='line'>
+          <TabsTrigger value='overview'>
+            <LayoutDashboard className='size-4' />
             Overview
           </TabsTrigger>
-          <TabsTrigger value="members">
-            <Users className="size-4" />
+          <TabsTrigger value='members'>
+            <Users className='size-4' />
             Members
           </TabsTrigger>
-          <TabsTrigger value="access">
-            <Shield className="size-4" />
-            Access
+          <TabsTrigger value='services'>
+            <Shield className='size-4' />
+            Services
           </TabsTrigger>
-          <TabsTrigger value="settings">
-            <Settings className="size-4" />
+          <TabsTrigger value='settings'>
+            <Settings className='size-4' />
             Settings
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="mt-6 space-y-6">
+        <TabsContent value='overview' className='mt-6 space-y-6'>
           <OrgUsageStats stats={stats} />
           <OrgOverview
             organizationName={activeOrg.name}
@@ -94,10 +100,10 @@ export function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
           />
         </TabsContent>
 
-        <TabsContent value="members" className="mt-6">
+        <TabsContent value='members' className='mt-6'>
           <div>
-            <div className="flex w-full justify-end">
-              <Button variant="outline" size="sm" asChild>
+            <div className='flex w-full justify-end'>
+              <Button variant='outline' size='sm' asChild>
                 <Link href={`/${activeOrg.slug}/members` as Route}>
                   Manage members
                   <ArrowRightIcon />
@@ -105,20 +111,27 @@ export function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
               </Button>
             </div>
           </div>
-          <OrgMembersPreview members={activeOrg.members ?? []} />
+          <OrgMembersPreview members={members} />
         </TabsContent>
 
-        <TabsContent value="access" className="mt-6">
-          <PlaceholderSection
-            title="Access"
-            description="Role-based access control settings will appear here."
-          />
+        <TabsContent value='services' className='mt-6'>
+          <div>
+            <div className='flex w-full justify-end'>
+              <Button variant='outline' size='sm' asChild>
+                <Link href={`/${activeOrg.slug}/services` as Route}>
+                  Manage services
+                  <ArrowRightIcon />
+                </Link>
+              </Button>
+            </div>
+          </div>
+          <OrgServicesPreview services={services} />
         </TabsContent>
 
-        <TabsContent value="settings" className="mt-6">
+        <TabsContent value='settings' className='mt-6'>
           <PlaceholderSection
-            title="Settings"
-            description="Organization settings and configuration will appear here."
+            title='Settings'
+            description='Organization settings and configuration will appear here.'
           />
         </TabsContent>
       </Tabs>
@@ -128,9 +141,9 @@ export function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
 
 function PlaceholderSection({ title, description }: { title: string; description: string }) {
   return (
-    <div className="rounded-lg border p-8 text-center">
-      <h3 className="font-semibold text-lg">{title}</h3>
-      <p className="mt-1 text-muted-foreground text-sm">{description}</p>
+    <div className='rounded-lg border p-8 text-center'>
+      <h3 className='font-semibold text-lg'>{title}</h3>
+      <p className='mt-1 text-muted-foreground text-sm'>{description}</p>
     </div>
   )
 }

@@ -3,6 +3,7 @@
  * Do not edit manually.
  */
 
+import type { BadRequestErrorDto } from './BadRequestErrorDto.ts'
 import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
 import type { ToggleStaffStatusBodyDto } from './ToggleStaffStatusBodyDto.ts'
 import type { ToggleStaffStatusResponseDtoOutput } from './ToggleStaffStatusResponseDtoOutput.ts'
@@ -29,6 +30,11 @@ export type ToggleStaffStatusControllerPathParams = {
 export type ToggleStaffStatusController200 = ToggleStaffStatusResponseDtoOutput
 
 /**
+ * @description Bad Request
+ */
+export type ToggleStaffStatusController400 = BadRequestErrorDto
+
+/**
  * @description Unauthorized
  */
 export type ToggleStaffStatusController401 = UnauthorizedErrorDto
@@ -46,5 +52,8 @@ export type ToggleStaffStatusControllerMutation = {
   Response: ToggleStaffStatusController200
   Request: ToggleStaffStatusControllerMutationRequest
   PathParams: ToggleStaffStatusControllerPathParams
-  Errors: ToggleStaffStatusController401 | ToggleStaffStatusController404
+  Errors:
+    | ToggleStaffStatusController400
+    | ToggleStaffStatusController401
+    | ToggleStaffStatusController404
 }
