@@ -44,32 +44,32 @@ const waitChartConfig = {
 
 export function OrgAnalyticsCharts() {
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
+    <div className='grid gap-4 lg:grid-cols-2'>
       <Card>
         <CardHeader>
-          <CardTitle className="font-medium text-sm">Queue volume</CardTitle>
+          <CardTitle className='font-medium text-sm'>Queue volume</CardTitle>
           <CardDescription>Queued vs served · last 7 days</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={queueChartConfig} className="aspect-4/2 w-full">
+          <ChartContainer config={queueChartConfig} className='aspect-4/2 w-full'>
             <AreaChart data={queueTrendData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
               <CartesianGrid vertical={false} />
-              <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} />
+              <XAxis dataKey='day' tickLine={false} axisLine={false} tickMargin={8} />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Area
-                dataKey="queued"
-                type="monotone"
-                fill="var(--color-queued)"
+                dataKey='queued'
+                type='monotone'
+                fill='var(--color-queued)'
                 fillOpacity={0.15}
-                stroke="var(--color-queued)"
+                stroke='var(--color-queued)'
                 strokeWidth={2}
               />
               <Area
-                dataKey="served"
-                type="monotone"
-                fill="var(--color-served)"
+                dataKey='served'
+                type='monotone'
+                fill='var(--color-served)'
                 fillOpacity={0.15}
-                stroke="var(--color-served)"
+                stroke='var(--color-served)'
                 strokeWidth={2}
               />
             </AreaChart>
@@ -79,16 +79,16 @@ export function OrgAnalyticsCharts() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-medium text-sm">Average wait time</CardTitle>
+          <CardTitle className='font-medium text-sm'>Average wait time</CardTitle>
           <CardDescription>Minutes · last 7 days</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={waitChartConfig} className="aspect-4/2 w-full">
+          <ChartContainer config={waitChartConfig} className='aspect-4/2 w-full'>
             <BarChart data={avgWaitData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
               <CartesianGrid vertical={false} />
-              <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} />
+              <XAxis dataKey='day' tickLine={false} axisLine={false} tickMargin={8} />
               <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="minutes" fill="var(--color-minutes)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey='minutes' fill='var(--color-minutes)' radius={[4, 4, 0, 0]} />
             </BarChart>
           </ChartContainer>
         </CardContent>

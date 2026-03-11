@@ -10,6 +10,7 @@ export { getOrganizationBySlugController } from './clients/getOrganizationBySlug
 export { getServiceByIdController } from './clients/getServiceByIdController.ts'
 export { getServiceStaffByServiceIdController } from './clients/getServiceStaffByServiceIdController.ts'
 export { getServiceStaffByStaffIdController } from './clients/getServiceStaffByStaffIdController.ts'
+export { getServicesStaffByServiceIdsController } from './clients/getServicesStaffByServiceIdsController.ts'
 export { getTicketPositionController } from './clients/getTicketPositionController.ts'
 export { getUserByIdController } from './clients/getUserByIdController.ts'
 export { leaveQueueController } from './clients/leaveQueueController.ts'
@@ -17,6 +18,7 @@ export { snoozeTicketController } from './clients/snoozeTicketController.ts'
 export { toggleServiceStatusController } from './clients/toggleServiceStatusController.ts'
 export { toggleStaffStatusController } from './clients/toggleStaffStatusController.ts'
 export { transferTicketController } from './clients/transferTicketController.ts'
+export { unassignStaffFromServiceController } from './clients/unassignStaffFromServiceController.ts'
 export { updateServiceController } from './clients/updateServiceController.ts'
 export { updateTicketStatusController } from './clients/updateTicketStatusController.ts'
 export type { AssignStaffToServiceBodyDto } from './types/AssignStaffToServiceBodyDto.ts'
@@ -30,6 +32,7 @@ export type {
   AssignStaffToServiceControllerPathParams,
 } from './types/AssignStaffToServiceController.ts'
 export type { AssignStaffToServiceResponseDtoOutput } from './types/AssignStaffToServiceResponseDtoOutput.ts'
+export type { BadRequestErrorDto } from './types/BadRequestErrorDto.ts'
 export type { CreateServiceBodyDto } from './types/CreateServiceBodyDto.ts'
 export type {
   CreateServiceController201,
@@ -151,6 +154,17 @@ export type {
   GetServiceStaffByStaffIdControllerPathParams,
 } from './types/GetServiceStaffByStaffIdController.ts'
 export type { GetServiceStaffByStaffIdResponseDtoOutput } from './types/GetServiceStaffByStaffIdResponseDtoOutput.ts'
+export type { GetServicesStaffByServiceIdsBodyDto } from './types/GetServicesStaffByServiceIdsBodyDto.ts'
+export type {
+  GetServicesStaffByServiceIdsController200,
+  GetServicesStaffByServiceIdsController401,
+  GetServicesStaffByServiceIdsController404,
+  GetServicesStaffByServiceIdsControllerMutation,
+  GetServicesStaffByServiceIdsControllerMutationRequest,
+  GetServicesStaffByServiceIdsControllerMutationResponse,
+  GetServicesStaffByServiceIdsControllerPathParams,
+} from './types/GetServicesStaffByServiceIdsController.ts'
+export type { GetServicesStaffByServiceIdsResponseDtoOutput } from './types/GetServicesStaffByServiceIdsResponseDtoOutput.ts'
 export type {
   GetTicketPositionController200,
   GetTicketPositionController401,
@@ -213,6 +227,7 @@ export type { ToggleServiceStatusResponseDtoOutput } from './types/ToggleService
 export type { ToggleStaffStatusBodyDto } from './types/ToggleStaffStatusBodyDto.ts'
 export type {
   ToggleStaffStatusController200,
+  ToggleStaffStatusController400,
   ToggleStaffStatusController401,
   ToggleStaffStatusController404,
   ToggleStaffStatusControllerMutation,
@@ -236,6 +251,17 @@ export type {
   TransferTicketResponseDtoOutput,
 } from './types/TransferTicketResponseDtoOutput.ts'
 export { ticketStatusEnum3 } from './types/TransferTicketResponseDtoOutput.ts'
+export type { UnassignStaffFromServiceBodyDto } from './types/UnassignStaffFromServiceBodyDto.ts'
+export type {
+  UnassignStaffFromServiceController200,
+  UnassignStaffFromServiceController401,
+  UnassignStaffFromServiceController404,
+  UnassignStaffFromServiceControllerMutation,
+  UnassignStaffFromServiceControllerMutationRequest,
+  UnassignStaffFromServiceControllerMutationResponse,
+  UnassignStaffFromServiceControllerPathParams,
+} from './types/UnassignStaffFromServiceController.ts'
+export type { UnassignStaffFromServiceResponseDtoOutput } from './types/UnassignStaffFromServiceResponseDtoOutput.ts'
 export type { UnauthorizedErrorDto } from './types/UnauthorizedErrorDto.ts'
 export type { UpdateServiceBodyDto } from './types/UpdateServiceBodyDto.ts'
 export type {

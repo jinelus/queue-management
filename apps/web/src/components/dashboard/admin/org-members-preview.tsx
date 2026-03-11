@@ -17,8 +17,6 @@ type OrgMembersPreviewProps = {
   members: OrgMember[]
 }
 
-const PREVIEW_LIMIT = 5
-
 const roleBadgeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
   owner: 'default',
   admin: 'secondary',
@@ -43,11 +41,7 @@ function formatDate(date: Date) {
 }
 
 export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
-  const recentMembers = [...members]
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, PREVIEW_LIMIT)
-
-  if (recentMembers.length === 0) {
+  if (members.length === 0) {
     return (
       <div className="rounded-lg border p-8 text-center">
         <h3 className="font-semibold text-lg">No members yet</h3>
@@ -60,7 +54,6 @@ export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
 
   return (
     <div className="space-y-4">
-      {/* Desktop table */}
       <div className="hidden md:block">
         <Table>
           <TableHeader>
@@ -71,7 +64,7 @@ export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {recentMembers.map((m) => (
+            {members.map((m) => (
               <TableRow key={m.id}>
                 <TableCell>
                   <div className="flex items-center gap-3">
@@ -99,9 +92,8 @@ export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
         </Table>
       </div>
 
-      {/* Mobile cards */}
       <div className="grid gap-3 md:hidden">
-        {recentMembers.map((m) => (
+        {members.map((m) => (
           <Card key={m.id} className="py-4">
             <CardContent className="flex items-center gap-3 px-4">
               <Avatar>

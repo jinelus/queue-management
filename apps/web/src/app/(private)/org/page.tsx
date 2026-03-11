@@ -5,7 +5,7 @@ import { OrganizationPage } from '@/components/org'
 export default function OrgPage() {
   return (
     <Container>
-      <div className="flex min-h-svh items-center justify-center p-4">
+      <div className='flex min-h-svh items-center justify-center p-4'>
         <Suspense>
           <OrganizationPage />
         </Suspense>

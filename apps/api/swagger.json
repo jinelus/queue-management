@@ -1042,6 +1042,62 @@
         "tags": ["Service Staff"]
       }
     },
+    "/organizations/{organizationId}/service-staff/by-service-ids": {
+      "post": {
+        "description": "Retrieve all staff members assigned to multiple services at once within an organization.",
+        "operationId": "GetServicesStaffByServiceIdsController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/GetServicesStaffByServiceIdsBodyDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with service staff details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetServicesStaffByServiceIdsResponseDto_Output"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Get services staff by service IDs",
+        "tags": ["Service Staff"]
+      }
+    },
     "/organizations/{organizationId}/service-staff/{serviceStaffId}/status": {
       "patch": {
         "description": "Toggle the online status or close counter mode for a staff member assignment.",
@@ -1087,6 +1143,14 @@
               }
             }
           },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BadRequestErrorDto" }
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -1104,6 +1168,62 @@
         },
         "security": [{ "bearer": [] }],
         "summary": "Toggle staff online/counter status",
+        "tags": ["Service Staff"]
+      }
+    },
+    "/organizations/{organizationId}/service-staff/unassign": {
+      "post": {
+        "description": "Remove a staff member assignment from a service within an organization.",
+        "operationId": "UnassignStaffFromServiceController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UnassignStaffFromServiceBodyDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response confirming staff was unassigned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnassignStaffFromServiceResponseDto_Output"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Unassign staff from a service",
         "tags": ["Service Staff"]
       }
     },
@@ -1865,6 +1985,77 @@
         "required": ["servicesStaff"],
         "additionalProperties": false
       },
+      "GetServicesStaffByServiceIdsBodyDto": {
+        "type": "object",
+        "properties": {
+          "serviceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+            }
+          }
+        },
+        "required": ["serviceIds"]
+      },
+      "GetServicesStaffByServiceIdsResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "servicesStaff": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "userId": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "serviceId": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "active": { "type": "boolean" },
+                "isOnline": { "type": "boolean" },
+                "isCounterClosed": { "type": "boolean" }
+              },
+              "required": ["id", "userId", "serviceId"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["servicesStaff"],
+        "additionalProperties": false
+      },
+      "BadRequestErrorDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "number", "const": 400 },
+          "message": { "type": "string" },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": { "type": "string" },
+                "expected": { "type": "string" },
+                "received": { "type": "string" },
+                "path": { "type": "array", "items": { "type": "string" } },
+                "message": { "type": "string" }
+              },
+              "required": ["code", "expected", "received", "path", "message"]
+            }
+          }
+        },
+        "required": ["statusCode", "message"]
+      },
       "ToggleStaffStatusBodyDto": {
         "type": "object",
         "properties": {
@@ -1902,6 +2093,28 @@
           }
         },
         "required": ["serviceStaff"],
+        "additionalProperties": false
+      },
+      "UnassignStaffFromServiceBodyDto": {
+        "type": "object",
+        "properties": {
+          "serviceId": {
+            "type": "string",
+            "format": "ulid",
+            "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+          },
+          "staffId": {
+            "type": "string",
+            "format": "ulid",
+            "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+          }
+        },
+        "required": ["serviceId", "staffId"]
+      },
+      "UnassignStaffFromServiceResponseDto_Output": {
+        "type": "object",
+        "properties": { "success": { "type": "boolean" } },
+        "required": ["success"],
         "additionalProperties": false
       },
       "GetAnalyticsResponseDto_Output": {

@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "serviceIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "ulid",
+        "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+      }
+    }
+  },
+  "required": ["serviceIds"],
+  "x-readme-ref-name": "GetServicesStaffByServiceIdsBodyDto"
+}

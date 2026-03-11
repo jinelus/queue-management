@@ -6,6 +6,7 @@
 import type { Client, RequestConfig, ResponseErrorConfig } from '@/lib/api-client'
 import fetch from '@/lib/api-client'
 import type {
+  ToggleStaffStatusController400,
   ToggleStaffStatusController401,
   ToggleStaffStatusController404,
   ToggleStaffStatusControllerMutationRequest,
@@ -43,7 +44,11 @@ export async function toggleStaffStatusController(
 
   const res = await request<
     ToggleStaffStatusControllerMutationResponse,
-    ResponseErrorConfig<ToggleStaffStatusController401 | ToggleStaffStatusController404>,
+    ResponseErrorConfig<
+      | ToggleStaffStatusController400
+      | ToggleStaffStatusController401
+      | ToggleStaffStatusController404
+    >,
     ToggleStaffStatusControllerMutationRequest
   >({
     method: 'PATCH',

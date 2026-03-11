@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "statusCode": { "type": "number", "const": 400 },
+    "message": { "type": "string" },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "string" },
+          "expected": { "type": "string" },
+          "received": { "type": "string" },
+          "path": { "type": "array", "items": { "type": "string" } },
+          "message": { "type": "string" }
+        },
+        "required": ["code", "expected", "received", "path", "message"]
+      }
+    }
+  },
+  "required": ["statusCode", "message"],
+  "x-readme-ref-name": "BadRequestErrorDto"
+}
