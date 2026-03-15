@@ -38,6 +38,7 @@ export function CreateOrganizationDialog({ trigger }: CreateOrganizationDialogPr
     defaultValues: {
       name: '',
     },
+    mode: 'onChange',
   })
 
   const [open, setOpen] = useState(false)

@@ -49,8 +49,8 @@ export function DeleteServiceButton({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
-          <Trash2Icon className="size-4" />
+        <Button variant='ghost' size='icon' className='text-destructive hover:text-destructive'>
+          <Trash2Icon className='size-4' />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

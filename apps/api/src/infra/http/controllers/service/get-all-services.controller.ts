@@ -39,7 +39,11 @@ export class GetAllServicesParamsDto extends createZodDto(getAllServicesParams) 
 
 export const getAllServicesResponse = z.object({
   services: z.array(httpServiceSchema),
-  total: z.number(),
+  meta: z.object({
+    total: z.number(),
+    totalPages: z.number(),
+    hasNext: z.boolean(),
+  }),
 })
 
 export class GetAllServicesResponseDto extends createZodDto(getAllServicesResponse) {}
@@ -121,11 +125,11 @@ export class GetAllServicesController {
       }
     }
 
-    const { services, total } = result.value
+    const { services, meta } = result.value
 
     return {
       services: services.map(PrismaServiceMapper.toHttp),
-      total,
+      meta,
     }
   }
 }

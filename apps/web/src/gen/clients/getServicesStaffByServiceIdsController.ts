@@ -8,16 +8,16 @@ import fetch from '@/lib/api-client'
 import type {
   GetServicesStaffByServiceIdsController401,
   GetServicesStaffByServiceIdsController404,
-  GetServicesStaffByServiceIdsControllerMutationRequest,
-  GetServicesStaffByServiceIdsControllerMutationResponse,
   GetServicesStaffByServiceIdsControllerPathParams,
+  GetServicesStaffByServiceIdsControllerQueryParams,
+  GetServicesStaffByServiceIdsControllerQueryResponse,
 } from '../types/GetServicesStaffByServiceIdsController.ts'
 
 function getGetServicesStaffByServiceIdsControllerUrl(
   organizationId: GetServicesStaffByServiceIdsControllerPathParams['organizationId'],
 ) {
   const res = {
-    method: 'POST',
+    method: 'GET',
     url: `/organizations/${organizationId}/service-staff/by-service-ids` as const,
   }
   return res
@@ -30,25 +30,21 @@ function getGetServicesStaffByServiceIdsControllerUrl(
  */
 export async function getServicesStaffByServiceIdsController(
   organizationId: GetServicesStaffByServiceIdsControllerPathParams['organizationId'],
-  data: GetServicesStaffByServiceIdsControllerMutationRequest,
-  config: Partial<RequestConfig<GetServicesStaffByServiceIdsControllerMutationRequest>> & {
-    client?: Client
-  } = {},
+  params: GetServicesStaffByServiceIdsControllerQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config
 
-  const requestData = data
-
   const res = await request<
-    GetServicesStaffByServiceIdsControllerMutationResponse,
+    GetServicesStaffByServiceIdsControllerQueryResponse,
     ResponseErrorConfig<
       GetServicesStaffByServiceIdsController401 | GetServicesStaffByServiceIdsController404
     >,
-    GetServicesStaffByServiceIdsControllerMutationRequest
+    unknown
   >({
-    method: 'POST',
+    method: 'GET',
     url: getGetServicesStaffByServiceIdsControllerUrl(organizationId).url.toString(),
-    data: requestData,
+    params,
     ...requestConfig,
   })
   return res

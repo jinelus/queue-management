@@ -47,7 +47,10 @@ export class GetServicesStaffByServiceIds {
       return left(new NotAllowedError())
     }
 
-    const servicesStaff = await this.serviceStaffRepository.findByServiceIds(serviceIds)
+    const servicesStaff = await this.serviceStaffRepository.findByServiceIds(
+      serviceIds,
+      organizationId,
+    )
 
     return right({ servicesStaff })
   }

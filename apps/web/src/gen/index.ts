@@ -154,15 +154,14 @@ export type {
   GetServiceStaffByStaffIdControllerPathParams,
 } from './types/GetServiceStaffByStaffIdController.ts'
 export type { GetServiceStaffByStaffIdResponseDtoOutput } from './types/GetServiceStaffByStaffIdResponseDtoOutput.ts'
-export type { GetServicesStaffByServiceIdsBodyDto } from './types/GetServicesStaffByServiceIdsBodyDto.ts'
 export type {
   GetServicesStaffByServiceIdsController200,
   GetServicesStaffByServiceIdsController401,
   GetServicesStaffByServiceIdsController404,
-  GetServicesStaffByServiceIdsControllerMutation,
-  GetServicesStaffByServiceIdsControllerMutationRequest,
-  GetServicesStaffByServiceIdsControllerMutationResponse,
   GetServicesStaffByServiceIdsControllerPathParams,
+  GetServicesStaffByServiceIdsControllerQuery,
+  GetServicesStaffByServiceIdsControllerQueryParams,
+  GetServicesStaffByServiceIdsControllerQueryResponse,
 } from './types/GetServicesStaffByServiceIdsController.ts'
 export type { GetServicesStaffByServiceIdsResponseDtoOutput } from './types/GetServicesStaffByServiceIdsResponseDtoOutput.ts'
 export type {

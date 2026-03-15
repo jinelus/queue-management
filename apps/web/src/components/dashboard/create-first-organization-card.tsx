@@ -47,6 +47,7 @@ export function CreateFirstOrganizationCard({ organizations }: CreateFirstOrgani
     defaultValues: {
       name: '',
     },
+    mode: 'onChange',
   })
 
   const [open, setOpen] = useState(false)

@@ -35,12 +35,13 @@ export async function listMembers({
   params,
 }: {
   organizationSlug: string
-  params?: { limit?: number; offset?: number }
+  params?: { limit?: number; offset?: number; q?: string }
 }) {
   const { data, error } = await authClient.organization.listMembers({
     query: {
-      limit: params?.limit || 10,
-      offset: params?.offset || 0,
+      limit: params?.limit ?? 10,
+      offset: params?.offset ?? 0,
+      filterValue: params?.q ?? '',
       sortBy: 'createdAt',
       sortDirection: 'desc',
       organizationSlug,
@@ -54,7 +55,13 @@ export async function listMembers({
     throw new Error('Failed to load members')
   }
 
+  const total =
+    typeof (data as { total?: unknown }).total === 'number'
+      ? (data as { total: number }).total
+      : data.members.length
+
   return {
     members: data.members,
+    total,
   }
 }

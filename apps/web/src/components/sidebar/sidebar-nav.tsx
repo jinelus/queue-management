@@ -7,7 +7,6 @@ import {
   type LucideIcon,
   Settings,
   Ticket,
-  UserCog,
   Users,
 } from 'lucide-react'
 import { Route } from 'next'
@@ -46,12 +45,6 @@ const mainNavItems: NavItem[] = [
     path: '/services',
     icon: Briefcase,
     allowRoles: ['owner', 'admin', 'member'],
-  },
-  {
-    title: 'Staff',
-    path: '/staff',
-    icon: UserCog,
-    allowRoles: ['owner', 'admin'],
   },
 ]
 

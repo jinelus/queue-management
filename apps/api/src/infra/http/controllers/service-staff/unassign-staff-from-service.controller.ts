@@ -4,7 +4,7 @@ import {
   Controller,
   NotFoundException,
   Param,
-  Post,
+  Patch,
   UnauthorizedException,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
@@ -48,7 +48,7 @@ export class UnassignStaffFromServiceResponseDto extends createZodDto(
 export class UnassignStaffFromServiceController {
   constructor(private readonly unassignStaffFromServiceService: UnassignStaffFromService) {}
 
-  @Post('')
+  @Patch('')
   @ApiOperation({
     summary: 'Unassign staff from a service',
     description: 'Remove a staff member assignment from a service within an organization.',

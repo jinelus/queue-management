@@ -15,7 +15,10 @@ interface GetAllServicesServiceParams {
   search?: string
 }
 
-type GetAllServicesServiceResponse = Either<NotFoundError, { services: Service[]; total: number }>
+type GetAllServicesServiceResponse = Either<
+  NotFoundError,
+  { services: Service[]; meta: { total: number; totalPages: number; hasNext: boolean } }
+>
 
 @Injectable()
 export class GetAllServicesService {
@@ -45,6 +48,9 @@ export class GetAllServicesService {
 
     const total = await this.serviceRepository.count(organizationId, { search, orderBy, order })
 
-    return right({ services, total })
+    const totalPages = Math.ceil(total / (perPage || 10))
+    const hasNext = (page || 1) < totalPages
+
+    return right({ services, meta: { total, totalPages, hasNext } })
   }
 }

@@ -1,15 +1,17 @@
 import {
   BadRequestException,
-  Body,
   Controller,
+  Get,
   NotFoundException,
   Param,
-  Post,
+  Query,
+  UnauthorizedException,
 } from '@nestjs/common'
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth'
 import { createZodDto, ZodResponse } from 'nestjs-zod'
 import z from 'zod'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { GetServicesStaffByServiceIds } from '@/domain/master/application/services/service-staff/get-services-staff-by-service-ids.service'
 import {
@@ -29,12 +31,20 @@ export class GetServicesStaffByServiceIdsParamsDto extends createZodDto(
   getServicesStaffByServiceIdsParams,
 ) {}
 
-export const getServicesStaffByServiceIdsBody = z.object({
-  serviceIds: z.array(z.ulid()),
+export const getServicesStaffByServiceIdsQuery = z.object({
+  serviceIds: z
+    .union([z.array(z.string()), z.string()])
+    .transform((val) => {
+      if (typeof val === 'string') {
+        return val.split(',')
+      }
+      return val
+    })
+    .pipe(z.array(z.string())),
 })
 
-export class GetServicesStaffByServiceIdsBodyDto extends createZodDto(
-  getServicesStaffByServiceIdsBody,
+export class GetServicesStaffByServiceIdsQueryDto extends createZodDto(
+  getServicesStaffByServiceIdsQuery,
 ) {}
 
 export const getServicesStaffByServiceIdsResponse = z.object({
@@ -51,7 +61,7 @@ export class GetServicesStaffByServiceIdsResponseDto extends createZodDto(
 export class GetServicesStaffByServiceIdsController {
   constructor(private readonly getServicesStaffByServiceIdsService: GetServicesStaffByServiceIds) {}
 
-  @Post('')
+  @Get('')
   @ApiOperation({
     summary: 'Get services staff by service IDs',
     description:
@@ -69,13 +79,19 @@ export class GetServicesStaffByServiceIdsController {
     description: 'The unique identifier of the organization',
     type: String,
   })
+  @ApiQuery({
+    name: 'serviceIds',
+    description: 'An array of service IDs to retrieve staff for',
+    schema: { type: 'array', items: { type: 'string' } },
+    required: true,
+  })
   async handle(
     @Session() session: UserSession,
-    @Body() body: GetServicesStaffByServiceIdsBodyDto,
+    @Query() query: GetServicesStaffByServiceIdsQueryDto,
     @Param() params: GetServicesStaffByServiceIdsParamsDto,
   ): Promise<GetServicesStaffByServiceIdsResponseDto> {
     const currentUserId = session.user.id
-    const { serviceIds } = body
+    const { serviceIds } = query
     const { organizationId } = params
 
     const result = await this.getServicesStaffByServiceIdsService.execute({
@@ -90,6 +106,8 @@ export class GetServicesStaffByServiceIdsController {
       switch (error.constructor) {
         case NotFoundError:
           throw new NotFoundException(error.message)
+        case NotAllowedError:
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

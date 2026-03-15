@@ -2,6 +2,7 @@ import { GeistPixelSquare } from 'geist/font/pixel'
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next'
 import './globals.css'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { Toaster } from '@/components/ui/sonner'
 
 export const metadata: Metadata = {
@@ -15,10 +16,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistPixelSquare.variable}`}>
-      <body className="antialiased">
-        {children}
-        <Toaster position="top-right" richColors />
+    <html lang='en' className={`${GeistSans.variable} ${GeistPixelSquare.variable}`}>
+      <body className='antialiased'>
+        <NuqsAdapter>
+          {children}
+          <Toaster position='top-right' richColors />
+        </NuqsAdapter>
       </body>
     </html>
   )

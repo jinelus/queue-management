@@ -3,7 +3,6 @@
  * Do not edit manually.
  */
 
-import type { GetServicesStaffByServiceIdsBodyDto } from './GetServicesStaffByServiceIdsBodyDto.ts'
 import type { GetServicesStaffByServiceIdsResponseDtoOutput } from './GetServicesStaffByServiceIdsResponseDtoOutput.ts'
 import type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
 import type { UnauthorizedErrorDto } from './UnauthorizedErrorDto.ts'
@@ -15,6 +14,13 @@ export type GetServicesStaffByServiceIdsControllerPathParams = {
    * @type string, ulid
    */
   organizationId: string
+}
+
+export type GetServicesStaffByServiceIdsControllerQueryParams = {
+  /**
+   * @description An array of service IDs to retrieve staff for
+   */
+  serviceIds: string[]
 }
 
 /**
@@ -33,15 +39,12 @@ export type GetServicesStaffByServiceIdsController401 = UnauthorizedErrorDto
  */
 export type GetServicesStaffByServiceIdsController404 = NotFoundErrorDto
 
-export type GetServicesStaffByServiceIdsControllerMutationRequest =
-  GetServicesStaffByServiceIdsBodyDto
-
-export type GetServicesStaffByServiceIdsControllerMutationResponse =
+export type GetServicesStaffByServiceIdsControllerQueryResponse =
   GetServicesStaffByServiceIdsController200
 
-export type GetServicesStaffByServiceIdsControllerMutation = {
+export type GetServicesStaffByServiceIdsControllerQuery = {
   Response: GetServicesStaffByServiceIdsController200
-  Request: GetServicesStaffByServiceIdsControllerMutationRequest
   PathParams: GetServicesStaffByServiceIdsControllerPathParams
+  QueryParams: GetServicesStaffByServiceIdsControllerQueryParams
   Errors: GetServicesStaffByServiceIdsController401 | GetServicesStaffByServiceIdsController404
 }

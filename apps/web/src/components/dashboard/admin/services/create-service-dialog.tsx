@@ -24,9 +24,9 @@ import { Textarea } from '@/components/ui/textarea'
 
 const createServiceSchema = z.object({
   name: z.string().min(1, 'Service name is required').max(255),
-  description: z.string().optional(),
+  description: z.string().min(1, 'Description is required').max(1000),
   maxCapacity: z.string().optional(),
-  avgDurationInt: z.string().optional(),
+  avgDurationInt: z.string().min(1, 'Average duration is required'),
 })
 
 type CreateServiceInput = z.infer<typeof createServiceSchema>
@@ -42,8 +42,9 @@ export function CreateServiceDialog({ organizationId }: CreateServiceDialogProps
       name: '',
       description: '',
       maxCapacity: '',
-      avgDurationInt: '',
+      avgDurationInt: '5',
     },
+    mode: 'onChange',
   })
 
   const [open, setOpen] = useState(false)

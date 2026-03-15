@@ -89,9 +89,12 @@ export class PrismaServiceStaffRepository implements ServiceStaffRepository {
     return PrismaServiceStaffMapper.toDomain(item)
   }
 
-  async findByServiceIds(serviceIds: string[]): Promise<ServiceStaff[]> {
+  async findByServiceIds(serviceIds: string[], organizationId: string): Promise<ServiceStaff[]> {
     const items = await this.prisma.serviceStaff.findMany({
-      where: { serviceId: { in: serviceIds } },
+      where: {
+        serviceId: { in: serviceIds },
+        service: { organizationId },
+      },
     })
     return items.map(PrismaServiceStaffMapper.toDomain)
   }

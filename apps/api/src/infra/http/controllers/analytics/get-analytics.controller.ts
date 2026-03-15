@@ -19,8 +19,15 @@ export class GetAnalyticsQueryDto extends createZodDto(getAnalyticsQuery) {}
 export const getAnalyticsResponse = z.object({
   servedTicketsByDay: z.array(
     z.object({
-      date: z.string(),
-      count: z.number(),
+      day: z.string(),
+      served: z.number(),
+      queue: z.number(),
+    }),
+  ),
+  averageWaitTime: z.array(
+    z.object({
+      day: z.string(),
+      time: z.number(),
     }),
   ),
   avgDurationByEmployee: z.array(
@@ -42,7 +49,8 @@ export class GetAnalyticsController {
   @Get('')
   @ApiOperation({
     summary: 'Get historical analytics',
-    description: 'Retrieve served tickets count and average service duration.',
+    description:
+      'Retrieve served vs queue volume, average wait time, and average service duration.',
   })
   @ZodResponse({
     status: 200,
@@ -79,9 +87,10 @@ export class GetAnalyticsController {
     if (result.isLeft()) {
       throw new UnauthorizedException(result.value.message)
     }
-    const { servedTicketsByDay, avgDurationByEmployee } = result.value
+    const { servedTicketsByDay, averageWaitTime, avgDurationByEmployee } = result.value
     return {
       servedTicketsByDay,
+      averageWaitTime,
       avgDurationByEmployee,
     }
   }

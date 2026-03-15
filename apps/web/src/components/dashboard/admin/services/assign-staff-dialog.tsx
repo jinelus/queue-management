@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useRef, useState, useTransition } from 'react'
 import { toast } from 'sonner'
-import { assignStaff, unassignStaff } from '@/actions/services'
+import { assignStaff, unassignStaff } from '@/actions/service-staff/mutation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -86,30 +86,30 @@ export function AssignStaffDialog({
           <DialogTitle>Assign staff to {serviceName}</DialogTitle>
           <DialogDescription>Select a member to assign to this service.</DialogDescription>
         </DialogHeader>
-        <div className="max-h-80 space-y-4 overflow-y-auto">
+        <div className='max-h-80 space-y-4 overflow-y-auto'>
           {availableMembers.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+            <div className='space-y-2'>
+              <h4 className='font-medium text-muted-foreground text-xs uppercase tracking-wide'>
                 Available members
               </h4>
               {availableMembers.map((member) => (
                 <div
                   key={member.id}
-                  className="flex items-center justify-between rounded-md border p-3"
+                  className='flex items-center justify-between rounded-md border p-3'
                 >
-                  <div className="flex items-center gap-3">
-                    <Avatar size="sm">
+                  <div className='flex items-center gap-3'>
+                    <Avatar size='sm'>
                       {member.image && <AvatarImage src={member.image} alt={member.name} />}
                       <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
                     </Avatar>
-                    <div className="flex flex-col">
-                      <span className="font-medium text-sm">{member.name}</span>
-                      <span className="text-muted-foreground text-xs">{member.email}</span>
+                    <div className='flex flex-col'>
+                      <span className='font-medium text-sm'>{member.name}</span>
+                      <span className='text-muted-foreground text-xs'>{member.email}</span>
                     </div>
                   </div>
                   <Button
-                    size="sm"
-                    variant="outline"
+                    size='sm'
+                    variant='outline'
                     disabled={isPending && activeIdRef.current === member.id}
                     onClick={() => handleAssign(member.id)}
                   >
@@ -121,28 +121,28 @@ export function AssignStaffDialog({
           )}
 
           {assignedMembers.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+            <div className='space-y-2'>
+              <h4 className='font-medium text-muted-foreground text-xs uppercase tracking-wide'>
                 Assigned members
               </h4>
               {assignedMembers.map((member) => (
                 <div
                   key={member.id}
-                  className="flex items-center justify-between rounded-md border border-dashed p-3"
+                  className='flex items-center justify-between rounded-md border border-dashed p-3'
                 >
-                  <div className="flex items-center gap-3">
-                    <Avatar size="sm">
+                  <div className='flex items-center gap-3'>
+                    <Avatar size='sm'>
                       {member.image && <AvatarImage src={member.image} alt={member.name} />}
                       <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
                     </Avatar>
-                    <div className="flex flex-col">
-                      <span className="font-medium text-sm">{member.name}</span>
-                      <span className="text-muted-foreground text-xs">{member.email}</span>
+                    <div className='flex flex-col'>
+                      <span className='font-medium text-sm'>{member.name}</span>
+                      <span className='text-muted-foreground text-xs'>{member.email}</span>
                     </div>
                   </div>
                   <Button
-                    size="sm"
-                    variant="destructive"
+                    size='sm'
+                    variant='destructive'
                     disabled={isPending && activeIdRef.current === member.id}
                     onClick={() => handleUnassign(member.id)}
                   >
@@ -154,11 +154,11 @@ export function AssignStaffDialog({
           )}
 
           {availableMembers.length === 0 && assignedMembers.length === 0 && (
-            <p className="text-muted-foreground text-sm">No members found.</p>
+            <p className='text-muted-foreground text-sm'>No members found.</p>
           )}
 
           {availableMembers.length === 0 && assignedMembers.length > 0 && (
-            <p className="text-muted-foreground text-sm">
+            <p className='text-muted-foreground text-sm'>
               All members are already assigned to this service.
             </p>
           )}

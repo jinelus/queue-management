@@ -12,6 +12,7 @@ describe('GetHistoricalStatsService', () => {
   beforeEach(() => {
     ticketRepository = {
       getServedTicketsCountByDay: vi.fn(),
+      getAverageWaitTimeByDay: vi.fn(),
       getAverageServiceDuration: vi.fn(),
     } as any
     permissionFactory = {
@@ -22,7 +23,8 @@ describe('GetHistoricalStatsService', () => {
   })
 
   it('should be able to get historical stats', async () => {
-    const servedStats = [{ date: '2023-01-01', count: 10 }]
+    const servedStats = [{ day: 'Mon', served: 10, queue: 12 }]
+    const averageWaitTime = [{ day: 'Mon', time: 15 }]
     const durationStats = [{ employeeId: 'emp-1', employeeName: 'John', avgDuration: 120 }]
 
     vi.spyOn(permissionFactory, 'userCan').mockResolvedValue({
@@ -30,6 +32,7 @@ describe('GetHistoricalStatsService', () => {
       error: undefined,
     })
     vi.spyOn(ticketRepository, 'getServedTicketsCountByDay').mockResolvedValue(servedStats)
+    vi.spyOn(ticketRepository, 'getAverageWaitTimeByDay').mockResolvedValue(averageWaitTime)
     vi.spyOn(ticketRepository, 'getAverageServiceDuration').mockResolvedValue(durationStats)
 
     const result = await sut.execute({
@@ -40,6 +43,7 @@ describe('GetHistoricalStatsService', () => {
     expect(result.isRight()).toBe(true)
     if (result.isRight()) {
       expect(result.value.servedTicketsByDay).toEqual(servedStats)
+      expect(result.value.averageWaitTime).toEqual(averageWaitTime)
       expect(result.value.avgDurationByEmployee).toEqual(durationStats)
     }
   })
