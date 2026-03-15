@@ -11,11 +11,28 @@ export type GetAnalyticsResponseDtoOutput = {
     /**
      * @type string
      */
-    date: string
+    day: string
     /**
      * @type number
      */
-    count: number
+    served: number
+    /**
+     * @type number
+     */
+    queue: number
+  }[]
+  /**
+   * @type array
+   */
+  averageWaitTime: {
+    /**
+     * @type string
+     */
+    day: string
+    /**
+     * @type number
+     */
+    time: number
   }[]
   /**
    * @type array

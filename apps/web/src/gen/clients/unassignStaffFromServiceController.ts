@@ -17,7 +17,7 @@ function getUnassignStaffFromServiceControllerUrl(
   organizationId: UnassignStaffFromServiceControllerPathParams['organizationId'],
 ) {
   const res = {
-    method: 'POST',
+    method: 'PATCH',
     url: `/organizations/${organizationId}/service-staff/unassign` as const,
   }
   return res
@@ -46,7 +46,7 @@ export async function unassignStaffFromServiceController(
     >,
     UnassignStaffFromServiceControllerMutationRequest
   >({
-    method: 'POST',
+    method: 'PATCH',
     url: getUnassignStaffFromServiceControllerUrl(organizationId).url.toString(),
     data: requestData,
     ...requestConfig,

@@ -6,10 +6,23 @@
       "items": {
         "type": "object",
         "properties": {
-          "date": { "type": "string" },
-          "count": { "type": "number" }
+          "day": { "type": "string" },
+          "served": { "type": "number" },
+          "queue": { "type": "number" }
         },
-        "required": ["date", "count"],
+        "required": ["day", "served", "queue"],
+        "additionalProperties": false
+      }
+    },
+    "averageWaitTime": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "day": { "type": "string" },
+          "time": { "type": "number" }
+        },
+        "required": ["day", "time"],
         "additionalProperties": false
       }
     },
@@ -27,7 +40,7 @@
       }
     }
   },
-  "required": ["servedTicketsByDay", "avgDurationByEmployee"],
+  "required": ["servedTicketsByDay", "averageWaitTime", "avgDurationByEmployee"],
   "additionalProperties": false,
   "x-readme-ref-name": "GetAnalyticsResponseDto_Output"
 }
