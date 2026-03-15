@@ -103,33 +103,108 @@ export class InMemoryTicketRepository implements TicketRepository {
   async getServedTicketsCountByDay(
     organizationId: string,
     days: number,
-  ): Promise<{ date: string; count: number }[]> {
+  ): Promise<{ day: string; served: number; queue: number }[]> {
     const startDate = new Date()
     startDate.setHours(0, 0, 0, 0)
     startDate.setDate(startDate.getDate() - (days - 1))
 
-    const served = this.items.filter(
-      (item) =>
-        item.organizationId === organizationId &&
-        item.status === 'SERVED' &&
-        item.completedAt &&
-        item.completedAt >= startDate,
-    )
+    const dayKey = (date: Date) => date.toISOString().split('T')[0]
 
-    const grouped = served.reduce(
-      (acc, ticket) => {
-        if (ticket.completedAt) {
-          const dateKey = ticket.completedAt.toISOString().split('T')[0]
-          acc[dateKey] = (acc[dateKey] || 0) + 1
-        }
-        return acc
-      },
-      {} as Record<string, number>,
-    )
+    const servedByDate = this.items
+      .filter(
+        (item) =>
+          item.organizationId === organizationId &&
+          item.status === 'SERVED' &&
+          item.completedAt &&
+          item.completedAt >= startDate,
+      )
+      .reduce(
+        (acc, ticket) => {
+          if (!ticket.completedAt) {
+            return acc
+          }
+          const key = dayKey(ticket.completedAt)
+          acc[key] = (acc[key] || 0) + 1
+          return acc
+        },
+        {} as Record<string, number>,
+      )
 
-    return Object.entries(grouped)
-      .map(([date, count]) => ({ date, count }))
-      .sort((a, b) => a.date.localeCompare(b.date))
+    const queuedByDate = this.items
+      .filter((item) => item.organizationId === organizationId && item.joinedAt >= startDate)
+      .reduce(
+        (acc, ticket) => {
+          const key = dayKey(ticket.joinedAt)
+          acc[key] = (acc[key] || 0) + 1
+          return acc
+        },
+        {} as Record<string, number>,
+      )
+
+    return Array.from({ length: days }).map((_, index) => {
+      const date = new Date(startDate)
+      date.setDate(startDate.getDate() + index)
+      const key = dayKey(date)
+
+      return {
+        day: new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(date),
+        served: servedByDate[key] ?? 0,
+        queue: queuedByDate[key] ?? 0,
+      }
+    })
+  }
+
+  async getAverageWaitTimeByDay(
+    organizationId: string,
+    days: number,
+  ): Promise<{ day: string; time: number }[]> {
+    const startDate = new Date()
+    startDate.setHours(0, 0, 0, 0)
+    startDate.setDate(startDate.getDate() - (days - 1))
+
+    const dayKey = (date: Date) => date.toISOString().split('T')[0]
+
+    const waitByDate = this.items
+      .filter(
+        (item) =>
+          item.organizationId === organizationId &&
+          item.status === 'SERVED' &&
+          item.joinedAt &&
+          item.startedAt &&
+          item.completedAt &&
+          item.completedAt >= startDate,
+      )
+      .reduce(
+        (acc, ticket) => {
+          if (!ticket.startedAt || !ticket.joinedAt || !ticket.completedAt) {
+            return acc
+          }
+
+          const key = dayKey(ticket.completedAt)
+          const waitInMinutes = (ticket.startedAt.getTime() - ticket.joinedAt.getTime()) / 60000
+
+          if (!acc[key]) {
+            acc[key] = { total: 0, count: 0 }
+          }
+
+          acc[key].total += waitInMinutes
+          acc[key].count += 1
+          return acc
+        },
+        {} as Record<string, { total: number; count: number }>,
+      )
+
+    return Array.from({ length: days }).map((_, index) => {
+      const date = new Date(startDate)
+      date.setDate(startDate.getDate() + index)
+      const key = dayKey(date)
+      const value = waitByDate[key]
+
+      return {
+        day: new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(date),
+        time: value ? Math.round(value.total / value.count) : 0,
+      }
+    })
   }
 
   async getAverageServiceDuration(

@@ -27,11 +27,13 @@ describe('GetAllServicesService', () => {
       organizationId: organization.id.toString(),
       name: 'Service 1',
       isActive: true,
+      description: 'Description 1',
     })
     const service2 = Service.create({
       organizationId: organization.id.toString(),
       name: 'Service 2',
       isActive: true,
+      description: 'Description 2',
     })
     await serviceRepository.create(service1)
     await serviceRepository.create(service2)
@@ -45,7 +47,7 @@ describe('GetAllServicesService', () => {
     expect(result.isRight()).toBe(true)
     if (result.isRight()) {
       expect(result.value.services).toHaveLength(2)
-      expect(result.value.total).toBe(2)
+      expect(result.value.meta.total).toBe(2)
     }
   })
 

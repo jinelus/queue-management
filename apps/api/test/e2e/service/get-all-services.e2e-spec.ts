@@ -34,7 +34,7 @@ describe('Get All Services (E2E)', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.body.services).toHaveLength(3)
-    expect(response.body.total).toBe(3)
+    expect(response.body.meta.total).toBe(3)
     expect(response.body.services[0]).toHaveProperty('id')
     expect(response.body.services[0]).toHaveProperty('name')
   })
@@ -51,7 +51,7 @@ describe('Get All Services (E2E)', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.body.services).toHaveLength(2)
-    expect(response.body.total).toBe(3)
+    expect(response.body.meta.total).toBe(3)
   })
 
   it('[GET] /organizations/:organizationId/services - should support search', async () => {
