@@ -2,7 +2,10 @@ import { ArrowLeftIcon, UsersIcon } from 'lucide-react'
 import { Route } from 'next'
 import Link from 'next/link'
 import { getCurrentMember, listMembers } from '@/actions/members'
-import { getServicesStaffByServiceIds, listServices } from '@/actions/services'
+import { getServicesStaffByServiceIds } from '@/actions/service-staff/get'
+import { listServices } from '@/actions/services'
+import { loadServicesSearchParams } from '@/app/(private)/[slug]/services/search-params'
+import { QueryPagination } from '@/components/custom/pagination'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -22,6 +25,8 @@ import { ServiceToggle } from './service-toggle'
 export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
   const { slug } = await props.params
 
+  const { page, perPage, q } = await loadServicesSearchParams(props.searchParams)
+
   const { organization } = await getCurrentMember({ organizationSlug: slug })
 
   if (!organization) {
@@ -32,7 +37,24 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
     )
   }
 
-  const { services } = await listServices(organization.id)
+  const [error, data] = await listServices(organization.id, {
+    page,
+    perPage,
+    search: q,
+  })
+
+  if (error || !data) {
+    return (
+      <div className='p-4'>
+        <p className='text-muted-foreground text-sm'>Failed to load services.</p>
+      </div>
+    )
+  }
+
+  const {
+    services,
+    meta: { totalPages, total },
+  } = data
 
   const { members } = await listMembers({ organizationSlug: slug })
   const staffList = members.map((m) => ({
@@ -43,9 +65,21 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
   }))
 
   const serviceIds = services.map((s) => s.id)
-  const { servicesStaff } = serviceIds.length
-    ? await getServicesStaffByServiceIds(organization.id, serviceIds)
-    : { servicesStaff: [] }
+  const [serviceStaffError, servicesStaffData] = await getServicesStaffByServiceIds(
+    organization.id,
+    serviceIds,
+  )
+
+  if (serviceStaffError || !servicesStaffData) {
+    return (
+      <div className='p-4'>
+        <p className='text-muted-foreground text-sm'>Failed to load services staff.</p>
+        {serviceStaffError.message}
+      </div>
+    )
+  }
+
+  const servicesStaff = servicesStaffData.servicesStaff
 
   const assignedStaffByService = new Map<string, string[]>()
   for (const ss of servicesStaff) {
@@ -66,7 +100,7 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
           <div>
             <h1 className='font-semibold text-2xl'>Services</h1>
             <p className='text-muted-foreground text-sm'>
-              {services.length} {services.length === 1 ? 'service' : 'services'}
+              {total} {total === 1 ? 'service' : 'services'}
             </p>
           </div>
         </div>
@@ -199,6 +233,8 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
           </p>
         </div>
       )}
+
+      <QueryPagination totalPages={totalPages} currentPage={page} />
     </div>
   )
 }

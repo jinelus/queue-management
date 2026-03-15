@@ -2,6 +2,8 @@ import { ArrowLeftIcon, UserPlusIcon } from 'lucide-react'
 import { Route } from 'next'
 import Link from 'next/link'
 import { listMembers } from '@/actions/members'
+import { loadMembersSearchParams } from '@/app/(private)/[slug]/members/search-params'
+import { QueryPagination } from '@/components/custom/pagination'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -25,7 +27,18 @@ const roleBadgeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
 export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
   const { slug } = await props.params
 
-  const { members } = await listMembers({ organizationSlug: slug })
+  const { page, perPage, q } = await loadMembersSearchParams(props.searchParams)
+
+  const { members, total } = await listMembers({
+    organizationSlug: slug,
+    params: {
+      limit: perPage ?? 10,
+      offset: (page - 1) * (perPage ?? 10),
+      q,
+    },
+  })
+
+  const totalPages = Math.ceil(total / (perPage ?? 10))
 
   return (
     <div className='space-y-6'>
@@ -39,7 +52,7 @@ export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
           <div>
             <h1 className='font-semibold text-2xl'>Members</h1>
             <p className='text-muted-foreground text-sm'>
-              {members.length} {members.length === 1 ? 'member' : 'members'}
+              {total} {total === 1 ? 'member' : 'members'}
             </p>
           </div>
         </div>
@@ -118,6 +131,8 @@ export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
           </p>
         </div>
       )}
+
+      <QueryPagination totalPages={totalPages} currentPage={page} />
     </div>
   )
 }

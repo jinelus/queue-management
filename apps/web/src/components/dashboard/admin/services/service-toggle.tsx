@@ -30,5 +30,5 @@ export function ServiceToggle({ organizationId, serviceId, isActive }: ServiceTo
     })
   }
 
-  return <Switch checked={isActive} onCheckedChange={handleToggle} disabled={isPending} size="sm" />
+  return <Switch checked={isActive} onCheckedChange={handleToggle} disabled={isPending} size='sm' />
 }

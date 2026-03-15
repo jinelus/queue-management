@@ -68,7 +68,7 @@ export function OrgServicesPreview({ services }: OrgServicesPreviewProps) {
                   {service.maxCapacity ?? '—'}
                 </TableCell>
                 <TableCell className='text-muted-foreground text-sm'>
-                  {service.avgDurationInt ? `${service.avgDurationInt} min` : '—'}
+                  {service.avgDurationInt != null ? `${service.avgDurationInt} min` : '—'}
                 </TableCell>
               </TableRow>
             ))}

@@ -43,9 +43,9 @@ function formatDate(date: Date) {
 export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
   if (members.length === 0) {
     return (
-      <div className="rounded-lg border p-8 text-center">
-        <h3 className="font-semibold text-lg">No members yet</h3>
-        <p className="mt-1 text-muted-foreground text-sm">
+      <div className='rounded-lg border p-8 text-center'>
+        <h3 className='font-semibold text-lg'>No members yet</h3>
+        <p className='mt-1 text-muted-foreground text-sm'>
           Invite members to get started with your organization.
         </p>
       </div>
@@ -53,8 +53,8 @@ export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="hidden md:block">
+    <div className='space-y-4'>
+      <div className='hidden md:block'>
         <Table>
           <TableHeader>
             <TableRow>
@@ -67,23 +67,23 @@ export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
             {members.map((m) => (
               <TableRow key={m.id}>
                 <TableCell>
-                  <div className="flex items-center gap-3">
-                    <Avatar size="sm">
+                  <div className='flex items-center gap-3'>
+                    <Avatar size='sm'>
                       {m.user.image && <AvatarImage src={m.user.image} alt={m.user.name} />}
                       <AvatarFallback>{getInitials(m.user.name)}</AvatarFallback>
                     </Avatar>
-                    <div className="flex flex-col">
-                      <span className="font-medium text-sm">{m.user.name}</span>
-                      <span className="text-muted-foreground text-xs">{m.user.email}</span>
+                    <div className='flex flex-col'>
+                      <span className='font-medium text-sm'>{m.user.name}</span>
+                      <span className='text-muted-foreground text-xs'>{m.user.email}</span>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={roleBadgeVariant[m.role] ?? 'outline'} className="capitalize">
+                  <Badge variant={roleBadgeVariant[m.role] ?? 'outline'} className='capitalize'>
                     {m.role}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-muted-foreground text-sm">
+                <TableCell className='text-muted-foreground text-sm'>
                   {formatDate(m.createdAt)}
                 </TableCell>
               </TableRow>
@@ -92,23 +92,23 @@ export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
         </Table>
       </div>
 
-      <div className="grid gap-3 md:hidden">
+      <div className='grid gap-3 md:hidden'>
         {members.map((m) => (
-          <Card key={m.id} className="py-4">
-            <CardContent className="flex items-center gap-3 px-4">
+          <Card key={m.id} className='py-4'>
+            <CardContent className='flex items-center gap-3 px-4'>
               <Avatar>
                 {m.user.image && <AvatarImage src={m.user.image} alt={m.user.name} />}
                 <AvatarFallback>{getInitials(m.user.name)}</AvatarFallback>
               </Avatar>
-              <div className="flex min-w-0 flex-1 flex-col">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="truncate font-medium text-sm">{m.user.name}</span>
-                  <Badge variant={roleBadgeVariant[m.role] ?? 'outline'} className="capitalize">
+              <div className='flex min-w-0 flex-1 flex-col'>
+                <div className='flex items-center justify-between gap-2'>
+                  <span className='truncate font-medium text-sm'>{m.user.name}</span>
+                  <Badge variant={roleBadgeVariant[m.role] ?? 'outline'} className='capitalize'>
                     {m.role}
                   </Badge>
                 </div>
-                <span className="truncate text-muted-foreground text-xs">{m.user.email}</span>
-                <span className="text-muted-foreground text-xs">{formatDate(m.createdAt)}</span>
+                <span className='truncate text-muted-foreground text-xs'>{m.user.email}</span>
+                <span className='text-muted-foreground text-xs'>{formatDate(m.createdAt)}</span>
               </div>
             </CardContent>
           </Card>
