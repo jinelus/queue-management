@@ -53,11 +53,12 @@ export async function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
   const membersCount = activeOrg.members?.length ?? 0
   const stats = buildUsageStats(membersCount)
 
-  const [{ members }, [error, data], [analyticsError, analyticsData]] = await Promise.all([
+  const [membersResult, [error, data], [analyticsError, analyticsData]] = await Promise.all([
     listMembers({ organizationSlug: activeOrg.slug, params: { limit: 5 } }),
     listServices(activeOrg.id, { page: 1, perPage: 5 }),
     getAnalyticsData(activeOrg.id),
   ])
+  const members = membersResult.ok ? membersResult.members : []
 
   return (
     <div className="space-y-6">

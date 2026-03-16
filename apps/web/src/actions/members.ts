@@ -52,7 +52,12 @@ export async function listMembers({
   })
 
   if (error || !data) {
-    throw new Error('Failed to load members')
+    return {
+      ok: false as const,
+      error: error?.message ?? 'Failed to load members',
+      members: null,
+      total: 0,
+    }
   }
 
   const total =
@@ -61,6 +66,7 @@ export async function listMembers({
       : data.members.length
 
   return {
+    ok: true as const,
     members: data.members,
     total,
   }

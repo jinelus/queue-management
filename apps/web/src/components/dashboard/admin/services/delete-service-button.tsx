@@ -34,23 +34,33 @@ export function DeleteServiceButton({
 
   function handleDelete() {
     startTransition(async () => {
-      const [error] = await removeService(organizationId, serviceId)
+      try {
+        const [error] = await removeService(organizationId, serviceId)
 
-      if (error) {
+        if (error) {
+          toast.error('Failed to delete service.')
+          return
+        }
+
+        toast.success('Service deleted.')
+        router.refresh()
+      } catch {
         toast.error('Failed to delete service.')
-        return
       }
-
-      toast.success('Service deleted.')
-      router.refresh()
     })
   }
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant='ghost' size='icon' className='text-destructive hover:text-destructive'>
-          <Trash2Icon className='size-4' />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-destructive hover:text-destructive"
+          aria-label={`Delete service ${serviceName}`}
+        >
+          <Trash2Icon className="size-4" />
+          <span className="sr-only">Delete service {serviceName}</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

@@ -36,9 +36,12 @@ export const getServicesStaffByServiceIdsQuery = z.object({
     .union([z.array(z.string()), z.string()])
     .transform((val) => {
       if (typeof val === 'string') {
-        return val.split(',')
+        return val
+          .split(',')
+          .map((id) => id.trim())
+          .filter(Boolean)
       }
-      return val
+      return val.map((id) => id.trim()).filter(Boolean)
     })
     .pipe(z.array(z.string())),
 })
@@ -82,7 +85,8 @@ export class GetServicesStaffByServiceIdsController {
   @ApiQuery({
     name: 'serviceIds',
     description: 'An array of service IDs to retrieve staff for',
-    schema: { type: 'array', items: { type: 'string' } },
+    type: String,
+    isArray: true,
     required: true,
   })
   async handle(
