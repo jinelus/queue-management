@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SearchIcon } from 'lucide-react'
 import { parseAsString, useQueryState } from 'nuqs'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDebouncedCallback } from 'use-debounce'
 import z from 'zod'
@@ -44,21 +44,27 @@ export const SearchInput: FC<SearchInputProps> = ({ placeholder }) => {
     setSearch(data?.search ?? '')
   }
 
+  useEffect(() => {
+    if (search !== form.getValues('search')) {
+      form.setValue('search', search ?? '')
+    }
+  }, [search, form])
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <FormField
           control={form.control}
-          name='search'
+          name="search"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <div className='relative flex items-center gap-2'>
-                  <SearchIcon className='absolute left-3 text-muted-foreground' />
+                <div className="relative flex items-center gap-2">
+                  <SearchIcon className="absolute left-3 text-muted-foreground" />
                   <Input
                     {...field}
                     placeholder={placeholder ?? 'Search...'}
-                    className='pl-10'
+                    className="pl-10"
                     onChange={(e) => {
                       field.onChange(e)
                       debouncedSetSearch(e.target.value)
