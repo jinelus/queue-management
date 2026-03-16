@@ -1,10 +1,9 @@
-import { listUserOrganizations } from "@/lib/current-user"
-import { Route } from "next"
-import { redirect } from "next/navigation"
-import { SyncActiveOrg } from "../sync-active-org"
+import { Route } from 'next'
+import { redirect } from 'next/navigation'
+import { listUserOrganizations } from '@/lib/current-user'
+import { SyncActiveOrg } from '../sync-active-org'
 
-
-export const ListSyncOrganizations = async ({ params }: { params: Promise<{ slug: string }>}) => {
+export const ListSyncOrganizations = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params
   const organizations = await listUserOrganizations()
 
@@ -14,7 +13,5 @@ export const ListSyncOrganizations = async ({ params }: { params: Promise<{ slug
     redirect('/org' as Route)
   }
 
-  return (
-    <SyncActiveOrg slug={slug} />
-  )
+  return <SyncActiveOrg slug={slug} />
 }

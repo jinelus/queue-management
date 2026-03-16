@@ -48,7 +48,20 @@ export type GetAllServicesResponseDtoOutput = {
     updatedAt: string
   }[]
   /**
-   * @type number
+   * @type object
    */
-  total: number
+  meta: {
+    /**
+     * @type number
+     */
+    total: number
+    /**
+     * @type number
+     */
+    totalPages: number
+    /**
+     * @type boolean
+     */
+    hasNext: boolean
+  }
 }

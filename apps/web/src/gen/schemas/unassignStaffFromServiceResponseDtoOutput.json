@@ -1,0 +1,7 @@
+{
+  "type": "object",
+  "properties": { "success": { "type": "boolean" } },
+  "required": ["success"],
+  "additionalProperties": false,
+  "x-readme-ref-name": "UnassignStaffFromServiceResponseDto_Output"
+}

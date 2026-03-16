@@ -11,13 +11,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useIsMobile } from '@/hooks/use-mobile'
 import type { OrgMember } from './owner-dashboard'
 
 type OrgMembersPreviewProps = {
   members: OrgMember[]
 }
-
-const PREVIEW_LIMIT = 5
 
 const roleBadgeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
   owner: 'default',
@@ -43,11 +42,10 @@ function formatDate(date: Date) {
 }
 
 export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
-  const recentMembers = [...members]
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, PREVIEW_LIMIT)
+  const isMobile = useIsMobile()
+  const previewMembers = members
 
-  if (recentMembers.length === 0) {
+  if (members.length === 0) {
     return (
       <div className="rounded-lg border p-8 text-center">
         <h3 className="font-semibold text-lg">No members yet</h3>
@@ -60,8 +58,30 @@ export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
 
   return (
     <div className="space-y-4">
-      {/* Desktop table */}
-      <div className="hidden md:block">
+      {isMobile ? (
+        <div className="grid gap-3">
+          {previewMembers.map((m) => (
+            <Card key={m.id} className="py-4">
+              <CardContent className="flex items-center gap-3 px-4">
+                <Avatar>
+                  {m.user.image && <AvatarImage src={m.user.image} alt={m.user.name} />}
+                  <AvatarFallback>{getInitials(m.user.name)}</AvatarFallback>
+                </Avatar>
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="truncate font-medium text-sm">{m.user.name}</span>
+                    <Badge variant={roleBadgeVariant[m.role] ?? 'outline'} className="capitalize">
+                      {m.role}
+                    </Badge>
+                  </div>
+                  <span className="truncate text-muted-foreground text-xs">{m.user.email}</span>
+                  <span className="text-muted-foreground text-xs">{formatDate(m.createdAt)}</span>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
         <Table>
           <TableHeader>
             <TableRow>
@@ -71,7 +91,7 @@ export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {recentMembers.map((m) => (
+            {previewMembers.map((m) => (
               <TableRow key={m.id}>
                 <TableCell>
                   <div className="flex items-center gap-3">
@@ -97,31 +117,7 @@ export function OrgMembersPreview({ members }: OrgMembersPreviewProps) {
             ))}
           </TableBody>
         </Table>
-      </div>
-
-      {/* Mobile cards */}
-      <div className="grid gap-3 md:hidden">
-        {recentMembers.map((m) => (
-          <Card key={m.id} className="py-4">
-            <CardContent className="flex items-center gap-3 px-4">
-              <Avatar>
-                {m.user.image && <AvatarImage src={m.user.image} alt={m.user.name} />}
-                <AvatarFallback>{getInitials(m.user.name)}</AvatarFallback>
-              </Avatar>
-              <div className="flex min-w-0 flex-1 flex-col">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="truncate font-medium text-sm">{m.user.name}</span>
-                  <Badge variant={roleBadgeVariant[m.role] ?? 'outline'} className="capitalize">
-                    {m.role}
-                  </Badge>
-                </div>
-                <span className="truncate text-muted-foreground text-xs">{m.user.email}</span>
-                <span className="text-muted-foreground text-xs">{formatDate(m.createdAt)}</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      )}
     </div>
   )
 }

@@ -14,7 +14,8 @@ interface GetHistoricalStatsServiceParams {
 type GetHistoricalStatsServiceResponse = Either<
   NotAllowedError,
   {
-    servedTicketsByDay: { date: string; count: number }[]
+    servedTicketsByDay: { day: string; served: number; queue: number }[]
+    averageWaitTime: { day: string; time: number }[]
     avgDurationByEmployee: {
       employeeId: string
       employeeName: string
@@ -47,13 +48,15 @@ export class GetHistoricalStatsService {
     const requestedDays = Number.isFinite(days) ? days : 7
     const normalizedDays = Math.max(1, Math.min(requestedDays, 365))
 
-    const [servedTicketsByDay, avgDurationByEmployee] = await Promise.all([
+    const [servedTicketsByDay, averageWaitTime, avgDurationByEmployee] = await Promise.all([
       this.ticketRepository.getServedTicketsCountByDay(organizationId, normalizedDays),
+      this.ticketRepository.getAverageWaitTimeByDay(organizationId, normalizedDays),
       this.ticketRepository.getAverageServiceDuration(organizationId),
     ])
 
     return right({
       servedTicketsByDay,
+      averageWaitTime,
       avgDurationByEmployee,
     })
   }

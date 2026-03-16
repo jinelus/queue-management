@@ -1042,6 +1042,61 @@
         "tags": ["Service Staff"]
       }
     },
+    "/organizations/{organizationId}/service-staff/by-service-ids": {
+      "get": {
+        "description": "Retrieve all staff members assigned to multiple services at once within an organization.",
+        "operationId": "GetServicesStaffByServiceIdsController",
+        "parameters": [
+          {
+            "name": "serviceIds",
+            "required": true,
+            "in": "query",
+            "description": "An array of service IDs to retrieve staff for",
+            "schema": { "items": { "type": "string" } }
+          },
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with service staff details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetServicesStaffByServiceIdsResponseDto_Output"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Get services staff by service IDs",
+        "tags": ["Service Staff"]
+      }
+    },
     "/organizations/{organizationId}/service-staff/{serviceStaffId}/status": {
       "patch": {
         "description": "Toggle the online status or close counter mode for a staff member assignment.",
@@ -1087,6 +1142,14 @@
               }
             }
           },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BadRequestErrorDto" }
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -1107,9 +1170,65 @@
         "tags": ["Service Staff"]
       }
     },
+    "/organizations/{organizationId}/service-staff/unassign": {
+      "patch": {
+        "description": "Remove a staff member assignment from a service within an organization.",
+        "operationId": "UnassignStaffFromServiceController",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": true,
+            "in": "path",
+            "description": "The unique identifier of the organization",
+            "schema": {
+              "format": "ulid",
+              "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UnassignStaffFromServiceBodyDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response confirming staff was unassigned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnassignStaffFromServiceResponseDto_Output"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnauthorizedErrorDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Unassign staff from a service",
+        "tags": ["Service Staff"]
+      }
+    },
     "/organizations/{organizationId}/analytics": {
       "get": {
-        "description": "Retrieve served tickets count and average service duration.",
+        "description": "Retrieve served vs queue volume, average wait time, and average service duration.",
         "operationId": "GetAnalyticsController",
         "parameters": [
           {
@@ -1412,9 +1531,18 @@
               "additionalProperties": false
             }
           },
-          "total": { "type": "number" }
+          "meta": {
+            "type": "object",
+            "properties": {
+              "total": { "type": "number" },
+              "totalPages": { "type": "number" },
+              "hasNext": { "type": "boolean" }
+            },
+            "required": ["total", "totalPages", "hasNext"],
+            "additionalProperties": false
+          }
         },
-        "required": ["services", "total"],
+        "required": ["services", "meta"],
         "additionalProperties": false
       },
       "ToggleServiceStatusBodyDto": {
@@ -1865,6 +1993,63 @@
         "required": ["servicesStaff"],
         "additionalProperties": false
       },
+      "GetServicesStaffByServiceIdsResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "servicesStaff": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "userId": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "serviceId": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "active": { "type": "boolean" },
+                "isOnline": { "type": "boolean" },
+                "isCounterClosed": { "type": "boolean" }
+              },
+              "required": ["id", "userId", "serviceId"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["servicesStaff"],
+        "additionalProperties": false
+      },
+      "BadRequestErrorDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "number", "const": 400 },
+          "message": { "type": "string" },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": { "type": "string" },
+                "expected": { "type": "string" },
+                "received": { "type": "string" },
+                "path": { "type": "array", "items": { "type": "string" } },
+                "message": { "type": "string" }
+              },
+              "required": ["code", "expected", "received", "path", "message"]
+            }
+          }
+        },
+        "required": ["statusCode", "message"]
+      },
       "ToggleStaffStatusBodyDto": {
         "type": "object",
         "properties": {
@@ -1904,6 +2089,28 @@
         "required": ["serviceStaff"],
         "additionalProperties": false
       },
+      "UnassignStaffFromServiceBodyDto": {
+        "type": "object",
+        "properties": {
+          "serviceId": {
+            "type": "string",
+            "format": "ulid",
+            "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+          },
+          "staffId": {
+            "type": "string",
+            "format": "ulid",
+            "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+          }
+        },
+        "required": ["serviceId", "staffId"]
+      },
+      "UnassignStaffFromServiceResponseDto_Output": {
+        "type": "object",
+        "properties": { "success": { "type": "boolean" } },
+        "required": ["success"],
+        "additionalProperties": false
+      },
       "GetAnalyticsResponseDto_Output": {
         "type": "object",
         "properties": {
@@ -1911,8 +2118,21 @@
             "type": "array",
             "items": {
               "type": "object",
-              "properties": { "date": { "type": "string" }, "count": { "type": "number" } },
-              "required": ["date", "count"],
+              "properties": {
+                "day": { "type": "string" },
+                "served": { "type": "number" },
+                "queue": { "type": "number" }
+              },
+              "required": ["day", "served", "queue"],
+              "additionalProperties": false
+            }
+          },
+          "averageWaitTime": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": { "day": { "type": "string" }, "time": { "type": "number" } },
+              "required": ["day", "time"],
               "additionalProperties": false
             }
           },
@@ -1930,7 +2150,7 @@
             }
           }
         },
-        "required": ["servedTicketsByDay", "avgDurationByEmployee"],
+        "required": ["servedTicketsByDay", "averageWaitTime", "avgDurationByEmployee"],
         "additionalProperties": false
       },
       "GetDashboardSummaryResponseDto_Output": {

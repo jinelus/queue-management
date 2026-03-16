@@ -9,40 +9,32 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 
-// ── Fictitious data ──────────────────────────────────────────────────
+type QueueTrendData = {
+  day: string
+  queue: number
+  served: number
+}
 
-const queueTrendData = [
-  { day: 'Mon', queued: 42, served: 38 },
-  { day: 'Tue', queued: 55, served: 50 },
-  { day: 'Wed', queued: 61, served: 58 },
-  { day: 'Thu', queued: 48, served: 45 },
-  { day: 'Fri', queued: 73, served: 68 },
-  { day: 'Sat', queued: 35, served: 30 },
-  { day: 'Sun', queued: 20, served: 18 },
-]
+type AvgWaitData = {
+  day: string
+  time: number
+}
 
-const avgWaitData = [
-  { day: 'Mon', minutes: 12 },
-  { day: 'Tue', minutes: 15 },
-  { day: 'Wed', minutes: 10 },
-  { day: 'Thu', minutes: 18 },
-  { day: 'Fri', minutes: 22 },
-  { day: 'Sat', minutes: 8 },
-  { day: 'Sun', minutes: 6 },
-]
+interface OrgAnalyticsChartsProps {
+  queueTrendData: QueueTrendData[]
+  avgWaitData: AvgWaitData[]
+}
 
 const queueChartConfig = {
-  queued: { label: 'Queued', color: 'var(--chart-1)' },
+  queue: { label: 'Queue', color: 'var(--chart-1)' },
   served: { label: 'Served', color: 'var(--chart-2)' },
 } satisfies ChartConfig
 
 const waitChartConfig = {
-  minutes: { label: 'Avg wait (min)', color: 'var(--chart-3)' },
+  time: { label: 'Avg wait (min)', color: 'var(--chart-3)' },
 } satisfies ChartConfig
 
-// ── Component ────────────────────────────────────────────────────────
-
-export function OrgAnalyticsCharts() {
+export function OrgAnalyticsCharts({ queueTrendData, avgWaitData }: OrgAnalyticsChartsProps) {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       <Card>
@@ -57,11 +49,11 @@ export function OrgAnalyticsCharts() {
               <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Area
-                dataKey="queued"
+                dataKey="queue"
                 type="monotone"
-                fill="var(--color-queued)"
+                fill="var(--color-queue)"
                 fillOpacity={0.15}
-                stroke="var(--color-queued)"
+                stroke="var(--color-queue)"
                 strokeWidth={2}
               />
               <Area
@@ -88,7 +80,7 @@ export function OrgAnalyticsCharts() {
               <CartesianGrid vertical={false} />
               <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} />
               <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="minutes" fill="var(--color-minutes)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="time" fill="var(--color-time)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ChartContainer>
         </CardContent>

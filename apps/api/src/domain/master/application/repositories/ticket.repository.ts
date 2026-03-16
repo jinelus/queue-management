@@ -16,7 +16,11 @@ export abstract class TicketRepository extends Repository<Ticket> {
   abstract getServedTicketsCountByDay(
     organizationId: string,
     days: number,
-  ): Promise<{ date: string; count: number }[]>
+  ): Promise<{ day: string; served: number; queue: number }[]>
+  abstract getAverageWaitTimeByDay(
+    organizationId: string,
+    days: number,
+  ): Promise<{ day: string; time: number }[]>
   abstract getAverageServiceDuration(
     organizationId: string,
   ): Promise<{ employeeId: string; employeeName: string; avgDuration: number }[]>

@@ -23,7 +23,7 @@ function getGetAnalyticsControllerUrl(
 }
 
 /**
- * @description Retrieve served tickets count and average service duration.
+ * @description Retrieve served vs queue volume, average wait time, and average service duration.
  * @summary Get historical analytics
  * {@link /organizations/:organizationId/analytics}
  */

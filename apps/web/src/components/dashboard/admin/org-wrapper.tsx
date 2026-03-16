@@ -1,45 +1,29 @@
-import { authClient } from "@/lib/auth-client"
-import { getCurrentUser } from "@/lib/current-user"
-import { Permission } from "@/components/auth/permission"
-import { OwnerDashboard } from "./owner-dashboard"
-import { MemberDashboard } from "../member/member-dashboard"
-import { headers } from "next/headers"
-
+import { getCurrentMember } from '@/actions/members'
+import { Permission } from '@/components/auth/permission'
+import { MemberDashboard } from '../member/member-dashboard'
+import { OwnerDashboard } from './owner-dashboard'
 
 export const OrgWrapper = async ({ params }: PageProps<'/[slug]'>) => {
   const { slug } = await params
 
-  const user = await getCurrentUser()
-  const { data: activeOrg } = await authClient.organization.getFullOrganization({
-    query: {
-        organizationSlug: slug
-    },
-    fetchOptions: {
-        headers: await headers()
-    }
-  })
+  const { member, organization } = await getCurrentMember({ organizationSlug: slug })
 
-  if (!activeOrg) {
-    return (<div className="p-4">
-      <p className="text-sm text-muted-foreground">Organization not found.</p>
-    </div>
+  if (!organization) {
+    return (
+      <div className='p-4'>
+        <p className='text-muted-foreground text-sm'>Organization not found.</p>
+      </div>
     )
   }
 
-
-  const currentMember = activeOrg?.members?.find(
-    (m: { userId: string }) => m.userId === user?.id,
-  )
-  const memberRole = currentMember?.role
-
   return (
-    <div className="space-y-4">
-      <Permission role={memberRole} allowRoles={['owner', 'admin']}>
-        <OwnerDashboard activeOrg={activeOrg} />
+    <div className='space-y-4'>
+      <Permission role={member?.role} allowRoles={['owner', 'admin']}>
+        <OwnerDashboard activeOrg={organization} />
       </Permission>
 
-      <Permission role={memberRole} allowRoles={['member']}>
-        <MemberDashboard role={memberRole} organizationName={activeOrg?.name} />
+      <Permission role={member?.role} allowRoles={['member']}>
+        <MemberDashboard role={member?.role} organizationName={organization?.name} />
       </Permission>
     </div>
   )

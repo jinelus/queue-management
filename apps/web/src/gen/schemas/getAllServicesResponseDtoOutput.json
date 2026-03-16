@@ -27,9 +27,18 @@
         "additionalProperties": false
       }
     },
-    "total": { "type": "number" }
+    "meta": {
+      "type": "object",
+      "properties": {
+        "total": { "type": "number" },
+        "totalPages": { "type": "number" },
+        "hasNext": { "type": "boolean" }
+      },
+      "required": ["total", "totalPages", "hasNext"],
+      "additionalProperties": false
+    }
   },
-  "required": ["services", "total"],
+  "required": ["services", "meta"],
   "additionalProperties": false,
   "x-readme-ref-name": "GetAllServicesResponseDto_Output"
 }

@@ -1,7 +1,9 @@
 import { ArrowLeftIcon, UserPlusIcon } from 'lucide-react'
 import { Route } from 'next'
-import { headers } from 'next/headers'
 import Link from 'next/link'
+import { listMembers } from '@/actions/members'
+import { loadMembersSearchParams } from '@/app/(private)/[slug]/members/search-params'
+import { QueryPagination } from '@/components/custom/pagination'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -14,7 +16,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { authClient } from '@/lib/auth-client'
 import { formatDate, getInitials } from '@/utils/format'
 
 const roleBadgeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
@@ -26,31 +27,28 @@ const roleBadgeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
 export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
   const { slug } = await props.params
 
-  const { data, error } = await authClient.organization.listMembers({
-    query: {
-      limit: 100,
-      offset: 0,
-      sortBy: 'createdAt',
-      sortDirection: 'desc',
-      organizationSlug: slug,
-    },
-    fetchOptions: {
-      headers: await headers(),
+  const { page, perPage, q } = await loadMembersSearchParams(props.searchParams)
+
+  const membersResult = await listMembers({
+    organizationSlug: slug,
+    params: {
+      limit: perPage ?? 10,
+      offset: (page - 1) * (perPage ?? 10),
+      q,
     },
   })
 
-  if (error || !data) {
+  if (!membersResult.ok) {
     return (
-      <div className="rounded-lg border p-8 text-center">
-        <h3 className="font-semibold text-lg">Failed to load members</h3>
-        <p className="mt-1 text-muted-foreground text-sm">
-          There was an error loading the members. Please try again later.
-        </p>
+      <div className="p-4">
+        <p className="text-muted-foreground text-sm">{membersResult.error}</p>
       </div>
     )
   }
 
-  const { members } = data
+  const { members, total } = membersResult
+
+  const totalPages = Math.ceil(total / (perPage ?? 10))
 
   return (
     <div className="space-y-6">
@@ -64,7 +62,7 @@ export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
           <div>
             <h1 className="font-semibold text-2xl">Members</h1>
             <p className="text-muted-foreground text-sm">
-              {members.length} {members.length === 1 ? 'member' : 'members'}
+              {total} {total === 1 ? 'member' : 'members'}
             </p>
           </div>
         </div>
@@ -143,6 +141,8 @@ export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
           </p>
         </div>
       )}
+
+      <QueryPagination totalPages={totalPages} />
     </div>
   )
 }

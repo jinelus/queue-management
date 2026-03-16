@@ -38,6 +38,7 @@ export function CreateOrganizationDialog({ trigger }: CreateOrganizationDialogPr
     defaultValues: {
       name: '',
     },
+    mode: 'onChange',
   })
 
   const [open, setOpen] = useState(false)
@@ -82,20 +83,20 @@ export function CreateOrganizationDialog({ trigger }: CreateOrganizationDialogPr
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
             <FormField
               control={form.control}
-              name="name"
+              name='name'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Organization name</FormLabel>
-                  <Input {...field} placeholder="My organization" />
+                  <Input {...field} placeholder='My organization' />
                 </FormItem>
               )}
             />
             <DialogFooter>
               <Button
-                type="submit"
+                type='submit'
                 disabled={form.formState.isSubmitting || !form.formState.isValid}
               >
                 {form.formState.isSubmitting ? 'Creating...' : 'Create organization'}

@@ -1,6 +1,9 @@
 import { ArrowRightIcon, LayoutDashboard, Settings, Shield, Users } from 'lucide-react'
 import { Route } from 'next'
 import Link from 'next/link'
+import { getAnalyticsData } from '@/actions/analytics/get'
+import { listMembers } from '@/actions/members'
+import { listServices } from '@/actions/services'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -8,6 +11,7 @@ import { OrgAnalyticsCharts } from './org-analytics-charts'
 import { OrgHeader } from './org-header'
 import { OrgMembersPreview } from './org-members-preview'
 import { OrgOverview } from './org-overview'
+import { OrgServicesPreview } from './org-services-preview'
 import { OrgUsageStats } from './org-usage-stats'
 
 export type OrgMember = {
@@ -45,9 +49,16 @@ function buildUsageStats(membersCount: number) {
   ]
 }
 
-export function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
+export async function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
   const membersCount = activeOrg.members?.length ?? 0
   const stats = buildUsageStats(membersCount)
+
+  const [membersResult, [error, data], [analyticsError, analyticsData]] = await Promise.all([
+    listMembers({ organizationSlug: activeOrg.slug, params: { limit: 5 } }),
+    listServices(activeOrg.id, { page: 1, perPage: 5 }),
+    getAnalyticsData(activeOrg.id),
+  ])
+  const members = membersResult.ok ? membersResult.members : []
 
   return (
     <div className="space-y-6">
@@ -60,7 +71,16 @@ export function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
 
       <Separator />
 
-      <OrgAnalyticsCharts />
+      {analyticsError || !analyticsData ? (
+        <div className="p-4">
+          <p className="text-muted-foreground text-sm">Failed to load analytics data.</p>
+        </div>
+      ) : (
+        <OrgAnalyticsCharts
+          queueTrendData={analyticsData.servedTicketsByDay}
+          avgWaitData={analyticsData.averageWaitTime}
+        />
+      )}
 
       <Separator />
 
@@ -74,9 +94,9 @@ export function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
             <Users className="size-4" />
             Members
           </TabsTrigger>
-          <TabsTrigger value="access">
+          <TabsTrigger value="services">
             <Shield className="size-4" />
-            Access
+            Services
           </TabsTrigger>
           <TabsTrigger value="settings">
             <Settings className="size-4" />
@@ -105,14 +125,27 @@ export function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
               </Button>
             </div>
           </div>
-          <OrgMembersPreview members={activeOrg.members ?? []} />
+          <OrgMembersPreview members={members} />
         </TabsContent>
 
-        <TabsContent value="access" className="mt-6">
-          <PlaceholderSection
-            title="Access"
-            description="Role-based access control settings will appear here."
-          />
+        <TabsContent value="services" className="mt-6">
+          <div>
+            <div className="flex w-full justify-end">
+              <Button variant="outline" size="sm" asChild>
+                <Link href={`/${activeOrg.slug}/services` as Route}>
+                  Manage services
+                  <ArrowRightIcon />
+                </Link>
+              </Button>
+            </div>
+          </div>
+          {error || !data ? (
+            <div className="p-4">
+              <p className="text-muted-foreground text-sm">Failed to load services.</p>
+            </div>
+          ) : (
+            <OrgServicesPreview services={data.services} />
+          )}
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6">

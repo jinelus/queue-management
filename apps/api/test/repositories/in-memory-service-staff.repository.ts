@@ -48,4 +48,8 @@ export class InMemoryServiceStaffRepository implements ServiceStaffRepository {
     )
     return serviceStaff || null
   }
+
+  async findByServiceIds(serviceIds: string[], _organizationId: string): Promise<ServiceStaff[]> {
+    return this.items.filter((item) => serviceIds.includes(item.serviceId))
+  }
 }

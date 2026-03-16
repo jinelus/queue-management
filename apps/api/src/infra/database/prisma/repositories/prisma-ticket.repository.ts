@@ -126,26 +126,87 @@ export class PrismaTicketRepository implements TicketRepository {
   async getServedTicketsCountByDay(
     organizationId: string,
     days: number,
-  ): Promise<{ date: string; count: number }[]> {
+  ): Promise<{ day: string; served: number; queue: number }[]> {
     const startDate = new Date()
     startDate.setHours(0, 0, 0, 0)
     startDate.setDate(startDate.getDate() - (days - 1))
 
-    const results = await this.prisma.$queryRaw<{ date: Date; count: number }[]>`
+    const results = await this.prisma.$queryRaw<{ date: Date; served: number; queue: number }[]>`
+      WITH days AS (
+        SELECT generate_series(${startDate}::date, CURRENT_DATE, '1 day'::interval)::date AS day
+      ),
+      served AS (
+        SELECT
+          "completedAt"::date AS day,
+          COUNT(*)::int AS served
+        FROM "ticket"
+        WHERE "organizationId" = ${organizationId}
+          AND "status" = 'SERVED'
+          AND "completedAt" >= ${startDate}
+        GROUP BY "completedAt"::date
+      ),
+      queued AS (
+        SELECT
+          "joinedAt"::date AS day,
+          COUNT(*)::int AS queue
+        FROM "ticket"
+        WHERE "organizationId" = ${organizationId}
+          AND "joinedAt" >= ${startDate}
+        GROUP BY "joinedAt"::date
+      )
       SELECT
-        "completedAt"::date as date,
-        COUNT(*)::int as count
-      FROM "ticket"
-      WHERE "organizationId" = ${organizationId}
-        AND "status" = 'SERVED'
-        AND "completedAt" >= ${startDate}
-      GROUP BY "completedAt"::date
-      ORDER BY "completedAt"::date ASC
+        d.day AS date,
+        COALESCE(s.served, 0)::int AS served,
+        COALESCE(q.queue, 0)::int AS queue
+      FROM days d
+      LEFT JOIN served s ON s.day = d.day
+      LEFT JOIN queued q ON q.day = d.day
+      ORDER BY d.day ASC
     `
 
     return results.map((r) => ({
-      date: r.date instanceof Date ? r.date.toISOString().split('T')[0] : r.date,
-      count: Number(r.count),
+      day: new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(new Date(r.date)),
+      served: Number(r.served),
+      queue: Number(r.queue),
+    }))
+  }
+
+  async getAverageWaitTimeByDay(
+    organizationId: string,
+    days: number,
+  ): Promise<{ day: string; time: number }[]> {
+    const startDate = new Date()
+    startDate.setHours(0, 0, 0, 0)
+    startDate.setDate(startDate.getDate() - (days - 1))
+
+    const results = await this.prisma.$queryRaw<{ date: Date; time: number }[]>`
+      WITH days AS (
+        SELECT generate_series(${startDate}::date, CURRENT_DATE, '1 day'::interval)::date AS day
+      ),
+      avg_wait AS (
+        SELECT
+          "completedAt"::date AS day,
+          AVG(EXTRACT(EPOCH FROM ("startedAt" - "joinedAt")) / 60.0)::float AS time
+        FROM "ticket"
+        WHERE "organizationId" = ${organizationId}
+          AND "status" = 'SERVED'
+          AND "startedAt" IS NOT NULL
+          AND "joinedAt" IS NOT NULL
+          AND "completedAt" IS NOT NULL
+          AND "completedAt" >= ${startDate}
+        GROUP BY "completedAt"::date
+      )
+      SELECT
+        d.day AS date,
+        COALESCE(a.time, 0)::float AS time
+      FROM days d
+      LEFT JOIN avg_wait a ON a.day = d.day
+      ORDER BY d.day ASC
+    `
+
+    return results.map((r) => ({
+      day: new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(new Date(r.date)),
+      time: Math.round(Number(r.time)),
     }))
   }
 
