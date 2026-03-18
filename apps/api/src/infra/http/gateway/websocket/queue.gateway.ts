@@ -8,8 +8,11 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets'
+import { env } from '@repo/env'
 import { AllowAnonymous, AuthGuard, OptionalAuth } from '@thallesp/nestjs-better-auth'
 import { Server, Socket } from 'socket.io'
+import { OrganizationRepository } from '@/domain/master/application/repositories/organization.repository'
+import { TicketRepository } from '@/domain/master/application/repositories/ticket.repository'
 import { CallNextWithRetryService } from '@/domain/master/application/services/ticket/call-next-with-retry.service'
 import { CreateTicketService } from '@/domain/master/application/services/ticket/create-ticket.service'
 import { LeaveQueueService } from '@/domain/master/application/services/ticket/leave-queue.service'
@@ -18,7 +21,7 @@ import { WebSocketBroadcaster } from './websocket-broadcaster.service'
 
 @WebSocketGateway({
   namespace: 'queue',
-  cors: { origin: '*' },
+  cors: { origin: env.WEBSOCKET_ORIGIN },
 })
 @UseGuards(AuthGuard)
 @Injectable()
@@ -33,6 +36,8 @@ export class QueueGateway
     private readonly leaveQueueService: LeaveQueueService,
     private readonly callNextWithRetryService: CallNextWithRetryService,
     private readonly broadcaster: WebSocketBroadcaster,
+    private readonly organizationRepository: OrganizationRepository,
+    private readonly ticketRepository: TicketRepository,
   ) {}
 
   onModuleInit() {
@@ -53,6 +58,20 @@ export class QueueGateway
   async handleConnection(client: Socket) {
     const orgId = client.handshake.query.orgId as string
     const ticketId = client.handshake.query.ticketId as string
+
+    const organization = await this.organizationRepository.findById(orgId)
+    if (!organization) {
+      Logger.warn(`[Queue] Connection attempt with invalid orgId: ${orgId}`)
+      client.disconnect(true)
+      return
+    }
+
+    const ticket = await this.ticketRepository.findById(ticketId)
+    if (ticketId && !ticket) {
+      Logger.warn(`[Queue] Connection attempt with invalid ticketId: ${ticketId}`)
+      client.disconnect(true)
+      return
+    }
 
     Logger.log(`[Queue] Joining rooms - Org: ${orgId}, Ticket: ${ticketId}`)
 

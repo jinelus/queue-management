@@ -15,6 +15,7 @@ type GetEnv<T extends keyof typeof env> = PathValue<
     REDIS_URL?: string
     BACKEND_URL?: string
     NEXT_PUBLIC_FRONT_END_URL?: string
+    WEBSOCKET_ORIGIN: string
   },
   T
 >
