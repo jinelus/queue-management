@@ -1,8 +1,7 @@
-'use server'
-
 import { headers } from 'next/headers'
 import { authClient } from '@/lib/auth-client'
 import { getCurrentUser } from '@/lib/current-user'
+import 'server-only'
 
 export async function getCurrentMember({ organizationSlug }: { organizationSlug: string }) {
   const user = await getCurrentUser()
