@@ -4,7 +4,7 @@ import { Trash2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
-import { removeService } from '@/actions/services'
+import { removeService } from '@/actions/services/mutations'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -54,13 +54,13 @@ export function DeleteServiceButton({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          variant="ghost"
-          size="icon"
-          className="text-destructive hover:text-destructive"
+          variant='ghost'
+          size='icon'
+          className='text-destructive hover:text-destructive'
           aria-label={`Delete service ${serviceName}`}
         >
-          <Trash2Icon className="size-4" />
-          <span className="sr-only">Delete service {serviceName}</span>
+          <Trash2Icon className='size-4' />
+          <span className='sr-only'>Delete service {serviceName}</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, UserPlusIcon } from 'lucide-react'
 import { Route } from 'next'
 import Link from 'next/link'
-import { listMembers } from '@/actions/members'
+import { listMembers } from '@/actions/members/get'
 import { loadMembersSearchParams } from '@/app/(private)/[slug]/members/search-params'
 import { QueryPagination } from '@/components/custom/pagination'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -40,8 +40,8 @@ export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
 
   if (!membersResult.ok) {
     return (
-      <div className="p-4">
-        <p className="text-muted-foreground text-sm">{membersResult.error}</p>
+      <div className='p-4'>
+        <p className='text-muted-foreground text-sm'>{membersResult.error}</p>
       </div>
     )
   }
@@ -51,28 +51,28 @@ export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
   const totalPages = Math.ceil(total / (perPage ?? 10))
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
+    <div className='space-y-6'>
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center gap-3'>
+          <Button variant='ghost' size='icon' asChild>
             <Link href={`/${slug}` as Route}>
               <ArrowLeftIcon />
             </Link>
           </Button>
           <div>
-            <h1 className="font-semibold text-2xl">Members</h1>
-            <p className="text-muted-foreground text-sm">
+            <h1 className='font-semibold text-2xl'>Members</h1>
+            <p className='text-muted-foreground text-sm'>
               {total} {total === 1 ? 'member' : 'members'}
             </p>
           </div>
         </div>
-        <Button size="sm">
+        <Button size='sm'>
           <UserPlusIcon />
           Invite member
         </Button>
       </div>
 
-      <div className="hidden md:block">
+      <div className='hidden md:block'>
         <Table>
           <TableHeader>
             <TableRow>
@@ -85,23 +85,23 @@ export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
             {members.map((m) => (
               <TableRow key={m.id}>
                 <TableCell>
-                  <div className="flex items-center gap-3">
-                    <Avatar size="sm">
+                  <div className='flex items-center gap-3'>
+                    <Avatar size='sm'>
                       {m.user.image && <AvatarImage src={m.user.image} alt={m.user.name} />}
                       <AvatarFallback>{getInitials(m.user.name)}</AvatarFallback>
                     </Avatar>
-                    <div className="flex flex-col">
-                      <span className="font-medium text-sm">{m.user.name}</span>
-                      <span className="text-muted-foreground text-xs">{m.user.email}</span>
+                    <div className='flex flex-col'>
+                      <span className='font-medium text-sm'>{m.user.name}</span>
+                      <span className='text-muted-foreground text-xs'>{m.user.email}</span>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={roleBadgeVariant[m.role] ?? 'outline'} className="capitalize">
+                  <Badge variant={roleBadgeVariant[m.role] ?? 'outline'} className='capitalize'>
                     {m.role}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-muted-foreground text-sm">
+                <TableCell className='text-muted-foreground text-sm'>
                   {formatDate(m.createdAt)}
                 </TableCell>
               </TableRow>
@@ -110,23 +110,23 @@ export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
         </Table>
       </div>
 
-      <div className="grid gap-3 md:hidden">
+      <div className='grid gap-3 md:hidden'>
         {members.map((m) => (
-          <Card key={m.id} className="py-4">
-            <CardContent className="flex items-center gap-3 px-4">
+          <Card key={m.id} className='py-4'>
+            <CardContent className='flex items-center gap-3 px-4'>
               <Avatar>
                 {m.user.image && <AvatarImage src={m.user.image} alt={m.user.name} />}
                 <AvatarFallback>{getInitials(m.user.name)}</AvatarFallback>
               </Avatar>
-              <div className="flex min-w-0 flex-1 flex-col">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="truncate font-medium text-sm">{m.user.name}</span>
-                  <Badge variant={roleBadgeVariant[m.role] ?? 'outline'} className="capitalize">
+              <div className='flex min-w-0 flex-1 flex-col'>
+                <div className='flex items-center justify-between gap-2'>
+                  <span className='truncate font-medium text-sm'>{m.user.name}</span>
+                  <Badge variant={roleBadgeVariant[m.role] ?? 'outline'} className='capitalize'>
                     {m.role}
                   </Badge>
                 </div>
-                <span className="truncate text-muted-foreground text-xs">{m.user.email}</span>
-                <span className="text-muted-foreground text-xs">{formatDate(m.createdAt)}</span>
+                <span className='truncate text-muted-foreground text-xs'>{m.user.email}</span>
+                <span className='text-muted-foreground text-xs'>{formatDate(m.createdAt)}</span>
               </div>
             </CardContent>
           </Card>
@@ -134,9 +134,9 @@ export const ManageMembers = async (props: PageProps<'/[slug]/members'>) => {
       </div>
 
       {members.length === 0 && (
-        <div className="rounded-lg border p-8 text-center">
-          <h3 className="font-semibold text-lg">No members yet</h3>
-          <p className="mt-1 text-muted-foreground text-sm">
+        <div className='rounded-lg border p-8 text-center'>
+          <h3 className='font-semibold text-lg'>No members yet</h3>
+          <p className='mt-1 text-muted-foreground text-sm'>
             Invite members to get started with your organization.
           </p>
         </div>
