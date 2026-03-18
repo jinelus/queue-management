@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
-import { toggleService } from '@/actions/services'
+import { toggleService } from '@/actions/services/mutations'
 import { Switch } from '@/components/ui/switch'
 
 type ServiceToggleProps = {
@@ -18,15 +18,19 @@ export function ServiceToggle({ organizationId, serviceId, isActive }: ServiceTo
 
   function handleToggle(checked: boolean) {
     startTransition(async () => {
-      const [error] = await toggleService(organizationId, serviceId, { isActive: checked })
+      try {
+        const [error] = await toggleService(organizationId, serviceId, { isActive: checked })
 
-      if (error) {
+        if (error) {
+          toast.error('Failed to toggle service status.')
+          return
+        }
+
+        toast.success(`Service ${checked ? 'activated' : 'deactivated'}.`)
+        router.refresh()
+      } catch {
         toast.error('Failed to toggle service status.')
-        return
       }
-
-      toast.success(`Service ${checked ? 'activated' : 'deactivated'}.`)
-      router.refresh()
     })
   }
 
