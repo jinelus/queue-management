@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
-import { addService } from '@/actions/services'
+import { addService } from '@/actions/services/mutations'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -77,7 +77,7 @@ export function CreateServiceDialog({ organizationId }: CreateServiceDialogProps
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">
+        <Button size='sm'>
           <PlusIcon />
           Add service
         </Button>
@@ -88,54 +88,54 @@ export function CreateServiceDialog({ organizationId }: CreateServiceDialogProps
           <DialogDescription>Add a new service to your organization.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
             <FormField
               control={form.control}
-              name="name"
+              name='name'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
-                  <Input {...field} placeholder="e.g. General Consultation" />
+                  <Input {...field} placeholder='e.g. General Consultation' />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="description"
+              name='description'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
-                  <Textarea {...field} placeholder="Optional description" />
+                  <Textarea {...field} placeholder='Optional description' />
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-4">
+            <div className='grid grid-cols-2 gap-4'>
               <FormField
                 control={form.control}
-                name="maxCapacity"
+                name='maxCapacity'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Max capacity</FormLabel>
                     <Input
                       {...field}
-                      type="number"
+                      type='number'
                       onChange={field.onChange}
-                      placeholder="e.g. 50"
+                      placeholder='e.g. 50'
                     />
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
-                name="avgDurationInt"
+                name='avgDurationInt'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Avg duration (min)</FormLabel>
                     <Input
                       {...field}
-                      type="number"
+                      type='number'
                       onChange={field.onChange}
-                      placeholder="e.g. 15"
+                      placeholder='e.g. 15'
                     />
                   </FormItem>
                 )}
@@ -143,7 +143,7 @@ export function CreateServiceDialog({ organizationId }: CreateServiceDialogProps
             </div>
             <DialogFooter>
               <Button
-                type="submit"
+                type='submit'
                 disabled={form.formState.isSubmitting || !form.formState.isValid}
               >
                 {form.formState.isSubmitting ? 'Creating...' : 'Create service'}

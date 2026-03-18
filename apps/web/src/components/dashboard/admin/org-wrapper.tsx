@@ -1,4 +1,4 @@
-import { getCurrentMember } from '@/actions/members'
+import { getCurrentMember } from '@/actions/members/get'
 import { Permission } from '@/components/auth/permission'
 import { MemberDashboard } from '../member/member-dashboard'
 import { OwnerDashboard } from './owner-dashboard'
@@ -10,20 +10,20 @@ export const OrgWrapper = async ({ params }: PageProps<'/[slug]'>) => {
 
   if (!organization) {
     return (
-      <div className='p-4'>
-        <p className='text-muted-foreground text-sm'>Organization not found.</p>
+      <div className="p-4">
+        <p className="text-muted-foreground text-sm">Organization not found.</p>
       </div>
     )
   }
 
   return (
-    <div className='space-y-4'>
+    <div className="space-y-4">
       <Permission role={member?.role} allowRoles={['owner', 'admin']}>
         <OwnerDashboard activeOrg={organization} />
       </Permission>
 
       <Permission role={member?.role} allowRoles={['member']}>
-        <MemberDashboard role={member?.role} organizationName={organization?.name} />
+        <MemberDashboard organizationId={organization.id} organizationName={organization.name} />
       </Permission>
     </div>
   )
