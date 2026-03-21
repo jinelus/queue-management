@@ -9,13 +9,14 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets'
 import { env } from '@repo/env'
-import { AllowAnonymous, AuthGuard, OptionalAuth } from '@thallesp/nestjs-better-auth'
+import { AllowAnonymous, AuthGuard } from '@thallesp/nestjs-better-auth'
 import { Server, Socket } from 'socket.io'
 import { OrganizationRepository } from '@/domain/master/application/repositories/organization.repository'
 import { TicketRepository } from '@/domain/master/application/repositories/ticket.repository'
 import { CallNextWithRetryService } from '@/domain/master/application/services/ticket/call-next-with-retry.service'
 import { CreateTicketService } from '@/domain/master/application/services/ticket/create-ticket.service'
 import { LeaveQueueService } from '@/domain/master/application/services/ticket/leave-queue.service'
+import { Ticket } from '@/domain/master/entreprise/entities/ticket'
 import * as queueTypes from './queue.types'
 import { WebSocketBroadcaster } from './websocket-broadcaster.service'
 
@@ -66,11 +67,14 @@ export class QueueGateway
       return
     }
 
-    const ticket = await this.ticketRepository.findById(ticketId)
-    if (ticketId && !ticket) {
-      Logger.warn(`[Queue] Connection attempt with invalid ticketId: ${ticketId}`)
-      client.disconnect(true)
-      return
+    let ticket: Ticket | undefined
+    if (ticketId) {
+      ticket = await this.ticketRepository.findById(ticketId)
+      if (!ticket) {
+        Logger.warn(`[Queue] Connection attempt with invalid ticketId: ${ticketId}`)
+        client.disconnect(true)
+        return
+      }
     }
 
     Logger.log(`[Queue] Joining rooms - Org: ${orgId}, Ticket: ${ticketId}`)
@@ -176,7 +180,7 @@ export class QueueGateway
     }
   }
 
-  @OptionalAuth()
+  @AllowAnonymous()
   @SubscribeMessage('get-queue-status')
   async handleGetQueueStatus(
     @MessageBody() data: { organizationId: string; serviceId: string },

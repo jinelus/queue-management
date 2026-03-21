@@ -56,24 +56,24 @@ export function MemberStaffStatusToggle({
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-2">
+    <div className='space-y-2'>
+      <div className='flex items-center gap-2'>
         <Switch
           checked={isOnline}
           onCheckedChange={handleOnlineToggle}
           disabled={isPending}
-          size="sm"
+          size='sm'
         />
         <Badge variant={isOnline ? 'default' : 'secondary'}>
           {isOnline ? 'Online' : 'Offline'}
         </Badge>
       </div>
-      <div className="flex items-center gap-2">
+      <div className='flex items-center gap-2'>
         <Switch
           checked={isCounterClosed}
           onCheckedChange={handleCounterToggle}
           disabled={isPending}
-          size="sm"
+          size='sm'
         />
         <Badge variant={isCounterClosed ? 'secondary' : 'outline'}>
           {isCounterClosed ? 'Counter closed' : 'Counter open'}
