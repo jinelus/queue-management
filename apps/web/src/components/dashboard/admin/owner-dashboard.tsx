@@ -2,8 +2,8 @@ import { ArrowRightIcon, LayoutDashboard, Settings, Shield, Users } from 'lucide
 import { Route } from 'next'
 import Link from 'next/link'
 import { getAnalyticsData } from '@/actions/analytics/get'
-import { listMembers } from '@/actions/members'
-import { listServices } from '@/actions/services'
+import { listMembers } from '@/actions/members/get'
+import { listServices } from '@/actions/services/get'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -61,7 +61,7 @@ export async function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
   const members = membersResult.ok ? membersResult.members : []
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <OrgHeader
         name={activeOrg.name}
         slug={activeOrg.slug}
@@ -72,8 +72,8 @@ export async function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
       <Separator />
 
       {analyticsError || !analyticsData ? (
-        <div className="p-4">
-          <p className="text-muted-foreground text-sm">Failed to load analytics data.</p>
+        <div className='p-4'>
+          <p className='text-muted-foreground text-sm'>Failed to load analytics data.</p>
         </div>
       ) : (
         <OrgAnalyticsCharts
@@ -84,27 +84,27 @@ export async function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
 
       <Separator />
 
-      <Tabs defaultValue="overview">
-        <TabsList variant="line">
-          <TabsTrigger value="overview">
-            <LayoutDashboard className="size-4" />
+      <Tabs defaultValue='overview'>
+        <TabsList variant='line'>
+          <TabsTrigger value='overview'>
+            <LayoutDashboard className='size-4' />
             Overview
           </TabsTrigger>
-          <TabsTrigger value="members">
-            <Users className="size-4" />
+          <TabsTrigger value='members'>
+            <Users className='size-4' />
             Members
           </TabsTrigger>
-          <TabsTrigger value="services">
-            <Shield className="size-4" />
+          <TabsTrigger value='services'>
+            <Shield className='size-4' />
             Services
           </TabsTrigger>
-          <TabsTrigger value="settings">
-            <Settings className="size-4" />
+          <TabsTrigger value='settings'>
+            <Settings className='size-4' />
             Settings
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="mt-6 space-y-6">
+        <TabsContent value='overview' className='mt-6 space-y-6'>
           <OrgUsageStats stats={stats} />
           <OrgOverview
             organizationName={activeOrg.name}
@@ -114,10 +114,10 @@ export async function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
           />
         </TabsContent>
 
-        <TabsContent value="members" className="mt-6">
+        <TabsContent value='members' className='mt-6'>
           <div>
-            <div className="flex w-full justify-end">
-              <Button variant="outline" size="sm" asChild>
+            <div className='flex w-full justify-end'>
+              <Button variant='outline' size='sm' asChild>
                 <Link href={`/${activeOrg.slug}/members` as Route}>
                   Manage members
                   <ArrowRightIcon />
@@ -128,10 +128,10 @@ export async function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
           <OrgMembersPreview members={members} />
         </TabsContent>
 
-        <TabsContent value="services" className="mt-6">
+        <TabsContent value='services' className='mt-6'>
           <div>
-            <div className="flex w-full justify-end">
-              <Button variant="outline" size="sm" asChild>
+            <div className='flex w-full justify-end'>
+              <Button variant='outline' size='sm' asChild>
                 <Link href={`/${activeOrg.slug}/services` as Route}>
                   Manage services
                   <ArrowRightIcon />
@@ -140,18 +140,18 @@ export async function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
             </div>
           </div>
           {error || !data ? (
-            <div className="p-4">
-              <p className="text-muted-foreground text-sm">Failed to load services.</p>
+            <div className='p-4'>
+              <p className='text-muted-foreground text-sm'>Failed to load services.</p>
             </div>
           ) : (
             <OrgServicesPreview services={data.services} />
           )}
         </TabsContent>
 
-        <TabsContent value="settings" className="mt-6">
+        <TabsContent value='settings' className='mt-6'>
           <PlaceholderSection
-            title="Settings"
-            description="Organization settings and configuration will appear here."
+            title='Settings'
+            description='Organization settings and configuration will appear here.'
           />
         </TabsContent>
       </Tabs>
@@ -161,9 +161,9 @@ export async function OwnerDashboard({ activeOrg }: OwnerDashboardProps) {
 
 function PlaceholderSection({ title, description }: { title: string; description: string }) {
   return (
-    <div className="rounded-lg border p-8 text-center">
-      <h3 className="font-semibold text-lg">{title}</h3>
-      <p className="mt-1 text-muted-foreground text-sm">{description}</p>
+    <div className='rounded-lg border p-8 text-center'>
+      <h3 className='font-semibold text-lg'>{title}</h3>
+      <p className='mt-1 text-muted-foreground text-sm'>{description}</p>
     </div>
   )
 }

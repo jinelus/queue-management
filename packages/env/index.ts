@@ -11,9 +11,9 @@ export const env = createEnv({
     REDIS_HOST: z.string().default('localhost'),
     REDIS_PORT: z.coerce.number().default(6379),
     REDIS_URL: z.string().optional(),
+    WEBSOCKET_ORIGIN: z.string().default('http://localhost:3000'),
   },
-  client: {
-  },
+  client: {},
   shared: {
     NEXT_PUBLIC_FRONT_END_URL: z.url().default('http://localhost:3000/'),
   },
@@ -27,5 +27,6 @@ export const env = createEnv({
     REDIS_URL: process.env.REDIS_URL,
     NEXT_PUBLIC_FRONT_END_URL: process.env.NEXT_PUBLIC_FRONT_END_URL,
     BACKEND_URL: process.env.BACKEND_URL,
+    WEBSOCKET_ORIGIN: process.env.WEBSOCKET_ORIGIN,
   },
 })

@@ -1,9 +1,9 @@
 import { ArrowLeftIcon, UsersIcon } from 'lucide-react'
 import { Route } from 'next'
 import Link from 'next/link'
-import { getCurrentMember, listMembers } from '@/actions/members'
+import { getCurrentMember, listMembers } from '@/actions/members/get'
 import { getServicesStaffByServiceIds } from '@/actions/service-staff/get'
-import { listServices } from '@/actions/services'
+import { listServices } from '@/actions/services/get'
 import { loadServicesSearchParams } from '@/app/(private)/[slug]/services/search-params'
 import { QueryPagination } from '@/components/custom/pagination'
 import { Badge } from '@/components/ui/badge'
@@ -31,8 +31,8 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
 
   if (!organization) {
     return (
-      <div className="p-4">
-        <p className="text-muted-foreground text-sm">Organization not found.</p>
+      <div className='p-4'>
+        <p className='text-muted-foreground text-sm'>Organization not found.</p>
       </div>
     )
   }
@@ -45,8 +45,8 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
 
   if (error || !data) {
     return (
-      <div className="p-4">
-        <p className="text-muted-foreground text-sm">Failed to load services.</p>
+      <div className='p-4'>
+        <p className='text-muted-foreground text-sm'>Failed to load services.</p>
       </div>
     )
   }
@@ -75,8 +75,8 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
 
   if (serviceStaffError || !servicesStaffData) {
     return (
-      <div className="p-4">
-        <p className="text-muted-foreground text-sm">Failed to load services staff.</p>
+      <div className='p-4'>
+        <p className='text-muted-foreground text-sm'>Failed to load services staff.</p>
       </div>
     )
   }
@@ -91,18 +91,18 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href={`/${slug}` as Route} aria-label="Back">
+    <div className='space-y-6'>
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center gap-3'>
+          <Button variant='ghost' size='icon' asChild>
+            <Link href={`/${slug}` as Route} aria-label='Back'>
               <ArrowLeftIcon />
-              <span className="sr-only">Back</span>
+              <span className='sr-only'>Back</span>
             </Link>
           </Button>
           <div>
-            <h1 className="font-semibold text-2xl">Services</h1>
-            <p className="text-muted-foreground text-sm">
+            <h1 className='font-semibold text-2xl'>Services</h1>
+            <p className='text-muted-foreground text-sm'>
               {total} {total === 1 ? 'service' : 'services'}
             </p>
           </div>
@@ -110,7 +110,7 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
         <CreateServiceDialog organizationId={organization.id} />
       </div>
 
-      <div className="hidden md:block">
+      <div className='hidden md:block'>
         <Table>
           <TableHeader>
             <TableRow>
@@ -118,22 +118,22 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
               <TableHead>Status</TableHead>
               <TableHead>Capacity</TableHead>
               <TableHead>Avg Duration</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className='text-right'>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {services.map((service) => (
               <TableRow key={service.id}>
                 <TableCell>
-                  <div className="flex flex-col">
-                    <span className="font-medium text-sm">{service.name}</span>
+                  <div className='flex flex-col'>
+                    <span className='font-medium text-sm'>{service.name}</span>
                     {service.description && (
-                      <span className="text-muted-foreground text-xs">{service.description}</span>
+                      <span className='text-muted-foreground text-xs'>{service.description}</span>
                     )}
                   </div>
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-2">
+                  <div className='flex items-center gap-2'>
                     <ServiceToggle
                       organizationId={organization.id}
                       serviceId={service.id}
@@ -144,14 +144,14 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
                     </Badge>
                   </div>
                 </TableCell>
-                <TableCell className="text-muted-foreground text-sm">
+                <TableCell className='text-muted-foreground text-sm'>
                   {service.maxCapacity ?? '—'}
                 </TableCell>
-                <TableCell className="text-muted-foreground text-sm">
+                <TableCell className='text-muted-foreground text-sm'>
                   {service.avgDurationInt ? `${service.avgDurationInt} min` : '—'}
                 </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-1">
+                <TableCell className='text-right'>
+                  <div className='flex items-center justify-end gap-1'>
                     <AssignStaffDialog
                       organizationId={organization.id}
                       serviceId={service.id}
@@ -159,9 +159,9 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
                       members={staffList}
                       assignedStaffIds={assignedStaffByService.get(service.id) ?? []}
                       trigger={
-                        <Button variant="ghost" size="icon">
-                          <UsersIcon className="size-4" />
-                          <span className="sr-only">Assign staff</span>
+                        <Button variant='ghost' size='icon'>
+                          <UsersIcon className='size-4' />
+                          <span className='sr-only'>Assign staff</span>
                         </Button>
                       }
                     />
@@ -178,18 +178,18 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
         </Table>
       </div>
 
-      <div className="grid gap-3 md:hidden">
+      <div className='grid gap-3 md:hidden'>
         {services.map((service) => (
-          <Card key={service.id} className="py-4">
-            <CardContent className="space-y-3 px-4">
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col">
-                  <span className="font-medium text-sm">{service.name}</span>
+          <Card key={service.id} className='py-4'>
+            <CardContent className='space-y-3 px-4'>
+              <div className='flex items-center justify-between'>
+                <div className='flex flex-col'>
+                  <span className='font-medium text-sm'>{service.name}</span>
                   {service.description && (
-                    <span className="text-muted-foreground text-xs">{service.description}</span>
+                    <span className='text-muted-foreground text-xs'>{service.description}</span>
                   )}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className='flex items-center gap-2'>
                   <ServiceToggle
                     organizationId={organization.id}
                     serviceId={service.id}
@@ -200,11 +200,11 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
                   </Badge>
                 </div>
               </div>
-              <div className="flex items-center justify-between text-muted-foreground text-xs">
+              <div className='flex items-center justify-between text-muted-foreground text-xs'>
                 <span>Capacity: {service.maxCapacity ?? '—'}</span>
                 <span>Avg: {service.avgDurationInt ? `${service.avgDurationInt} min` : '—'}</span>
               </div>
-              <div className="flex items-center gap-1">
+              <div className='flex items-center gap-1'>
                 <AssignStaffDialog
                   organizationId={organization.id}
                   serviceId={service.id}
@@ -212,8 +212,8 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
                   members={staffList}
                   assignedStaffIds={assignedStaffByService.get(service.id) ?? []}
                   trigger={
-                    <Button variant="ghost" size="sm">
-                      <UsersIcon className="size-4" />
+                    <Button variant='ghost' size='sm'>
+                      <UsersIcon className='size-4' />
                       Assign staff
                     </Button>
                   }
@@ -230,9 +230,9 @@ export const ManageServices = async (props: PageProps<'/[slug]/services'>) => {
       </div>
 
       {services.length === 0 && (
-        <div className="rounded-lg border p-8 text-center">
-          <h3 className="font-semibold text-lg">No services yet</h3>
-          <p className="mt-1 text-muted-foreground text-sm">
+        <div className='rounded-lg border p-8 text-center'>
+          <h3 className='font-semibold text-lg'>No services yet</h3>
+          <p className='mt-1 text-muted-foreground text-sm'>
             Create your first service to start managing your queues.
           </p>
         </div>

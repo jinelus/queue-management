@@ -52,19 +52,19 @@ export const SearchInput: FC<SearchInputProps> = ({ placeholder }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
         <FormField
           control={form.control}
-          name="search"
+          name='search'
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <div className="relative flex items-center gap-2">
-                  <SearchIcon className="absolute left-3 text-muted-foreground" />
+                <div className='relative flex items-center gap-2'>
+                  <SearchIcon className='absolute left-3 text-muted-foreground' />
                   <Input
                     {...field}
                     placeholder={placeholder ?? 'Search...'}
-                    className="pl-10"
+                    className='pl-10'
                     onChange={(e) => {
                       field.onChange(e)
                       debouncedSetSearch(e.target.value)

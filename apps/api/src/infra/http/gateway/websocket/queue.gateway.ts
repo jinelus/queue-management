@@ -8,17 +8,21 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets'
-import { AllowAnonymous, AuthGuard, OptionalAuth } from '@thallesp/nestjs-better-auth'
+import { env } from '@repo/env'
+import { AllowAnonymous, AuthGuard } from '@thallesp/nestjs-better-auth'
 import { Server, Socket } from 'socket.io'
+import { OrganizationRepository } from '@/domain/master/application/repositories/organization.repository'
+import { TicketRepository } from '@/domain/master/application/repositories/ticket.repository'
 import { CallNextWithRetryService } from '@/domain/master/application/services/ticket/call-next-with-retry.service'
 import { CreateTicketService } from '@/domain/master/application/services/ticket/create-ticket.service'
 import { LeaveQueueService } from '@/domain/master/application/services/ticket/leave-queue.service'
+import { Ticket } from '@/domain/master/entreprise/entities/ticket'
 import * as queueTypes from './queue.types'
 import { WebSocketBroadcaster } from './websocket-broadcaster.service'
 
 @WebSocketGateway({
   namespace: 'queue',
-  cors: { origin: '*' },
+  cors: { origin: env.WEBSOCKET_ORIGIN },
 })
 @UseGuards(AuthGuard)
 @Injectable()
@@ -33,6 +37,8 @@ export class QueueGateway
     private readonly leaveQueueService: LeaveQueueService,
     private readonly callNextWithRetryService: CallNextWithRetryService,
     private readonly broadcaster: WebSocketBroadcaster,
+    private readonly organizationRepository: OrganizationRepository,
+    private readonly ticketRepository: TicketRepository,
   ) {}
 
   onModuleInit() {
@@ -53,6 +59,23 @@ export class QueueGateway
   async handleConnection(client: Socket) {
     const orgId = client.handshake.query.orgId as string
     const ticketId = client.handshake.query.ticketId as string
+
+    const organization = await this.organizationRepository.findById(orgId)
+    if (!organization) {
+      Logger.warn(`[Queue] Connection attempt with invalid orgId: ${orgId}`)
+      client.disconnect(true)
+      return
+    }
+
+    let ticket: Ticket | undefined
+    if (ticketId) {
+      ticket = await this.ticketRepository.findById(ticketId)
+      if (!ticket) {
+        Logger.warn(`[Queue] Connection attempt with invalid ticketId: ${ticketId}`)
+        client.disconnect(true)
+        return
+      }
+    }
 
     Logger.log(`[Queue] Joining rooms - Org: ${orgId}, Ticket: ${ticketId}`)
 
@@ -157,7 +180,7 @@ export class QueueGateway
     }
   }
 
-  @OptionalAuth()
+  @AllowAnonymous()
   @SubscribeMessage('get-queue-status')
   async handleGetQueueStatus(
     @MessageBody() data: { organizationId: string; serviceId: string },

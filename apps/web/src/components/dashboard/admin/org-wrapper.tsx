@@ -1,4 +1,4 @@
-import { getCurrentMember } from '@/actions/members'
+import { getCurrentMember } from '@/actions/members/get'
 import { Permission } from '@/components/auth/permission'
 import { MemberDashboard } from '../member/member-dashboard'
 import { OwnerDashboard } from './owner-dashboard'
@@ -23,7 +23,7 @@ export const OrgWrapper = async ({ params }: PageProps<'/[slug]'>) => {
       </Permission>
 
       <Permission role={member?.role} allowRoles={['member']}>
-        <MemberDashboard role={member?.role} organizationName={organization?.name} />
+        <MemberDashboard organizationId={organization.id} organizationName={organization.name} />
       </Permission>
     </div>
   )
