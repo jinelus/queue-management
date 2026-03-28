@@ -82,10 +82,10 @@ export const HeroSection = () => {
 
           <div className='mt-8 flex flex-row flex-wrap items-center gap-3'>
             <Button asChild size='lg'>
-              <Link href='#get-started'>Start with QSpot</Link>
+              <Link href='/organization'>Start with QSpot</Link>
             </Button>
             <Button variant='outline' size='lg' asChild>
-              <Link href={'/auth/signin' as Route}>See product flow</Link>
+              <Link href={'/org' as Route}>View Organizations</Link>
             </Button>
           </div>
 
