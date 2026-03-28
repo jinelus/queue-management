@@ -7,6 +7,7 @@ export { getAnalyticsController } from './clients/getAnalyticsController.ts'
 export { getDashboardSummaryController } from './clients/getDashboardSummaryController.ts'
 export { getEmployeesUsersController } from './clients/getEmployeesUsersController.ts'
 export { getOrganizationBySlugController } from './clients/getOrganizationBySlugController.ts'
+export { getPublicOrganizationBySlugController } from './clients/getPublicOrganizationBySlugController.ts'
 export { getServiceByIdController } from './clients/getServiceByIdController.ts'
 export { getServiceStaffByServiceIdController } from './clients/getServiceStaffByServiceIdController.ts'
 export { getServiceStaffByStaffIdController } from './clients/getServiceStaffByStaffIdController.ts'
@@ -14,6 +15,7 @@ export { getServicesStaffByServiceIdsController } from './clients/getServicesSta
 export { getTicketPositionController } from './clients/getTicketPositionController.ts'
 export { getUserByIdController } from './clients/getUserByIdController.ts'
 export { leaveQueueController } from './clients/leaveQueueController.ts'
+export { searchPublicOrganizationsController } from './clients/searchPublicOrganizationsController.ts'
 export { snoozeTicketController } from './clients/snoozeTicketController.ts'
 export { toggleServiceStatusController } from './clients/toggleServiceStatusController.ts'
 export { toggleStaffStatusController } from './clients/toggleStaffStatusController.ts'
@@ -128,6 +130,14 @@ export type {
 } from './types/GetOrganizationBySlugController.ts'
 export type { GetOrganizationBySlugResponseDtoOutput } from './types/GetOrganizationBySlugResponseDtoOutput.ts'
 export type {
+  GetPublicOrganizationBySlugController200,
+  GetPublicOrganizationBySlugController404,
+  GetPublicOrganizationBySlugControllerPathParams,
+  GetPublicOrganizationBySlugControllerQuery,
+  GetPublicOrganizationBySlugControllerQueryResponse,
+} from './types/GetPublicOrganizationBySlugController.ts'
+export type { GetPublicOrganizationBySlugResponseDtoOutput } from './types/GetPublicOrganizationBySlugResponseDtoOutput.ts'
+export type {
   GetServiceByIdController200,
   GetServiceByIdController401,
   GetServiceByIdController404,
@@ -200,6 +210,19 @@ export type {
 } from './types/LeaveQueueResponseDtoOutput.ts'
 export { ticketStatusEnum4 } from './types/LeaveQueueResponseDtoOutput.ts'
 export type { NotFoundErrorDto } from './types/NotFoundErrorDto.ts'
+export type {
+  SearchPublicOrganizationsController200,
+  SearchPublicOrganizationsControllerQuery,
+  SearchPublicOrganizationsControllerQueryParams,
+  SearchPublicOrganizationsControllerQueryParamsOrderByEnumKey,
+  SearchPublicOrganizationsControllerQueryParamsOrderEnumKey,
+  SearchPublicOrganizationsControllerQueryResponse,
+} from './types/SearchPublicOrganizationsController.ts'
+export {
+  searchPublicOrganizationsControllerQueryParamsOrderByEnum,
+  searchPublicOrganizationsControllerQueryParamsOrderEnum,
+} from './types/SearchPublicOrganizationsController.ts'
+export type { SearchPublicOrganizationsResponseDtoOutput } from './types/SearchPublicOrganizationsResponseDtoOutput.ts'
 export type {
   SnoozeTicketController200,
   SnoozeTicketController401,

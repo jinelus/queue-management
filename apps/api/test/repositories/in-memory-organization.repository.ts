@@ -25,6 +25,21 @@ export class InMemoryOrganizationRepository implements OrganizationRepository {
     return organization || null
   }
 
+  async searchByNameOrSlug(search?: string): Promise<Organization[]> {
+    if (!search) {
+      return this.items
+    }
+
+    const normalizedSearch = search.toLowerCase()
+
+    return this.items.filter((item) => {
+      return (
+        item.name.toLowerCase().includes(normalizedSearch) ||
+        item.slug.toLowerCase().includes(normalizedSearch)
+      )
+    })
+  }
+
   async findAll(): Promise<Organization[]> {
     return this.items
   }
