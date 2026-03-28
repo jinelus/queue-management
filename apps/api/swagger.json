@@ -173,6 +173,98 @@
         "tags": ["Organizations"]
       }
     },
+    "/public/organizations": {
+      "get": {
+        "description": "Search organizations by name or slug for public ticket creation flow.",
+        "operationId": "SearchPublicOrganizationsController",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Search by organization name or slug",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number for pagination",
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "perPage",
+            "required": false,
+            "in": "query",
+            "description": "Number of organizations per page",
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "orderBy",
+            "required": false,
+            "in": "query",
+            "description": "Field to order by",
+            "schema": { "type": "string", "enum": ["name", "slug"] }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "description": "Order direction",
+            "schema": { "type": "string", "enum": ["asc", "desc"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with organizations list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchPublicOrganizationsResponseDto_Output"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Search public organizations",
+        "tags": ["Public Organizations"]
+      }
+    },
+    "/public/organizations/by-slug/{slug}": {
+      "get": {
+        "description": "Retrieve an organization by slug for public ticket creation flow.",
+        "operationId": "GetPublicOrganizationBySlugController",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "The unique slug of the organization",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with organization details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPublicOrganizationBySlugResponseDto_Output"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundErrorDto" } }
+            }
+          }
+        },
+        "summary": "Get public organization by slug",
+        "tags": ["Public Organizations"]
+      }
+    },
     "/organizations/{organizationId}/services": {
       "post": {
         "description": "Create a new service within an organization.",
@@ -1052,7 +1144,10 @@
             "required": true,
             "in": "query",
             "description": "An array of service IDs to retrieve staff for",
-            "schema": { "items": { "type": "string" } }
+            "schema": {
+              "anyOf": [{ "type": "array", "items": { "type": "string" } }, { "type": "string" }],
+              "items": { "type": "string" }
+            }
           },
           {
             "name": "organizationId",
@@ -1424,6 +1519,91 @@
         "additionalProperties": false
       },
       "GetOrganizationBySlugResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "organization": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "ulid",
+                "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+              },
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "slug": { "type": "string" },
+              "logoUrl": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+              "logo": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+              "metadata": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+              "createdAt": { "type": "string" },
+              "updatedAt": { "type": "string" }
+            },
+            "required": [
+              "id",
+              "name",
+              "slug",
+              "logoUrl",
+              "logo",
+              "metadata",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": ["organization"],
+        "additionalProperties": false
+      },
+      "SearchPublicOrganizationsResponseDto_Output": {
+        "type": "object",
+        "properties": {
+          "organizations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "ulid",
+                  "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+                },
+                "name": { "type": "string" },
+                "description": { "type": "string" },
+                "slug": { "type": "string" },
+                "logoUrl": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+                "logo": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+                "metadata": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+                "createdAt": { "type": "string" },
+                "updatedAt": { "type": "string" }
+              },
+              "required": [
+                "id",
+                "name",
+                "slug",
+                "logoUrl",
+                "logo",
+                "metadata",
+                "createdAt",
+                "updatedAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "total": { "type": "number" },
+              "totalPages": { "type": "number" },
+              "hasNext": { "type": "boolean" }
+            },
+            "required": ["total", "totalPages", "hasNext"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["organizations", "meta"],
+        "additionalProperties": false
+      },
+      "GetPublicOrganizationBySlugResponseDto_Output": {
         "type": "object",
         "properties": {
           "organization": {
