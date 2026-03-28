@@ -6,7 +6,6 @@ export const env = createEnv({
     DATABASE_URL: z.url(),
     BETTER_AUTH_SECRET: z.string().optional(),
     BETTER_AUTH_URL: z.string().default('http://localhost:3333/'),
-    BACKEND_URL: z.string().default('http://localhost:3333/'),
     PORT: z.coerce.number().default(3333),
     REDIS_HOST: z.string().default('localhost'),
     REDIS_PORT: z.coerce.number().default(6379),
@@ -15,6 +14,7 @@ export const env = createEnv({
   },
   client: {},
   shared: {
+    BACKEND_URL: z.string().default('http://localhost:3333/'),
     NEXT_PUBLIC_FRONT_END_URL: z.url().default('http://localhost:3000/'),
   },
   runtimeEnv: {

@@ -29,9 +29,15 @@ export const routeRules: RouteRule[] = [
   },
   {
     path: '/org',
+    access: 'unauthenticated-only',
+    redirectTo: '/organization',
+    match: 'exact',
+  },
+  {
+    path: '/organization',
     access: 'authenticated-only',
     redirectTo: '/auth/signin',
-    match: 'exact',
+    match: 'prefix',
   },
   {
     path: '/',

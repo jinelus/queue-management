@@ -41,12 +41,18 @@ export class QueueEventsListener {
   @OnEvent(QUEUE_EVENTS.TICKET_CALLED)
   async onTicketCalled(data: TicketCalledEvent) {
     Logger.log(`[QueueEvents] Ticket called: ${data.ticketId}`)
+    this.broadcaster.broadcastToTicket(data.ticketId, 'ticket-called', {
+      ticketId: data.ticketId,
+    })
     await this.broadcastQueueUpdate(data.organizationId, data.serviceId)
   }
 
   @OnEvent(QUEUE_EVENTS.TICKET_LEFT)
   async onTicketLeft(data: TicketLeftEvent) {
     Logger.log(`[QueueEvents] Ticket left queue: ${data.ticketId}`)
+    this.broadcaster.broadcastToTicket(data.ticketId, 'ticket-left', {
+      ticketId: data.ticketId,
+    })
     await this.broadcastQueueUpdate(data.organizationId, data.serviceId)
   }
 

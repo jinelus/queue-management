@@ -105,6 +105,14 @@ export type {
 } from './GetOrganizationBySlugController.ts'
 export type { GetOrganizationBySlugResponseDtoOutput } from './GetOrganizationBySlugResponseDtoOutput.ts'
 export type {
+  GetPublicOrganizationBySlugController200,
+  GetPublicOrganizationBySlugController404,
+  GetPublicOrganizationBySlugControllerPathParams,
+  GetPublicOrganizationBySlugControllerQuery,
+  GetPublicOrganizationBySlugControllerQueryResponse,
+} from './GetPublicOrganizationBySlugController.ts'
+export type { GetPublicOrganizationBySlugResponseDtoOutput } from './GetPublicOrganizationBySlugResponseDtoOutput.ts'
+export type {
   GetServiceByIdController200,
   GetServiceByIdController401,
   GetServiceByIdController404,
@@ -177,6 +185,19 @@ export type {
 } from './LeaveQueueResponseDtoOutput.ts'
 export { ticketStatusEnum4 } from './LeaveQueueResponseDtoOutput.ts'
 export type { NotFoundErrorDto } from './NotFoundErrorDto.ts'
+export type {
+  SearchPublicOrganizationsController200,
+  SearchPublicOrganizationsControllerQuery,
+  SearchPublicOrganizationsControllerQueryParams,
+  SearchPublicOrganizationsControllerQueryParamsOrderByEnumKey,
+  SearchPublicOrganizationsControllerQueryParamsOrderEnumKey,
+  SearchPublicOrganizationsControllerQueryResponse,
+} from './SearchPublicOrganizationsController.ts'
+export {
+  searchPublicOrganizationsControllerQueryParamsOrderByEnum,
+  searchPublicOrganizationsControllerQueryParamsOrderEnum,
+} from './SearchPublicOrganizationsController.ts'
+export type { SearchPublicOrganizationsResponseDtoOutput } from './SearchPublicOrganizationsResponseDtoOutput.ts'
 export type {
   SnoozeTicketController200,
   SnoozeTicketController401,
