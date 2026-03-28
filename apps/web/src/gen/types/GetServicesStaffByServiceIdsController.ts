@@ -20,7 +20,7 @@ export type GetServicesStaffByServiceIdsControllerQueryParams = {
   /**
    * @description An array of service IDs to retrieve staff for
    */
-  serviceIds: string[]
+  serviceIds: string[] | string
 }
 
 /**

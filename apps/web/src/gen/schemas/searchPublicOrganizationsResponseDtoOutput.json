@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "organizations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ulid",
+            "pattern": "^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$"
+          },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "slug": { "type": "string" },
+          "logoUrl": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+          "logo": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+          "metadata": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+          "createdAt": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        },
+        "required": ["id", "name", "slug", "logoUrl", "logo", "metadata", "createdAt", "updatedAt"],
+        "additionalProperties": false
+      }
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "total": { "type": "number" },
+        "totalPages": { "type": "number" },
+        "hasNext": { "type": "boolean" }
+      },
+      "required": ["total", "totalPages", "hasNext"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["organizations", "meta"],
+  "additionalProperties": false,
+  "x-readme-ref-name": "SearchPublicOrganizationsResponseDto_Output"
+}
